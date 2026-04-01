@@ -20,5 +20,6 @@ Submodules
    :maxdepth: 1
 
    /autoapi/mapmetnet/errors/index
+   /autoapi/mapmetnet/logger/index
 
 
