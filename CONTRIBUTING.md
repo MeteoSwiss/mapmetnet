@@ -47,7 +47,7 @@ Feature suggestions are welcome! Please create an issue using our *feature reque
 
 ### Prerequisites
 
-- Python 3.11 or higher (up to 3.12)
+- Python 3.11 or higher
 - Poetry (for dependency management)
 - Git
 
@@ -56,7 +56,7 @@ Feature suggestions are welcome! Please create an issue using our *feature reque
 1. Clone your fork of the repository:
 
    ```console
-   $ git clone https://github.com/YOUR-USERNAME/mapmetnet.git
+   $ git clone https://github.com/MeteoSwiss/mapmetnet.git
    $ cd mapmetnet
    ```
 
@@ -83,7 +83,7 @@ We use [YAPF](https://github.com/google/yapf) for code formatting with PEP 8 sty
 Format your code before committing:
 
 ```console
-$ poetry run yapf -r -i mapmetnet
+$ poetry run yapf -r -i src
 ```
 
 ### Linting with Pylint
@@ -91,7 +91,7 @@ $ poetry run yapf -r -i mapmetnet
 Run pylint to check for code quality issues:
 
 ```console
-$ poetry run pylint mapmetnet
+$ poetry run pylint src
 ```
 
 The project configuration is in `pyproject.toml`. We disable certain docstring requirements but maintain other quality standards.
@@ -101,7 +101,7 @@ The project configuration is in `pyproject.toml`. We disable certain docstring r
 We enforce type hints throughout the codebase:
 
 ```console
-$ poetry run mypy mapmetnet
+$ poetry run mypy src
 ```
 
 All function definitions must include type annotations.
@@ -127,7 +127,7 @@ $ poetry run pytest
 Run tests with coverage:
 
 ```console
-$ poetry run pytest --cov=mapmetnet --cov-report=html
+$ poetry run pytest --cov=src --cov-report=html
 ```
 
 ## Documentation
