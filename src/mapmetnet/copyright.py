@@ -18,7 +18,8 @@ from . import __version__
 COPY_MAPMETNET = f'Created with mapmetnet v{__version__} (https://github.com/MeteoSwiss/mapmetnet).'
 
 #: str: Copyright statement for cartopy
-COPY_CARTOPY = 'Transverse Mercator projection generated using cartopy v' + cartopy_version + \
+# TODO: we should tie the name of the projection to the actual code ...
+COPY_CARTOPY = 'Orthographic projection generated using cartopy v' + cartopy_version + \
     ', Met Office (https://doi.org/10.5281/zenodo.1182735).'
 
 #: str: Copyright Natural Earth

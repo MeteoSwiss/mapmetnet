@@ -32,64 +32,40 @@ import wmoutils
 
 # Import from this package
 from .copyright import COPY_MAPMETNET, COPY_CARTOPY, COPY_GIBS, COPY_NE, COPY_EEZ, DISC_MCH
-from .hardcoded import WDQMS_COLORS
+from .hardcoded import WDQMS_COLORS, WIDTH_TWOCOL
 from .errors import MapmetnetError, MapmetnetWarning
 from .logger import log_func_call
 from .ne import get_ne_records, get_ne_country
-from . import network, gibs
+from . import network, gibs, utils
 from .eez import get_eez
-from . import utils as smutils
 from .utils import set_mplstyle, format_var_name
 
 # Instantiate the module logger
 logger = logging.getLogger(__name__)
 
 
-class CountryMapper():
-    """ Parent Mapper class tuned for showing a given country with little else. """
+class Mapper():
+    """ Grand-Parent Mapper class tuned for making a map with little else. """
 
     @log_func_call(logger)
-    def __init__(self, country_code: str, mrgid: Optional[int] = None) -> None:
+    def __init__(self, lat: float, lon: float) -> None:
         """ Basic init routine.
 
             Args:
-                country_code (str): a len(3) str containing the country code.
-                mrgid (int, optional): a Marine Regions Geographic IDengifier, used to identify
-                    the maritime boundaries of an applicable Exclusive Economic Zone (EEZ).
-                    See https://www.marineregions.org/mrgid.php for details.
+                lat (float): The latitude of the map center.
+                lon (float): The longitude of the map center.
 
             Raises: ValueError, TypeError
 
         """
 
-        # Some basic sanity checks
-        match country_code:
-            case str():
-                if len(country_code) != 3:
-                    raise ValueError('country_code should be str of len(3).')
-            case _:
-                raise TypeError("country_code must be a str")
-        match mrgid:
-            case None:
-                pass
-            case int():
-                pass
-            case _:
-                raise TypeError("mrgid should be an int")
-
-        # Assign the values to attibutes
-        self._country_code = country_code
-        self._mrgid = mrgid
-
-        # Fetch and set the country record from Natural Earth and store it, while I'm at it
-        self._country = get_ne_country(self.country_code)
-
-        # Fetch the EEZ if warranted
-        self._eez = get_eez(self.mrgid)
+        # Set the central coordinates and the extent of the map
+        self._center_lat = lat
+        self._center_lon = lon
 
         # Set the default map projection
-        self._proj = ccrs.TransverseMercator(central_longitude=self.country.geometry.centroid.x,
-                                             central_latitude=self.country.geometry.centroid.y)
+        self._proj = ccrs.Orthographic(
+            central_longitude=self._center_lon, central_latitude=self._center_lat)
 
         # Let's also create the other atribute that will become relevant later on
         self._fig = None
@@ -98,28 +74,8 @@ class CountryMapper():
         self._copyright_statement = COPY_MAPMETNET + '\n' + COPY_CARTOPY
 
     @property
-    def country_code(self) -> str:
-        """ Country code as a 3 letter string. """
-        return self._country_code
-
-    @property
-    def country(self):
-        """ Return the target country Record. """
-        return self._country
-
-    @property
-    def eez(self) -> list:
-        """ Return the list of EEZ geometries associated with the target country. """
-        return self._eez
-
-    @property
-    def mrgid(self) -> str:
-        """ Marine Regions Geographic IDentifier. """
-        return self._mrgid
-
-    @property
     def fig(self) -> mplfig:
-        """ The Matplotliub Figure instance holding the map. """
+        """ The Matplotlib figure instance holding the map. """
         return self._fig
 
     @property
@@ -137,17 +93,17 @@ class CountryMapper():
 
     @property
     def ax_map(self):
-        """ The Matplotlib axes holding the map. """
+        """ The Matplotlib axis holding the map. """
         return self._get_ax(0)
 
     @property
     def ax_leg(self):
-        """ The Matplotlib axes holding the legend. """
+        """ The Matplotlib axis holding the legend. """
         return self._get_ax(1)
 
     @property
     def ax_clb(self):
-        """ The Matplotlib axes holding the colorbar. """
+        """ The Matplotlib axis holding the colorbar. """
         return self._get_ax(2)
 
     @set_mplstyle
@@ -165,11 +121,11 @@ class CountryMapper():
             plt.close(figid)
 
         # Create the Figure and store it for later
-        self._fig = plt.figure(figid, figsize=(14.16, 10))
+        self._fig = plt.figure(figid, figsize=(WIDTH_TWOCOL, 10))
 
         # Create the axes
         gs = GridSpec(2, 2, width_ratios=[1, 0.3], height_ratios=[2, 1],
-                      left=0.04, right=0.98, top=0.92, bottom=0.04, hspace=0, wspace=0.1)
+                      left=0.06, right=0.98, top=0.92, bottom=0.04, hspace=0, wspace=0.1)
 
         # First, the ax that will hold the map
         ax0 = plt.subplot(gs[:, 0], projection=self._proj)
@@ -182,52 +138,19 @@ class CountryMapper():
         self._axs = [ax0, axl, axc]
 
     @log_func_call(logger)
-    def _set_map_extent(self, pad_frac: Optional[float] = 0.1,
-                        lon_min: Optional[float] = None,
-                        lon_max: Optional[float] = None,
-                        lat_min: Optional[float] = None,
-                        lat_max: Optional[float] = None) -> None:
-        """ Set the map extent according to specific rules.
-
-        We want to fit the entire country and all its EEZ, possibly with some padding.
+    def _set_map_extent(self, extent: float = 10.0) -> None:
+        """ Set the map extent (symetric along N-S and E-W).
 
         Args:
-            pad_frac (float, optional): padding fraction around the edges. Defaults to 0.1 (=10%).
-            lon_min (foat, optional): if set, will override the minimum longitude of the map.
-            lon_max (foat, optional): if set, will override the maximum longitude of the map.
-            lat_min (foat, optional): if set, will override the minimum latitude of the map.
-            lat_max (foat, optional): if set, will override the maximum latitude of the map.
+            extent (float, optional): the map extent in degrees. Defaults to 10.0.
         """
 
         # Start from the country extent ...
-        lon_lims = np.array(self.country.bounds[0::2])
-        lat_lims = np.array(self.country.bounds[1::2])
-
-        # ... then expand as needed with the EEZ ...
-        for item in self.eez:
-            if item.bounds[0] < lon_lims[0]:
-                lon_lims[0] = item.bounds[0]
-            if item.bounds[1] < lat_lims[0]:
-                lat_lims[0] = item.bounds[1]
-            if item.bounds[2] > lon_lims[1]:
-                lon_lims[1] = item.bounds[2]
-            if item.bounds[3] > lat_lims[1]:
-                lat_lims[1] = item.bounds[3]
-
-        # ... add some padding around ...
-        lon_lims = smutils.pad_angular_range(lon_lims, pad_frac)
-        lat_lims = smutils.pad_angular_range(lat_lims, pad_frac)
-
-        # ... deal with user-set limits
-        for lon_id, lon in enumerate([lon_min, lon_max]):
-            if lon is not None:
-                lon_lims[lon_id] = lon
-        for lat_id, lat in enumerate([lat_min, lat_max]):
-            if lat is not None:
-                lat_lims[lat_id] = lat
+        lon_lims = np.array([-extent/2., extent/2.]) + self._center_lon
+        lat_lims = np.array([-extent/2., extent/2.]) + self._center_lat
 
         # ... and make it square ...
-        lon_lims, lat_lims = smutils.squarify_extent(lon_lims, lat_lims)
+        lon_lims, lat_lims = utils.squarify_extent(lon_lims, lat_lims)
 
         #  ... to finally be able to set the plot extent
         self.ax_map.set_extent(tuple(lon_lims)+tuple(lat_lims))
@@ -244,7 +167,13 @@ class CountryMapper():
 
     @log_func_call(logger)
     def _add_background(self, which: str | None = None):
-        """ Add a background to the map. For now, this is the Natural Earth I in full resolution.
+        """ Add a background to the map.
+
+        Args:
+            which (str|None, optional): the background to add. If None (default), will use the
+                default Natural Earth "land" feature. If 'ne', will use the Natural Earth Relief
+                tiles. If 'elevation', 'lightning', 'pop-density', 'croplands' or 'human-footprint',
+                will use the corresponding NASA GIBS layer. Defaults to None.
 
 
         TODO: add link to docs in docstring
@@ -253,11 +182,14 @@ class CountryMapper():
 
         if which is None:
             # Use the Natural Earth "land" feature as default background.
-            land_feature = cfeature.NaturalEarthFeature(category='physical', name='land',
-                                                        scale='10m', facecolor=(0.75, 0.75, 0.75))
-            self.ax_map.add_feature(land_feature)
+            #land_feature = cfeature.NaturalEarthFeature(category='physical', name='land',
+            #                                            scale='10m', facecolor=(0.95, 0.95, 0.95))
+            #self.ax_map.add_feature(land_feature)
+            #self.ax_map.add_feature(cfeature.OCEAN.with_scale('10m'))
 
-            self._copyright_statement += '\n' + "Borders and places from " + COPY_NE
+            #TODO: why are oceans not show correctly ?
+            self.ax_map.add_feature(cfeature.OCEAN.with_scale('10m'))
+            self.ax_map.add_feature(cfeature.LAND.with_scale('10m'), facecolor=(0.95, 0.95, 0.95))
             # No colorbar required
             self.ax_clb.axis('off')
 
@@ -266,10 +198,10 @@ class CountryMapper():
             lat_lims = np.array(self.lat_lims)
 
             self.ax_map.background_img(name='NaturalEarthRelief', resolution='high',
-                                       extent=list(smutils.pad_angular_range(lon_lims, 0.1)) +
-                                       list(smutils.pad_angular_range(lat_lims, 0.1)))
+                                       extent=list(utils.pad_angular_range(lon_lims, 0.1)) +
+                                       list(utils.pad_angular_range(lat_lims, 0.1)))
 
-            self._copyright_statement += '\n' + "Borders, places and terrain from " + COPY_NE
+            self._copyright_statement += '\n' + "Terrain from " + COPY_NE
             # No colorbar required
             self.ax_clb.axis('off')
 
@@ -286,39 +218,38 @@ class CountryMapper():
 
             if which == 'elevation':
                 self.ax_map.add_wmts(wmts, 'SRTM_Color_Index')
-                self._copyright_statement += '\n' + "Borders and places from " + \
-                    COPY_NE + " Terrain elevation by the NASA SRTM (v3), from " + COPY_GIBS
+                self._copyright_statement += '\n' + \
+                    " Terrain elevation by the NASA SRTM (v3), from " + COPY_GIBS
                 # Load the png, and get it ready for plotting
                 cb_img = gibs.get_cb_img('SRTM_Color_Index_V.svg')
 
             elif which == 'lightning':
                 self.ax_map.add_wmts(
                     wmts, 'LIS_Very_High_Resolution_Lightning_Full_Climatology_LIS_Mean_Flash_Rate')
-                self._copyright_statement += '\n' + "Borders and places from " + \
-                    COPY_NE + " Mean Lightning Flash Rate (1998-2014) by the LIS, from " + COPY_GIBS
+                self._copyright_statement += '\n' + \
+                    " Mean Lightning Flash Rate (1998-2014) by the LIS, from " + COPY_GIBS
                 # Load the png, and get it ready for plotting
                 cb_img = gibs.get_cb_img(
                     'LIS_Very_High_Resolution_Lightning_Full_Climatology_LIS_Mean_Flash_Rate_V.svg')
 
             elif which == 'pop-density':
                 self.ax_map.add_wmts(wmts, 'GPW_Population_Density_2020')
-                self._copyright_statement += '\n' + "Borders and places from " + \
-                    COPY_NE + " UN-Adjusted pop. density (2020) from " + COPY_GIBS
+                self._copyright_statement += '\n' +\
+                    " UN-Adjusted pop. density (2020) from " + COPY_GIBS
                 # Load the png, and get it ready for plotting
                 cb_img = gibs.get_cb_img('GPW_Population_Density_2000_V.svg')
 
             elif which == 'croplands':
                 self.ax_map.add_wmts(wmts, 'Agricultural_Lands_Croplands_2000')
-                self._copyright_statement += '\n' + "Borders and places from " + \
-                    COPY_NE + " Global Agricultural Lands, v1 (2000) from " + COPY_GIBS
+                self._copyright_statement += '\n' + \
+                    " Global Agricultural Lands, v1 (2000) from " + COPY_GIBS
                 # Load the png, and get it ready for plotting
                 cb_img = gibs.get_cb_img('Agricultural_Lands_Croplands_2000_V.svg')
 
             elif which == 'human-footprint':
                 self.ax_map.add_wmts(wmts, 'Human_Footprint_1995-2004')
-                self._copyright_statement += '\n' + "Borders and places from " + \
-                    COPY_NE + " Global Human Footprint (Geographic), v2 (1995-2004) from " + \
-                    COPY_GIBS
+                self._copyright_statement += '\n' + \
+                    " Global Human Footprint (Geographic), v2 (1995-2004) from " + COPY_GIBS
                 # Load the png, and get it ready for plotting
                 cb_img = gibs.get_cb_img('Human_Footprint_1995-2004_V.svg')
 
@@ -338,137 +269,65 @@ class CountryMapper():
 
         self.ax_map.add_feature(cfeature.RIVERS.with_scale('10m'))
         self.ax_map.add_feature(cfeature.LAKES.with_scale('10m'))
+        self._copyright_statement += '\n' + "Rivers and lakes from " + COPY_NE
 
     @log_func_call(logger)
-    def _add_eez(self) -> None:
-        """ Add the EEZ Maritime boundaries. """
-
-        if len(self.eez) == 0:
-            if self.mrgid is not None:
-                warnings.warn(f"No EEZ found (mgrid = {self.mrgid})", MapmetnetWarning)
-            return
-
-        # Plot the EEZ boundaries
-        for item in self.eez:
-            # Check if the bounary is disputed
-            ls = '-'
-            label = 'EEZ limit'
-
-            if 'Unsettled' in item.attributes['LINE_TYPE']:
-                ls = '--'
-                label += ' (unsettled)'
-                self._legend_handles['EEZ'] = mlines.Line2D([], [], color='firebrick', ls='--',
-                                                            label='EEZ (200 NM, unsettled)')
-            else:
-                self._legend_handles['EEZ unsettled'] = mlines.Line2D([], [], color='firebrick',
-                                                                      label='EEZ (200 NM)')
-            # Plot it acordingly
-            self.ax_map.add_geometries(item.geometry, crs=ccrs.PlateCarree(),
-                                       edgecolor='firebrick', facecolor='none', ls=ls,
-                                       label=label)
-
-        # Include a dedicated copyright statement if I have some EEZ boundaries
-        self._copyright_statement += '\n' + COPY_EEZ
-
-    @log_func_call(logger)
-    def _add_countries(self, show_names=False, focus: bool = True) -> None:
-        """ Add neighboring countries to the map, using white shades.
+    def _draw_border(self, item, is_disputed: bool = False) -> None:
+        """ Draw a border on the map.
 
         Args:
-            show_names (bool, optional): if True, will display the names of neighboring countries.
-                Defaults to False.
-            focus (bool, optional): if True (defaults), will draw the neighboring countries with 70%
-                transparency, to make the target country stand out more. If False, will use 100%
-                opacity.
+            item: a Natural Earth record containing the geometry to add, and the relevant
+                attributes to build the legend handle.
 
         """
 
-        # Loop through all the countries, and only deal with those that overlap with
-        # the plotting area
-        for item in get_ne_records(resolution='10m', category='cultural',
-                                   name='admin_0_map_units'):
+        # Check if the country bounds overlap with the extent of the map
+        if not utils.is_overlapping(item.geometry,
+                                    self.ax_map.get_extent(crs=ccrs.PlateCarree())):
+            return
 
-            # Check if the country bounds overlap with the extent of the map
-            # TODO: do I need to have an extra padding to make sure I get all the near-by countries,
-            # including towards the map corners ?
-            if not smutils.is_overlapping(item.geometry,
-                                          self.ax_map.get_extent(crs=ccrs.PlateCarree())):
-                continue
+        # Tweak the look of things depending on the border type ...
+        if is_disputed:
+            ls = ':'
+            lbl = 'Borders (unsettled)'
 
-            # Fill the neighboring countries with semi-transparent white
-            if item.attributes['ISO_A3'] != self._country_code:
-                self.ax_map.add_geometries(item.geometry, crs=ccrs.PlateCarree(),
-                                           facecolor=(1, 1, 1), alpha=0.7 if focus else 0,
-                                           edgecolor='none',
-                                           label=item.attributes['ADM0_A3'])
+        else:
+            ls = '-'
+            lbl = 'Borders'
 
-            # Add the names of the countries, but only if the country centroid falls within the map.
-            lon_lims = np.array(self.lon_lims)
-            lat_lims = np.array(self.lat_lims)
+            if item.attributes['featurecla'] == 'International boundary (verify)':
+                # Log a warning about the suspicious border.
+                logger.warning("%s-%s border status: %s",
+                               item.attributes['adm0_a3_l'],
+                               item.attributes['adm0_a3_r'],
+                               item.attributes['featurecla'])
 
-            if lon_lims[0] < item.geometry.centroid.x < lon_lims[1] and \
-               lat_lims[0] < item.geometry.centroid.y < lat_lims[1] and \
-               item.attributes['LABELRANK'] < 10 and \
-               item.attributes['ISO_A3'] != self._country_code and \
-               show_names:
+        self._legend_handles['border'] = mlines.Line2D(
+            [], [], color='k', ls=ls, lw=0.75, label=lbl)
 
-                self.ax_map.annotate(item.attributes['NAME'],
-                                     xy=(item.geometry.centroid.x, item.geometry.centroid.y),
-                                     xytext=(0, 0), textcoords='offset fontsize',
-                                     color=(0.25, 0.25, 0.25), fontsize=11,
-                                     ha='center', va='center',
-                                     path_effects=[mplpe.withStroke(linewidth=0.2, foreground="w")],
-                                     transform=ccrs.PlateCarree())
+        # Actually draw the borders
+        self.ax_map.add_geometries(
+                item.geometry, crs=ccrs.PlateCarree(), facecolor='none', edgecolor='k',
+                ls=ls, lw=0.75)
 
     @log_func_call(logger)
     def _add_borders(self) -> None:
-        """ Add the (land) borders on the map, inlcuded the disputed ones. """
+        """ Add the relevant borders on the map, including the disputed ones. """
 
         # Loop through all the boundary lines, and only deal with those that overlap with
         # the plotting area
         for item in get_ne_records(resolution='10m', category='cultural',
                                    name='admin_0_boundary_lines_land'):
+            self._draw_border(item, is_disputed=False)
 
-            # Check if the country bounds overlap with the extent of the map
-            # TODO: do I need to have an extra padding to make sure I get all the near-by countries,
-            # including towards the map corners ?
-            if not smutils.is_overlapping(item.geometry,
-                                          self.ax_map.get_extent(crs=ccrs.PlateCarree())):
-                continue
-
-            # Add a legend ofr the borders
-            self._legend_handles['border'] = mlines.Line2D([], [], color='k', ls='-',
-                                                           label='Borders')
-            ls = '-'
-
-            # Some of these are disputed borders ... draw them accordingly
-            if item.attributes['featurecla'] != 'International boundary (verify)':
-                ls = '--'
-            #    self._legend_handles['border_disp'] = mlines.Line2D([], [], color='k', ls='--',
-            #                                                        label='Border (unsettled)')
-                logger.warning(f"{item.attributes['adm0_a3_l']}-{item.attributes['adm0_a3_r']} " +
-                               f"border status: {item.attributes['featurecla']}")
-
-            self.ax_map.add_geometries(item.geometry, crs=ccrs.PlateCarree(),
-                                       facecolor='none',
-                                       edgecolor='k', ls=ls, lw=0.75)
-
-        # Then, loop through the disputed area boundaries, and draw these if applicable...
+        # Then, loop through the officially disputed area boundaries,
+        # and draw these if applicable...
         for item in get_ne_records(resolution='10m', category='cultural',
                                    name='admin_0_boundary_lines_disputed_areas'):
 
-            # Check if the country bounds overlap with the extent of the map
-            # TODO: do I need to have an extra padding to make sure I get all the near-by countries,
-            # including towards the map corners ?
-            if not smutils.is_overlapping(item.geometry,
-                                          self.ax_map.get_extent(crs=ccrs.PlateCarree())):
-                continue
+            self._draw_border(item, is_disputed=True)
 
-            self.ax_map.add_geometries(item.geometry, crs=ccrs.PlateCarree(),
-                                       facecolor='none',
-                                       edgecolor='k', ls='--', lw=0.75)
-            self._legend_handles['border_disp'] = mlines.Line2D([], [], color='k', ls='--',
-                                                                label='Borders (unsettled)')
+        self._copyright_statement += '\n' + "Borders from " + COPY_NE
 
     @log_func_call(logger)
     def _add_coast(self) -> None:
@@ -476,47 +335,10 @@ class CountryMapper():
         self.ax_map.add_feature(cfeature.COASTLINE.with_scale('10m'), edgecolor='k', lw=0.75)
 
     @log_func_call(logger)
-    def _add_capital(self, ref_radius: Optional[Union[int, float]] = None) -> None:
-        """ Add a marker for the target country's capital city. Optionally draw a reference circle
-        around it.
-
-        Args:
-            ref_radius (int|float, optional): if set, will draw a circle of 'ref_radius' km in
-                radius around the capital.
-
-        """
-        # Loop through all the cities from Natural Earth until I find the correct one ...
-        for place in get_ne_records(resolution='10m', category='cultural',
-                                    name='populated_places'):
-            if place.attributes['ADM0_A3'] == self.country_code and \
-              'Admin-0 capital' in place.attributes['FEATURECLA']:
-                self.ax_map.scatter(place.geometry.x, place.geometry.y,
-                                    transform=ccrs.PlateCarree(),
-                                    marker='*', edgecolor='w', lw=0.5, s=100,
-                                    facecolor='k', zorder=100)
-                self.ax_map.annotate(place.attributes['NAME_EN'],
-                                     xy=(place.geometry.x, place.geometry.y),
-                                     transform=ccrs.PlateCarree(),
-                                     xytext=(0.5, 0), textcoords='offset fontsize',
-                                     va='center', ha='left', color='k',
-                                     path_effects=[mplpe.withStroke(linewidth=0.5, foreground="w")],
-                                     fontsize=10)
-                break
-
-        # Drawing proper circles around specific coordinates
-        if ref_radius is not None:
-            self.ax_map.add_geometries(smutils.get_circle_geom(place.geometry.x, place.geometry.y,
-                                                               ref_radius),
-                                       crs=ccrs.PlateCarree(),
-                                       facecolor='none', edgecolor='k', linewidth=1, ls='-.')
-            self._legend_handles['scale'] = mlines.Line2D([], [], color='k', ls='-.',
-                                                          label=f'R = {ref_radius} km')
-
-    @log_func_call(logger)
     def _add_gridlines(self):
         """ Add the lat/lon gridlines. """
 
-        gl = self.ax_map.gridlines(draw_labels=True, ls=':', lw=0.5, color='k')
+        gl = self.ax_map.gridlines(draw_labels=True, ls='-', lw=0.25, color='k')
         gl.xlabel_style = {'size': 12, 'color': 'k'}
         gl.ylabel_style = {'size': 12, 'color': 'k'}
         gl.bottom_labels = False  # To make space for the copyright statement
@@ -567,33 +389,20 @@ class CountryMapper():
         """ Wrapper around plt.savefig() """
         plt.savefig(fname, dpi=dpi)
 
-    @log_func_call(logger)
-    def get_surface_fraction(self, geom):
-        """ Compute the target country's surface fraction of a given geometry.set
 
-        Args:
-            geom (shapely geometry): the geometry to assess
-
-        Returns: float
-        """
-
-        area = shapely.area(shapely.intersection(self.country.geometry, geom))
-        return area/shapely.area(self.country.geometry)
-
-
-class StationMapper(CountryMapper):
-    """ Child CountryMapper class tuned to show stations from a given list. """
+class NetworkMapper(Mapper):
+    """ Child NetworkMapper class tuned to show stations from a given list. """
 
     @set_mplstyle
     @log_func_call(logger)
     def _add_stations(self, stations: pl.DataFrame,
-                      influence_radius: Optional[Union[float, int]] = None,
-                      facecolor: Optional[Union[str, tuple]] = 'k',
-                      edgecolor: Optional[Union[str, tuple]] = 'w',
-                      marker: Optional[str] = 's', size: Optional[int] = 30,
-                      label: Optional[str] = None,
-                      legend: Optional[str] = 'specific') -> shapely.geometry:
-        """ Add a series of stations to the country map.
+                      influence_radius: float | int | None = None,
+                      facecolor: str | tuple = 'k',
+                      edgecolor: str | tuple = 'w',
+                      marker: str = 's', size: Optional[int] = 30,
+                      label: str | None = None,
+                      ) -> shapely.geometry:
+        """ Add a series of stations to the map.
 
         Args:
             stations (polars.DataFrame): DataFrame of stations to plot. Must contain the columns
@@ -614,7 +423,7 @@ class StationMapper(CountryMapper):
 
         """
 
-        # Draw the stations
+        # Draw the stations if warranted
         if marker is not None:
             self.ax_map.scatter(stations.get_column('longitude').to_numpy(),
                                 stations.get_column('latitude').to_numpy(),
@@ -623,61 +432,64 @@ class StationMapper(CountryMapper):
                                 linewidth=0.5,
                                 zorder=101)
 
-        # Deal with the legend if warranted
-        if label is not None:
+            # Deal with the legend if warranted
+            if label is not None:
 
-            self._legend_handles[f'stations_{label}'] = \
-                mlines.Line2D([], [], markerfacecolor=facecolor,
-                              markeredgecolor=edgecolor,
-                              ls='', marker=marker, markersize=10,
-                              label=f'{label} [{len(stations)}]')
+                self._legend_handles[f'stations_{label}'] = \
+                    mlines.Line2D([], [], markerfacecolor=facecolor,
+                                  markeredgecolor=edgecolor,
+                                  ls='', marker=marker, markersize=10,
+                                  label=f'{label} [{len(stations)}]')
 
-        # If it is not specified, get the default GBON influence radius.
+        # If no influence radius was specified, we are done here
         if influence_radius is None:
             return None, None
 
         # Assemble circle geometries for each point
         geoms = []
         for row in stations.select(pl.col('longitude', 'latitude')).iter_rows():
-            geoms += [smutils.get_circle_geom(row[0], row[1], influence_radius)]
+            geoms += [utils.get_circle_geom(row[0], row[1], influence_radius)]
 
         # Merge them all into a single layer ...
         combined_geoms = shapely.union_all(geoms)
-        intersect_geoms = smutils.get_overlap_geom(geoms)
+        # ... and also find the overlap area ...
+        intersect_geoms = utils.get_overlap_geom(geoms)
 
-        # ... that I can plot in one go.
+        # ... that I can then plot on the map.
         self.ax_map.add_geometries(combined_geoms, crs=ccrs.PlateCarree(),
                                    facecolor=facecolor,
                                    edgecolor=edgecolor,
                                    linewidth=0, ls='-', alpha=0.2)
-        self.ax_map.add_geometries(intersect_geoms, crs=ccrs.PlateCarree(),
-                                   facecolor='none',
-                                   edgecolor=facecolor,
-                                   hatch='////',
-                                   linewidth=0, ls='-', alpha=1)
-        # Compute the country surface fraction covered ...
-        combined_area = self.get_surface_fraction(combined_geoms)
-        intersect_area = self.get_surface_fraction(intersect_geoms)
 
         # ... add it to the legend
-        lab = r'$D_\text{S}$ ≤ ' + f'{influence_radius} km'
-        if legend == 'specific':
-            lab += f' [{100 * combined_area:.1f}%]'
         self._legend_handles[f'stations_{label}_zone'] = \
             mpatches.Patch(facecolor=facecolor, edgecolor=edgecolor,
-                           alpha=0.2, label=lab)
-        lab = r'Overlap'
-        if legend == 'specific':
-            lab += f' [{100 * intersect_area:.1f}%]'
+                           alpha=0.2, label=r'$D_\text{s}$ ≤ ' + f'{influence_radius} km')
 
-        self._legend_handles[f'stations_{label}_zone_intersect'] = \
-            mpatches.Patch(facecolor='none', edgecolor=facecolor, lw=0,
-                           hatch='////',
-                           alpha=1, label=lab)
+        # CHeck if the intersect geometry is null
+        if not intersect_geoms.is_empty:
+            self.ax_map.add_geometries(intersect_geoms, crs=ccrs.PlateCarree(),
+                                       facecolor='none',
+                                       edgecolor=facecolor,
+                                       hatch='////',
+                                       linewidth=0, ls='-', alpha=1)
+
+            #self._legend_handles[f'stations_{label}_zone_intersect'] = \
+            #    mpatches.Patch(facecolor='none', edgecolor=facecolor, lw=0,
+            #                   hatch='////',
+            #                   alpha=1, label='Overlap')
+
+        # Compute the country surface fraction covered ...
+        #combined_area = self.get_surface_fraction(combined_geoms)
+        #intersect_area = self.get_surface_fraction(intersect_geoms)
+        #lab = r'Overlap'
+        #if legend == 'specific':
+        #    lab += f' [{100 * intersect_area:.1f}%]'
+
         return combined_geoms, intersect_geoms
 
     @log_func_call(logger)
-    def _add_geom_union_outline(self, geoms: list, label: Optional[str] = None):
+    def _add_geom_union_outline(self, geoms: list, label: str | None = None):
         """ Given a list of geometries, draw the outline of their union.
 
         Args:
@@ -697,16 +509,16 @@ class StationMapper(CountryMapper):
 
         # Add a label if warranted
         if label is not None:
-            area = self.get_surface_fraction(combined_geoms)
+            # area = self.get_surface_fraction(combined_geoms)
             self._legend_handles['stations_outline'] = \
                 mpatches.Patch(facecolor='none', edgecolor='k',
-                               label=f'{label} [{100*area:.1f}%]')
+                               label=f'{label}')
 
     @log_func_call(logger)
     def _link_neighbors(self, stations: pl.DataFrame,
-                        color: Optional[Union[str, tuple]] = 'k',
-                        thres: Optional[float] = None,
-                        drop_not_so_bad: Optional[bool] = False,
+                        color: str | tuple = 'k',
+                        thres: float | None = None,
+                        drop_not_so_bad: bool = False,
                         **kwargs) -> float:
         """ Given a set of stations, compute the neighbors and draw the connection on the map.
 
@@ -727,14 +539,14 @@ class StationMapper(CountryMapper):
         # First, identify the neighbor stations and their connectinfg vertices
         pts = stations.select(pl.col("longitude", "latitude")).to_numpy()
 
-        # Next find, the vertices
+        # Next, find the vertices
         good_verts, _, not_so_bad_verts = network.get_sep_vertices(pts[:, 0], pts[:, 1])
 
         if not drop_not_so_bad:
             good_verts = good_verts | not_so_bad_verts
 
         # From these, compute the mean separation
-        mean_sep = network.compute_mean_sep(good_verts)/1e3  # in km
+        mean_sep = network.compute_mean_sep(good_verts)/1.e3  # in km
 
         # Add these to the map
         for vert, dist in good_verts.items():
@@ -759,37 +571,293 @@ class StationMapper(CountryMapper):
                 mlines.Line2D([], [], color=color, ls='-',
                               label='Neighbors')
 
-        # Let's also add the mean separation to the legend
-        self._legend_handles['mean sep'] = \
-            mlines.Line2D([], [], color='none', ls='-',
-                          label=rf'$\rho={mean_sep:.1f}$ km')
-
         return mean_sep
 
 
-class GBONMapper(StationMapper):
+class CountryMapper(NetworkMapper):
+    """ Parent Mapper class tuned for showing a given country with little else. """
+
+    @log_func_call(logger)
+    def __init__(self, country_code: str, mrgid: Optional[int] = None) -> None:
+        """ Basic init routine.
+
+            Args:
+                country_code (str): a len(3) str containing the country code.
+                mrgid (int, optional): a Marine Regions Geographic IDengifier, used to identify
+                    the maritime boundaries of an applicable Exclusive Economic Zone (EEZ).
+                    See https://www.marineregions.org/mrgid.php for details.
+
+            Raises: ValueError, TypeError
+
+        """
+
+        # Some basic sanity checks
+        match country_code:
+            case str():
+                if len(country_code) != 3:
+                    raise ValueError('country_code should be str of len(3).')
+            case _:
+                raise TypeError("country_code must be a str")
+        match mrgid:
+            case None:
+                pass
+            case int():
+                pass
+            case _:
+                raise TypeError("mrgid should be an int")
+
+        # Assign the values to attibutes
+        self._country_code = country_code
+        self._mrgid = mrgid
+
+        # Fetch and set the country record from Natural Earth and store it, while I'm at it
+        self._country = get_ne_country(self.country_code)
+
+        # Fetch the EEZ if warranted
+        self._eez = get_eez(self.mrgid)
+
+        # Let's now trigger the Parent init
+        super().__init__(lat=self.country.geometry.centroid.y,
+                         lon=self.country.geometry.centroid.x)
+
+    @property
+    def country_code(self) -> str:
+        """ Country code as a 3 letter string. """
+        return self._country_code
+
+    @property
+    def country(self):
+        """ Return the target country Record. """
+        return self._country
+
+    @property
+    def eez(self) -> list:
+        """ Return the list of EEZ geometries associated with the target country. """
+        return self._eez
+
+    @property
+    def mrgid(self) -> str:
+        """ Marine Regions Geographic IDentifier. """
+        return self._mrgid
+
+    @log_func_call(logger)
+    def _center_map(self, pad_frac: float = 0.1,
+                    lon_min: float | None = None,
+                    lon_max: float | None = None,
+                    lat_min: float | None = None,
+                    lat_max: float | None = None) -> None:
+        """ Center the map on the target country.
+
+        We want to fit the entire country and all its EEZ, possibly with some padding.
+
+        Args:
+            pad_frac (float, optional): padding fraction around the edges. Defaults to 0.1 (=10%).
+            lon_min (foat, optional): if set, will override the minimum longitude of the map.
+            lon_max (foat, optional): if set, will override the maximum longitude of the map.
+            lat_min (foat, optional): if set, will override the minimum latitude of the map.
+            lat_max (foat, optional): if set, will override the maximum latitude of the map.
+        """
+
+        # Start from the country extent ...
+        lon_lims = np.array(self.country.bounds[0::2])
+        lat_lims = np.array(self.country.bounds[1::2])
+
+        # ... then expand as needed with the EEZ ...
+        for item in self.eez:
+            if item.bounds[0] < lon_lims[0]:
+                lon_lims[0] = item.bounds[0]
+            if item.bounds[1] < lat_lims[0]:
+                lat_lims[0] = item.bounds[1]
+            if item.bounds[2] > lon_lims[1]:
+                lon_lims[1] = item.bounds[2]
+            if item.bounds[3] > lat_lims[1]:
+                lat_lims[1] = item.bounds[3]
+
+        # ... add some padding around ...
+        lon_lims = utils.pad_angular_range(lon_lims, pad_frac)
+        lat_lims = utils.pad_angular_range(lat_lims, pad_frac)
+
+        # ... deal with user-set limits
+        for lon_id, lon in enumerate([lon_min, lon_max]):
+            if lon is not None:
+                lon_lims[lon_id] = lon
+        for lat_id, lat in enumerate([lat_min, lat_max]):
+            if lat is not None:
+                lat_lims[lat_id] = lat
+
+        # ... and make it square ...
+        lon_lims, lat_lims = utils.squarify_extent(lon_lims, lat_lims)
+
+        #  ... to finally be able to set the plot extent
+        self.ax_map.set_extent(tuple(lon_lims)+tuple(lat_lims))
+
+    @log_func_call(logger)
+    def _highlight_country(self, iso_alpha3: str | None = None,
+                           show_names=False) -> None:
+        """ Highlight a given target country on the map.
+
+        Args:
+            iso_alpha3 (str, optional): the 3-letter ISO code of the country to highlight. If None
+                (default), will use self.country_code.
+            show_names (bool, optional): if True, will display the names of neighboring countries.
+                Defaults to False.
+
+        """
+
+        if iso_alpha3 is None:
+            iso_alpha3 = self.country_code
+
+        # Loop through all the countries, and only deal with those that overlap with
+        # the plotting area
+        for item in get_ne_records(resolution='10m', category='cultural',
+                                   name='admin_0_map_units'):
+
+            # Check if the country bounds overlap with the extent of the map
+            if not utils.is_overlapping(item.geometry,
+                                        self.ax_map.get_extent(crs=ccrs.PlateCarree())):
+                continue
+
+            # Fill the neighboring countries with semi-transparent white
+            if item.attributes['ISO_A3'] != iso_alpha3:
+                self.ax_map.add_geometries(item.geometry, crs=ccrs.PlateCarree(),
+                                           facecolor=(1, 1, 1), alpha=0.7,
+                                           edgecolor='none',
+                                           label=item.attributes['ADM0_A3'])
+
+            # Add the names of the countries, but only if the country centroid falls within the map.
+            lon_lims = np.array(self.lon_lims)
+            lat_lims = np.array(self.lat_lims)
+
+            if lon_lims[0] < item.geometry.centroid.x < lon_lims[1] and \
+               lat_lims[0] < item.geometry.centroid.y < lat_lims[1] and \
+               item.attributes['LABELRANK'] < 10 and \
+               item.attributes['ISO_A3'] != iso_alpha3 and \
+               show_names:
+
+                self.ax_map.annotate(item.attributes['NAME'],
+                                     xy=(item.geometry.centroid.x, item.geometry.centroid.y),
+                                     xytext=(0, 0), textcoords='offset fontsize',
+                                     color=(0.25, 0.25, 0.25), fontsize=11,
+                                     ha='center', va='center',
+                                     path_effects=[mplpe.withStroke(linewidth=0.2, foreground="w")],
+                                     transform=ccrs.PlateCarree())
+
+    @log_func_call(logger)
+    def _add_eez(self) -> None:
+        """ Add the EEZ Maritime boundaries. """
+
+        if len(self.eez) == 0:
+            if self.mrgid is not None:
+                warnings.warn(f"No EEZ found (mgrid = {self.mrgid})", MapmetnetWarning)
+            return
+
+        # Plot the EEZ boundaries
+        for item in self.eez:
+            # Check if the bounary is disputed
+            ls = '-'
+            label = 'EEZ limit'
+
+            if 'Unsettled' in item.attributes['LINE_TYPE']:
+                ls = '--'
+                label += ' (unsettled)'
+                self._legend_handles['EEZ'] = mlines.Line2D([], [], color='firebrick', ls='--',
+                                                            label='EEZ (200 NM, unsettled)')
+            else:
+                self._legend_handles['EEZ unsettled'] = mlines.Line2D([], [], color='firebrick',
+                                                                      label='EEZ (200 NM)')
+            # Plot it acordingly
+            self.ax_map.add_geometries(item.geometry, crs=ccrs.PlateCarree(),
+                                       edgecolor='firebrick', facecolor='none', ls=ls,
+                                       label=label)
+
+        # Include a dedicated copyright statement if I have some EEZ boundaries
+        self._copyright_statement += '\n' + COPY_EEZ
+
+    @log_func_call(logger)
+    def _add_capital(self, ref_radius: int | float | None = None) -> None:
+        """ Add a marker for the target country's capital city. Optionally draw a reference circle
+        around it.
+
+        Args:
+            ref_radius (int|float, optional): if set, will draw a circle of 'ref_radius' km in
+                radius around the capital. Defaults to None.
+
+        """
+        # Loop through all the cities from Natural Earth until I find the correct one ...
+        for place in get_ne_records(resolution='10m', category='cultural',
+                                    name='populated_places'):
+            if place.attributes['ADM0_A3'] == self.country_code and \
+              'Admin-0 capital' in place.attributes['FEATURECLA']:
+                self.ax_map.scatter(place.geometry.x, place.geometry.y,
+                                    transform=ccrs.PlateCarree(),
+                                    marker='*', edgecolor='w', lw=0.5, s=100,
+                                    facecolor='k', zorder=100)
+                self.ax_map.annotate(place.attributes['NAME_EN'],
+                                     xy=(place.geometry.x, place.geometry.y),
+                                     transform=ccrs.PlateCarree(),
+                                     xytext=(0.5, 0), textcoords='offset fontsize',
+                                     va='center', ha='left', color='k',
+                                     path_effects=[mplpe.withStroke(linewidth=0.5, foreground="w")],
+                                     fontsize=10)
+                capital = place
+                break
+
+            capital = None
+
+        # Raise an error if I could not find the capital city
+        if capital is None:
+            warnings.warn(f"Could not find the capital city for {self.country_code}",
+                          MapmetnetWarning)
+            return
+
+        # Drawing a proper circle around specific coordinates
+        if ref_radius is not None:
+            self.ax_map.add_geometries(utils.get_circle_geom(capital.geometry.x,
+                                                             capital.geometry.y,
+                                                             ref_radius),
+                                       crs=ccrs.PlateCarree(),
+                                       facecolor='none', edgecolor='k', linewidth=1, ls='-.')
+            self._legend_handles['scale'] = mlines.Line2D([], [], color='k', ls='-.',
+                                                          label=f'R = {ref_radius} km')
+
+    @log_func_call(logger)
+    def get_surface_fraction(self, geom):
+        """ Compute the target country's surface fraction of a given geometry.set
+
+        Args:
+            geom (shapely geometry): the geometry to assess
+
+        Returns: float
+        """
+
+        area = shapely.area(shapely.intersection(self.country.geometry, geom))
+        return area/shapely.area(self.country.geometry)
+
+
+class GBONMapper(CountryMapper):
     """ Child Station Mapper class tuned for showing a given country alongside specific GBON info.
     """
 
     @log_func_call(logger)
     def _add_wdqms(self,
-                   station_type: Optional[str] = 'surface',
-                   var_name: Optional[str] = 'Temperature',
-                   interval: Optional[str] = 'monthly',
-                   date: Optional[str] = '2023-11',
-                   iso_a3: Optional[str] = None,
-                   wigos_ids: Optional[list] = None,
-                   show_influence_area: Optional[bool] = True,
+                   station_type: str = 'surface',
+                   var_name: str = 'temperature',
+                   interval: str = 'monthly',
+                   date: str = '2026-01',
+                   iso_a3: str | None = None,
+                   wigos_ids: list | None = None,
+                   show_influence_area: bool = True,
                    high_density: bool = False):
         """ Add all WDQMS station statistics of the target country to the map.
 
         Args:
             station_type (str, optional): either 'surface' (default) or 'upper-air'.
-            var_name (str, optional): name of variable to plot. Defaults to '2m Temperature'.
+            var_name (str, optional): name of variable to plot. Defaults to 'temperature'.
             interval (str, optional): assessment interval, i.e. one of
                 ['monthly', 'daily', 'six_hour']. Defaults to 'monthly'.
             date (str, optional): date of the availability assessment. Defaults to '2023-11'.
-            iso_a3 (str, optional): country code as ISO alpha 3. Defaults to None = target country.
+            iso_a3 (str, optional): station country code as ISO alpha 3.
+                Defaults to None = target country.
             wigos_ids (list, optional): Defaults to None. If specified, will be combined with the
                 country code using OR to select stations to be drawn.
             show_influence_area (bool, optional): if True (default), will draw the baseline
@@ -798,7 +866,7 @@ class GBONMapper(StationMapper):
                 (a.k.a "should") criteria for deriving the area of influence of stations.
 
         Returns:
-            float: the network horizontal resolution
+            float, float: the network horizontal resolution and country coverage fraction
 
         TODO:
             - allow users to select the high-density/sea parameters for the influence area.
@@ -810,13 +878,13 @@ class GBONMapper(StationMapper):
         # First deal with the influence radius.
         influence_radius = None
         if show_influence_area:
+            # TODO: allow to select marine stations too ...
             influence_radius = wmoutils.gbon.get_influence_radius(station_type, over='land',
                                                                   high_density=high_density)
             influence_radius = int(np.round(influence_radius, 0))
 
         # Get the data straight from WDQMS
         # TODO: allow to select other parameters
-
         pdf = wmoutils.query.query_wdqms('gbon', station_type, interval, 'availability',
                                          var_name, date)
 
@@ -852,30 +920,41 @@ class GBONMapper(StationMapper):
             #sub_pdf.write_csv(f'WDQMS_{iso_a3}_{station_type}_{var_name}_{interval}' +
             #                  f'_{date}_{lvls[0]}.csv')
 
-        # As a final step, compute the combined surface fraction from all layers ...
-        if influence_radius is not None:
-            self._add_geom_union_outline(combined_geoms, label='Total area')
 
-        # Let's also add the network horizontal resolution
+        # Let's add the network horizontal resolution to the legend ...
+        # ... after we compute it, evidently.
         # TODO: allow to differentiate between land and marine stations ...
         mean_sep = self._link_neighbors(pdf, thres=wmoutils.gbon.get_resolution(
             station_type, high_density=high_density))
+        self._legend_handles['mean_sep'] = mlines.Line2D(
+                [], [], color='none', ls='-', label=f'Mean sep.: {mean_sep:.1f} km')
 
-        return mean_sep
+        # Let's also compute the combined surface fraction from all layers ...
+        # ... draw the outline ...
+        # ... and add the relevant entry to the legend.
+        if influence_radius is not None:
+            self._add_geom_union_outline(combined_geoms)
+            cov_frac = self.get_surface_fraction(shapely.union_all(combined_geoms))
+            self._legend_handles['coverage'] = mlines.Line2D(
+                [], [], color='none', ls='-', label=f'{iso_a3} coverage: {cov_frac:.1%}')
+        else:
+            cov_frac = None
+
+        return mean_sep, cov_frac
 
     @log_func_call(logger)
-    def generate_map(self, figid: Optional[int] = 1, pad_frac: Optional[float] = 0.2,
+    def generate_map(self, figid: int = 1, pad_frac: float = 0.2,
                      background: str | None = None,
-                     station_type: Optional[str] = 'surface',
-                     var_name: Optional[str] = 'Temperature',
-                     interval: Optional[str] = 'monthly',
-                     date: Optional[str] = '2023-11',
-                     wigos_ids: Optional[list] = None,
+                     station_type: str = 'surface',
+                     var_name: str = 'temperature',
+                     interval: str = 'monthly',
+                     date: str = '2026-01',
+                     wigos_ids: list | None = None,
                      show_influence_area: bool = True,
                      high_density: bool = False,
                      show_country_names: bool = False,
-                     ref_radius: Optional[Union[float, int]] = 200,
-                     save_fmts: Optional[list] = None):
+                     ref_radius: float | int | None = None,
+                     save_fmts: str | list | None = None):
         """ All-in-one routine to generate a fully-fledged map.
 
         Args:
@@ -899,27 +978,25 @@ class GBONMapper(StationMapper):
                 map. Defaults to False.
             ref_radius (int|float, optional): if set, will draw a circle of 'ref_radius' km in
                 radius around the capital.
-            save_fmts (list, optional): a list of formats to save the map to, e.g. ['pdf', 'png'].
-                Defaults to None.
+            save_fmts (str|list, optional): a str or list of str of formats to save the map to,
+                e.g. ['pdf', 'png']. Defaults to None (= no figure saved).
 
         """
 
         self._create_fig(figid=figid)
-        self._set_map_extent(pad_frac=pad_frac)
+        self._center_map(pad_frac=pad_frac)
         self._add_background(which=background)
         self._add_rivers_and_lakes()
-        self._add_countries(show_names=show_country_names)
-        self._add_coast()
         self._add_borders()
+        self._highlight_country(show_names=show_country_names)
+        self._add_coast()
         self._add_capital(ref_radius=ref_radius)
         self._add_eez()
         self._add_gridlines()
-        mean_sep = self._add_wdqms(station_type=station_type, var_name=var_name, interval=interval,
-                                   date=date, wigos_ids=wigos_ids,
-                                   high_density=high_density,
-                                   show_influence_area=show_influence_area)
-
-        print(f'Mean station density: {mean_sep}')
+        _ = self._add_wdqms(station_type=station_type, var_name=var_name, interval=interval,
+                            date=date, wigos_ids=wigos_ids,
+                            high_density=high_density,
+                            show_influence_area=show_influence_area)
         self._add_copyright()
         self._add_legend()
         hd_txt = ', high-density' if high_density else ''
