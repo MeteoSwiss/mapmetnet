@@ -19,6 +19,6 @@ Submodules
 .. toctree::
    :maxdepth: 1
 
-   /autoapi/mapmetnet/main/index
+   /autoapi/mapmetnet/errors/index
 
 
