@@ -97,6 +97,7 @@ ENV/
 .vscode/
 #!.vscode/settings.json
 #!.vscode/launch.json
+.python-version
 
 # Rope project settings
 .ropeproject

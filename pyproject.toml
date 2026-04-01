@@ -19,6 +19,8 @@ dependencies = [
     "cartopy",
     "matplotlib",
     "numpy",
+    "owslib",
+    "polars",
     "pyyaml",
     "scipy",
     "shapely",
