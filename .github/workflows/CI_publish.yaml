@@ -29,10 +29,10 @@ jobs:
     - name: Checkout current repository
       uses: actions/checkout@v4
 
-    - name: Set up Python 3.12
+    - name: Set up Python 3.14
       uses: actions/setup-python@v5
       with:
-        python-version: 3.12
+        python-version: 3.14
 
     - name: Install poetry and python package
       run: |
@@ -45,7 +45,7 @@ jobs:
         poetry version ${GITHUB_REF#refs/tags/}
         poetry build
 
-    - name: Publish to PyPi
+    - name: Publish to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         packages-dir: dist/
