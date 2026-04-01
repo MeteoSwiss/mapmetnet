@@ -1,10 +1,11 @@
 import os
 
-extensions = ["sphinx.ext.napoleon", "autoapi.extension", "sphinx.ext.viewcode"]
+extensions = ["sphinx.ext.napoleon", "autoapi.extension", "sphinx.ext.viewcode",
+              "sphinx.ext.todo"]
 
 project = "mapmetnet"
 copyright = "2026, MeteoSwiss"
-author = "Frédéric Vogt"
+author = "F.P.A. Vogt"
 
 version = os.getenv("VERSION", default="")
 build_id = os.getenv("BUILD_ID", default="")
@@ -15,11 +16,16 @@ exclude_patterns = ["_build"]
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 
+# Deal with the todos
+todo_include_todos = True
+todo_link_only = False
+
 # html template settings
 html_title = project
 html_theme = "pydata_sphinx_theme"
 
-html_last_updated_fmt = "%d.%m.%Y"
+html_last_updated_fmt = "%Y-%m-%d"
+html_static_path = ['_static']
 
 html_theme_options = {
     "show_nav_level": 2,
@@ -47,5 +53,6 @@ html_sidebars = {"usage": [], "changelog": [], "migration_guide": [], "readme": 
 napoleon_use_param = False  # improve parameters description
 add_module_names = False  # avoid the display of redundant module names
 
-autoapi_dirs = ["../mapmetnet"]
-autoapi_options = ["members", "undoc-members", "show-inheritance", "show-module-summary", "imported-members"]
+autoapi_dirs = ["../src/mapmetnet"]
+autoapi_options = ["members", "undoc-members", "show-inheritance", "show-module-summary",
+                   "imported-members"]
