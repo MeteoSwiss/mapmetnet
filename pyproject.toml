@@ -1,24 +1,65 @@
-[tool.poetry]
+[project]
 name = "mapmetnet"
 version = "0.0.0"  # DO NOT SET. The version of the package is always set by the CI/CD pipeline.
-description = "Python library for creating beautiful hydromet network maps"
+description = "Python library to assemble maps of meteorological networks & station sites. "
 license = "BSD-3-Clause"
-authors = ["Frédéric Vogt <frédéric.vogt@meteoswiss.ch>"]
+authors = [
+    {name = "F.P.A Vogt", email = "frederic.vogt@meteoswiss.ch"},
+    {name = "E. Sauvageat"}
+]
+maintainers = [
+    {name = "F.P.A Vogt", email = "frederic.vogt@meteoswiss.ch"},
+]
 readme = "README.rst"
 include = ["CHANGELOG.rst"]
+packages = [{include = "*", from="src"}]
+requires-python = ">=3.11"
+dependencies = [
+    "polars",
+    "requests",
+]
+keywords = ["meteorology", "map", "network", "climate", "data", "utilities"]
+classifiers = [
+    # How mature is this project? Common values are
+    #   3 - Alpha
+    #   4 - Beta
+    #   5 - Production/Stable
 
-[tool.poetry.dependencies]
-python = ">=3.11,<3.13"
+    'Development Status :: 3 - Alpha',
 
-[tool.poetry.group.dev.dependencies]
-mypy = "^1.18.1"
-pydata-sphinx-theme = "^0.16.1"
-pylint = "^3.3.8"
-pytest = "^8.4.2"
-pytest-cov = "^7.0.0"
-sphinx = "^8.2.3"
-sphinx-autoapi = "^3.6.0"
-yapf = "^0.43.0"
+    # Indicate who your project is intended for
+    'Intended Audience :: Science/Research',
+    'Topic :: Scientific/Engineering :: Atmospheric Science',
+
+    # Pick your license as you wish (should match "license" above)
+    'License :: OSI Approved :: BSD License',
+
+    # Specify the Python versions you support here. In particular, ensure
+    # that you indicate whether you support Python 2, Python 3 or both.
+    'Programming Language :: Python :: 3',
+]
+
+[projects.urls]
+Homepage = "https://meteoswiss.github.io/mapmetnet"
+Documentation = "https://meteoswiss.github.io/mapmetnet"
+Repository = "https://github.com/MeteoSwiss/mapmetnet/"
+Issues = "https://github.com/MeteoSwiss/mapmetnet/issues"
+Changelog = "https://github.com/MeteoSwiss/mapmetnet/blob/main/CHANGELOG.rst"
+
+[dependency-groups]
+dev = [
+    "mypy (>=1.18.1)",
+    "pydata-sphinx-theme (>=0.16.1)",
+    "pylint (>=3.3.8)",
+    "pytest (>=8.4.2)",
+    "pytest-cov (>=7.0.0)",
+    "sphinx (>=8.2.3)",
+    "sphinx-autoapi (>=3.6.0)",
+    "yapf (>=0.43.0)",
+]
+
+[tool.poetry]
+include = []
 
 [tool.yapf]
 based_on_style = "pep8"
