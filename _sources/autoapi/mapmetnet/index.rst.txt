@@ -11,6 +11,8 @@ mapmetnet
 
    SPDX-License-Identifier: BSD-3-Clause
 
+   Module contains: highest-level init magic
+
 
 
 Submodules
@@ -20,6 +22,21 @@ Submodules
    :maxdepth: 1
 
    /autoapi/mapmetnet/errors/index
+   /autoapi/mapmetnet/hardcoded/index
    /autoapi/mapmetnet/logger/index
+   /autoapi/mapmetnet/utils/index
 
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   mapmetnet.logger
+
+
+Package Contents
+----------------
+
+.. py:data:: logger
 

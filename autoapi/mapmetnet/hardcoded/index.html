@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>mapmetnet.logger &#8212; mapmetnet</title>
+    <title>mapmetnet.hardcoded &#8212; mapmetnet</title>
   
   
   
@@ -42,7 +42,7 @@
     <script src="../../../_static/documentation_options.js?v=de6c52ac"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/mapmetnet/logger/index';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/mapmetnet/hardcoded/index';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = '_static/switcher_config.json';
@@ -52,8 +52,8 @@
         </script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="mapmetnet.utils" href="../utils/index.html" />
-    <link rel="prev" title="mapmetnet.hardcoded" href="../hardcoded/index.html" />
+    <link rel="next" title="mapmetnet.logger" href="../logger/index.html" />
+    <link rel="prev" title="mapmetnet.errors" href="../errors/index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -324,8 +324,8 @@
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">mapmetnet</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../errors/index.html">mapmetnet.errors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../hardcoded/index.html">mapmetnet.hardcoded</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">mapmetnet.logger</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">mapmetnet.hardcoded</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../logger/index.html">mapmetnet.logger</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../utils/index.html">mapmetnet.utils</a></li>
 </ul>
 </details></li>
@@ -375,7 +375,7 @@
     
     <li class="breadcrumb-item"><a href="../index.html" class="nav-link">mapmetnet</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">mapmetnet.logger</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">mapmetnet.hardcoded</span></li>
   </ul>
 </nav>
 </div>
@@ -392,18 +392,51 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="module-mapmetnet.logger">
-<span id="mapmetnet-logger"></span><h1>mapmetnet.logger<a class="headerlink" href="#module-mapmetnet.logger" title="Link to this heading">#</a></h1>
+  <section id="module-mapmetnet.hardcoded">
+<span id="mapmetnet-hardcoded"></span><h1>mapmetnet.hardcoded<a class="headerlink" href="#module-mapmetnet.hardcoded" title="Link to this heading">#</a></h1>
 <p>Copyright (c) 2023-2024 MeteoSwiss, contributors listed in AUTHORS.</p>
 <p>Distributed under the terms of the 3-Clause BSD License.</p>
 <p>SPDX-License-Identifier: BSD-3-Clause</p>
-<p>Module contains: logging utilities</p>
-<section id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
+<p>Module contains: hardcoded elements</p>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mapmetnet.logger.log_func_call" title="mapmetnet.logger.log_func_call"><code class="xref py py-obj docutils literal notranslate"><span class="pre">log_func_call</span></code></a>(→ Callable)</p></td>
-<td><p>Intended as a decorator to log function calls.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mapmetnet.hardcoded.WIDTH_ONECOL" title="mapmetnet.hardcoded.WIDTH_ONECOL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WIDTH_ONECOL</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mapmetnet.hardcoded.WIDTH_TWOCOL" title="mapmetnet.hardcoded.WIDTH_TWOCOL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WIDTH_TWOCOL</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mapmetnet.hardcoded.USR_BKG_PATH" title="mapmetnet.hardcoded.USR_BKG_PATH"><code class="xref py py-obj docutils literal notranslate"><span class="pre">USR_BKG_PATH</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mapmetnet.hardcoded.EEZ_PATH" title="mapmetnet.hardcoded.EEZ_PATH"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EEZ_PATH</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mapmetnet.hardcoded.EEZ_FN" title="mapmetnet.hardcoded.EEZ_FN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EEZ_FN</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mapmetnet.hardcoded.COPY_MAPMETNET" title="mapmetnet.hardcoded.COPY_MAPMETNET"><code class="xref py py-obj docutils literal notranslate"><span class="pre">COPY_MAPMETNET</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mapmetnet.hardcoded.COPY_CARTOPY" title="mapmetnet.hardcoded.COPY_CARTOPY"><code class="xref py py-obj docutils literal notranslate"><span class="pre">COPY_CARTOPY</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mapmetnet.hardcoded.COPY_NE" title="mapmetnet.hardcoded.COPY_NE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">COPY_NE</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mapmetnet.hardcoded.COPY_GIBS" title="mapmetnet.hardcoded.COPY_GIBS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">COPY_GIBS</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mapmetnet.hardcoded.COPY_EEZ" title="mapmetnet.hardcoded.COPY_EEZ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">COPY_EEZ</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mapmetnet.hardcoded.DISC_MCH" title="mapmetnet.hardcoded.DISC_MCH"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DISC_MCH</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mapmetnet.hardcoded.WDQMS_COLORS" title="mapmetnet.hardcoded.WDQMS_COLORS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WDQMS_COLORS</span></code></a></p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -411,25 +444,80 @@
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="mapmetnet.logger.log_func_call">
-<span class="sig-name descname"><span class="pre">log_func_call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">logging.Logger</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="reference internal" href="../../../_modules/mapmetnet/logger.html#log_func_call"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mapmetnet.logger.log_func_call" title="Link to this definition">#</a></dt>
-<dd><p>Intended as a decorator to log function calls.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>logger</strong> (<em>logging.Logger</em>) – a logger to feed info to.</p>
-</dd>
-</dl>
-<p>The first part of the message containing the function name is at the ‘INFO’ level.
-The second part of the message containing the argument values is at the ‘DEBUG’ level.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Adapted from the similar dvas function, which itself was adapted from
-<a class="reference external" href="https://stackoverflow.com/questions/218616">this post</a> on SO,
-in particular the reply from Kfir Eisner and Peter Mortensen.
-See also <a class="reference external" href="https://docs.python.org/3/library/inspect.html#inspect.BoundArguments">this</a>.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="mapmetnet.hardcoded.WIDTH_ONECOL">
+<span class="sig-name descname"><span class="pre">WIDTH_ONECOL</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6.92</span></span><a class="headerlink" href="#mapmetnet.hardcoded.WIDTH_ONECOL" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="mapmetnet.hardcoded.WIDTH_TWOCOL">
+<span class="sig-name descname"><span class="pre">WIDTH_TWOCOL</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">14.16</span></span><a class="headerlink" href="#mapmetnet.hardcoded.WIDTH_TWOCOL" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="mapmetnet.hardcoded.USR_BKG_PATH">
+<span class="sig-name descname"><span class="pre">USR_BKG_PATH</span></span><a class="headerlink" href="#mapmetnet.hardcoded.USR_BKG_PATH" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="mapmetnet.hardcoded.EEZ_PATH">
+<span class="sig-name descname"><span class="pre">EEZ_PATH</span></span><a class="headerlink" href="#mapmetnet.hardcoded.EEZ_PATH" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="mapmetnet.hardcoded.EEZ_FN">
+<span class="sig-name descname"><span class="pre">EEZ_FN</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'eez_boundaries_v12.shp'</span></span><a class="headerlink" href="#mapmetnet.hardcoded.EEZ_FN" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="mapmetnet.hardcoded.COPY_MAPMETNET">
+<span class="sig-name descname"><span class="pre">COPY_MAPMETNET</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Created</span> <span class="pre">with</span> <span class="pre">mapmetnet</span> <span class="pre">vUninferable</span> <span class="pre">(https://github.com/MeteoSwiss/mapmetnet).'</span></span><a class="headerlink" href="#mapmetnet.hardcoded.COPY_MAPMETNET" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="mapmetnet.hardcoded.COPY_CARTOPY">
+<span class="sig-name descname"><span class="pre">COPY_CARTOPY</span></span><a class="headerlink" href="#mapmetnet.hardcoded.COPY_CARTOPY" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="mapmetnet.hardcoded.COPY_NE">
+<span class="sig-name descname"><span class="pre">COPY_NE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Natural</span> <span class="pre">Earth.'</span></span><a class="headerlink" href="#mapmetnet.hardcoded.COPY_NE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="mapmetnet.hardcoded.COPY_GIBS">
+<span class="sig-name descname"><span class="pre">COPY_GIBS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Multiline-String</span></span><a class="headerlink" href="#mapmetnet.hardcoded.COPY_GIBS" title="Link to this definition">#</a></dt>
+<dd><details><summary>Show Value</summary><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;NASA&#39;s Global Imagery Browse Services (GIBS),</span>
+<span class="sd">part of NASA&#39;s Earth Observing System Data and Information System (EOSDIS).&quot;&quot;&quot;</span>
+</pre></div>
 </div>
-</dd></dl>
+</details></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="mapmetnet.hardcoded.COPY_EEZ">
+<span class="sig-name descname"><span class="pre">COPY_EEZ</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Multiline-String</span></span><a class="headerlink" href="#mapmetnet.hardcoded.COPY_EEZ" title="Link to this definition">#</a></dt>
+<dd><details><summary>Show Value</summary><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;EEZ maritime boundaries from Flanders Marine Institute (2023),</span>
+<span class="sd">Maritime Boundaries Geodatabase: Maritime Boundaries and Exclusive Economic Zones (200NM), version 12,</span>
+<span class="sd">available online at https://www.marineregions.org/ (https://doi.org/10.14284/632).&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</details></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="mapmetnet.hardcoded.DISC_MCH">
+<span class="sig-name descname"><span class="pre">DISC_MCH</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Multiline-String</span></span><a class="headerlink" href="#mapmetnet.hardcoded.DISC_MCH" title="Link to this definition">#</a></dt>
+<dd><details><summary>Show Value</summary><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Disclaimer: the designations employed in this map do not imply the expression of any opinion whatsoever</span>
+<span class="sd">on the part of MeteoSwiss concerning the legal status of any country, area, or territory or of its authorities,</span>
+<span class="sd">or concerning the delimitation of its borders. The depiction and use of boundaries, geographic names and related</span>
+<span class="sd">data are not warranted to be error free nor do they necessarily imply official endorsement by MeteoSwiss.&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</details></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="mapmetnet.hardcoded.WDQMS_COLORS">
+<span class="sig-name descname"><span class="pre">WDQMS_COLORS</span></span><a class="headerlink" href="#mapmetnet.hardcoded.WDQMS_COLORS" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
 </section>
 </section>
@@ -445,20 +533,20 @@ See also <a class="reference external" href="https://docs.python.org/3/library/i
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../hardcoded/index.html"
+       href="../errors/index.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">mapmetnet.hardcoded</p>
+        <p class="prev-next-title">mapmetnet.errors</p>
       </div>
     </a>
     <a class="right-next"
-       href="../utils/index.html"
+       href="../logger/index.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">mapmetnet.utils</p>
+        <p class="prev-next-title">mapmetnet.logger</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -481,9 +569,20 @@ See also <a class="reference external" href="https://docs.python.org/3/library/i
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attributes">Attributes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.logger.log_func_call"><code class="docutils literal notranslate"><span class="pre">log_func_call()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.hardcoded.WIDTH_ONECOL"><code class="docutils literal notranslate"><span class="pre">WIDTH_ONECOL</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.hardcoded.WIDTH_TWOCOL"><code class="docutils literal notranslate"><span class="pre">WIDTH_TWOCOL</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.hardcoded.USR_BKG_PATH"><code class="docutils literal notranslate"><span class="pre">USR_BKG_PATH</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.hardcoded.EEZ_PATH"><code class="docutils literal notranslate"><span class="pre">EEZ_PATH</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.hardcoded.EEZ_FN"><code class="docutils literal notranslate"><span class="pre">EEZ_FN</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.hardcoded.COPY_MAPMETNET"><code class="docutils literal notranslate"><span class="pre">COPY_MAPMETNET</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.hardcoded.COPY_CARTOPY"><code class="docutils literal notranslate"><span class="pre">COPY_CARTOPY</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.hardcoded.COPY_NE"><code class="docutils literal notranslate"><span class="pre">COPY_NE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.hardcoded.COPY_GIBS"><code class="docutils literal notranslate"><span class="pre">COPY_GIBS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.hardcoded.COPY_EEZ"><code class="docutils literal notranslate"><span class="pre">COPY_EEZ</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.hardcoded.DISC_MCH"><code class="docutils literal notranslate"><span class="pre">DISC_MCH</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.hardcoded.WDQMS_COLORS"><code class="docutils literal notranslate"><span class="pre">WDQMS_COLORS</span></code></a></li>
 </ul>
 </li>
 </ul>

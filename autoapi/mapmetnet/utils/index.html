@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>mapmetnet.logger &#8212; mapmetnet</title>
+    <title>mapmetnet.utils &#8212; mapmetnet</title>
   
   
   
@@ -42,7 +42,7 @@
     <script src="../../../_static/documentation_options.js?v=de6c52ac"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/mapmetnet/logger/index';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/mapmetnet/utils/index';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = '_static/switcher_config.json';
@@ -52,8 +52,7 @@
         </script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="mapmetnet.utils" href="../utils/index.html" />
-    <link rel="prev" title="mapmetnet.hardcoded" href="../hardcoded/index.html" />
+    <link rel="prev" title="mapmetnet.logger" href="../logger/index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -325,8 +324,8 @@
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">mapmetnet</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../errors/index.html">mapmetnet.errors</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hardcoded/index.html">mapmetnet.hardcoded</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">mapmetnet.logger</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../utils/index.html">mapmetnet.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../logger/index.html">mapmetnet.logger</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">mapmetnet.utils</a></li>
 </ul>
 </details></li>
 </ul>
@@ -375,7 +374,7 @@
     
     <li class="breadcrumb-item"><a href="../index.html" class="nav-link">mapmetnet</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">mapmetnet.logger</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">mapmetnet.utils</span></li>
   </ul>
 </nav>
 </div>
@@ -392,18 +391,44 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="module-mapmetnet.logger">
-<span id="mapmetnet-logger"></span><h1>mapmetnet.logger<a class="headerlink" href="#module-mapmetnet.logger" title="Link to this heading">#</a></h1>
-<p>Copyright (c) 2023-2024 MeteoSwiss, contributors listed in AUTHORS.</p>
+  <section id="module-mapmetnet.utils">
+<span id="mapmetnet-utils"></span><h1>mapmetnet.utils<a class="headerlink" href="#module-mapmetnet.utils" title="Link to this heading">#</a></h1>
+<p>Copyright (c) 2026 MeteoSwiss, contributors listed in AUTHORS.</p>
 <p>Distributed under the terms of the 3-Clause BSD License.</p>
 <p>SPDX-License-Identifier: BSD-3-Clause</p>
-<p>Module contains: logging utilities</p>
+<p>Module contains: general utility functions</p>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mapmetnet.utils.logger" title="mapmetnet.utils.logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logger</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 <section id="functions">
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mapmetnet.logger.log_func_call" title="mapmetnet.logger.log_func_call"><code class="xref py py-obj docutils literal notranslate"><span class="pre">log_func_call</span></code></a>(→ Callable)</p></td>
-<td><p>Intended as a decorator to log function calls.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mapmetnet.utils.pad_angular_range" title="mapmetnet.utils.pad_angular_range"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pad_angular_range</span></code></a>(ang_range, pad_fraction)</p></td>
+<td><p>Pad a given angular range by a fraction of the range (on both sides).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mapmetnet.utils.squarify_extent" title="mapmetnet.utils.squarify_extent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">squarify_extent</span></code></a>(lon_lims, lat_lims)</p></td>
+<td><p>Adjust longitude and latitude limits to get a squar-ish map extent.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mapmetnet.utils.is_overlapping" title="mapmetnet.utils.is_overlapping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_overlapping</span></code></a>(→ bool)</p></td>
+<td><p>Utility function to check if a given geometry overlapps with a plot extent.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mapmetnet.utils.get_circle_geom" title="mapmetnet.utils.get_circle_geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_circle_geom</span></code></a>(lon, lat, radius)</p></td>
+<td><p>Given a lat-lon positon and radius, build a circle geometry.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mapmetnet.utils.get_overlap_geom" title="mapmetnet.utils.get_overlap_geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_overlap_geom</span></code></a>(→ shapely.geometry)</p></td>
+<td><p>Given a list of geometries, assemble the region where two (or more) overlap. It does not</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mapmetnet.utils.set_mplstyle" title="mapmetnet.utils.set_mplstyle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_mplstyle</span></code></a>(→ Callable)</p></td>
+<td><p>Intended to be used as a decorator around plotting functions, to set the plotting style.</p></td>
 </tr>
 </tbody>
 </table>
@@ -411,24 +436,106 @@
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="mapmetnet.utils.logger">
+<span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#mapmetnet.utils.logger" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
 <dl class="py function">
-<dt class="sig sig-object py" id="mapmetnet.logger.log_func_call">
-<span class="sig-name descname"><span class="pre">log_func_call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">logging.Logger</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="reference internal" href="../../../_modules/mapmetnet/logger.html#log_func_call"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mapmetnet.logger.log_func_call" title="Link to this definition">#</a></dt>
-<dd><p>Intended as a decorator to log function calls.</p>
+<dt class="sig sig-object py" id="mapmetnet.utils.pad_angular_range">
+<span class="sig-name descname"><span class="pre">pad_angular_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ang_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad_fraction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mapmetnet.utils.pad_angular_range" title="Link to this definition">#</a></dt>
+<dd><p>Pad a given angular range by a fraction of the range (on both sides).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>logger</strong> (<em>logging.Logger</em>) – a logger to feed info to.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ang_range</strong> (<em>list, tuple, ndarray</em>) – len(2) list/tuple/ndarray with lower and higher angular
+bounds.</p></li>
+<li><p><strong>pad_fraction</strong> (<em>float</em>) – padding fraction. Setting pad_fraction to 0 returns the same range.</p></li>
+</ul>
 </dd>
 </dl>
-<p>The first part of the message containing the function name is at the ‘INFO’ level.
-The second part of the message containing the argument values is at the ‘DEBUG’ level.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Adapted from the similar dvas function, which itself was adapted from
-<a class="reference external" href="https://stackoverflow.com/questions/218616">this post</a> on SO,
-in particular the reply from Kfir Eisner and Peter Mortensen.
-See also <a class="reference external" href="https://docs.python.org/3/library/inspect.html#inspect.BoundArguments">this</a>.</p>
-</div>
+<p>Return: list or tuple or ndarray, padded by the requested amount.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mapmetnet.utils.squarify_extent">
+<span class="sig-name descname"><span class="pre">squarify_extent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lon_lims</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat_lims</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mapmetnet.utils.squarify_extent" title="Link to this definition">#</a></dt>
+<dd><p>Adjust longitude and latitude limits to get a squar-ish map extent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lon_lims</strong> (<em>tuple</em>) – min/max longitudes</p></li>
+<li><p><strong>lat_lims</strong> (<em>tuple</em>) – min/max latitudes</p></li>
+</ul>
+</dd>
+</dl>
+<p>Return: tuple of (lon_lims, lat_lims) with the narrowest direction suitably expanded.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mapmetnet.utils.is_overlapping">
+<span class="sig-name descname"><span class="pre">is_overlapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geom</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">shapely.geometry</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mapmetnet.utils.is_overlapping" title="Link to this definition">#</a></dt>
+<dd><p>Utility function to check if a given geometry overlapps with a plot extent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>geom</strong> (<em>shapely geometry</em>) – a geometry to check</p></li>
+<li><p><strong>extent</strong> (<em>tuple</em>) – the map extent, from ax.get_extent(crs=ccrs.PlateCarree())</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns: bool</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mapmetnet.utils.get_circle_geom">
+<span class="sig-name descname"><span class="pre">get_circle_geom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mapmetnet.utils.get_circle_geom" title="Link to this definition">#</a></dt>
+<dd><p>Given a lat-lon positon and radius, build a circle geometry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lon</strong> (<em>float</em>) – center longitude</p></li>
+<li><p><strong>lat</strong> (<em>float</em>) – center latitude</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – radius in km</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns: shapely.geometry</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mapmetnet.utils.get_overlap_geom">
+<span class="sig-name descname"><span class="pre">get_overlap_geom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geoms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">shapely.geometry</span></span></span><a class="headerlink" href="#mapmetnet.utils.get_overlap_geom" title="Link to this definition">#</a></dt>
+<dd><p>Given a list of geometries, assemble the region where two (or more) overlap. It does not
+need to be a contiguous region.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>geoms</strong> (<em>list</em>) – list of shapely geometries to process.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the shapely geometry of the overlaps</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>sgeom</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mapmetnet.utils.set_mplstyle">
+<span class="sig-name descname"><span class="pre">set_mplstyle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="headerlink" href="#mapmetnet.utils.set_mplstyle" title="Link to this definition">#</a></dt>
+<dd><p>Intended to be used as a decorator around plotting functions, to set the plotting style.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the decorator.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Callable</p>
+</dd>
+</dl>
+<p>Adapted from the ampycloud source code: <a class="github reference external" href="https://github.com/MeteoSwiss/ampycloud">MeteoSwiss/ampycloud</a></p>
+<p>This is a simpler version of the Decorator that only loads the basic matplotlib style
+specified in mpl_styles/base.mplstyle.</p>
 </dd></dl>
 
 </section>
@@ -445,22 +552,13 @@ See also <a class="reference external" href="https://docs.python.org/3/library/i
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../hardcoded/index.html"
+       href="../logger/index.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">mapmetnet.hardcoded</p>
+        <p class="prev-next-title">mapmetnet.logger</p>
       </div>
-    </a>
-    <a class="right-next"
-       href="../utils/index.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">mapmetnet.utils</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
@@ -481,9 +579,16 @@ See also <a class="reference external" href="https://docs.python.org/3/library/i
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attributes">Attributes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.logger.log_func_call"><code class="docutils literal notranslate"><span class="pre">log_func_call()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.utils.logger"><code class="docutils literal notranslate"><span class="pre">logger</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.utils.pad_angular_range"><code class="docutils literal notranslate"><span class="pre">pad_angular_range()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.utils.squarify_extent"><code class="docutils literal notranslate"><span class="pre">squarify_extent()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.utils.is_overlapping"><code class="docutils literal notranslate"><span class="pre">is_overlapping()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.utils.get_circle_geom"><code class="docutils literal notranslate"><span class="pre">get_circle_geom()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.utils.get_overlap_geom"><code class="docutils literal notranslate"><span class="pre">get_overlap_geom()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.utils.set_mplstyle"><code class="docutils literal notranslate"><span class="pre">set_mplstyle()</span></code></a></li>
 </ul>
 </li>
 </ul>
