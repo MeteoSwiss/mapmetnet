@@ -1,0 +1,8 @@
+{"__comment__": "JSON file specifying background images. env CARTOPY_USER_BACKGROUNDS, ax.background_img()",
+  "NaturalEarthRelief": {
+    "__comment__": "Natural Earth I with shaded Relief, water, and drainage",
+    "__source__": "https://www.naturalearthdata.com/download/10m/raster/NE1_HR_LC_SR_W_DR.zip",
+    "__projection__": "PlateCarree",
+    "high": "NE1_HR_LC_SR_W_DR.png"
+  }
+}

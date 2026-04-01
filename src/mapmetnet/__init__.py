@@ -9,8 +9,12 @@ Module contains: highest-level init magic
 """
 
 # Import from Python
+import os
 import logging
 from importlib.metadata import version as getversion
+
+# Import from this module
+from .hardcoded import USR_BKG_PATH
 
 # Extract the version from the system, because it is set (upon release) by the CI/CD pipeline
 # via the pyproject.toml file (using poetry).
@@ -21,3 +25,7 @@ logger = logging.getLogger(__name__)
 # Hide any log messages if the user did not instantiate any handler
 # For details, see: https://docs.python.org/3/howto/logging.html#configuring-logging-for-a-library
 logger.addHandler(logging.NullHandler())
+
+# Set the proper environment for cartopy, so that the custom background images can be found.
+# TODO: this is not great, because we might force the users to reset something they care about.
+os.environ['CARTOPY_USER_BACKGROUNDS'] = str(USR_BKG_PATH.absolute())

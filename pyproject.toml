@@ -65,7 +65,10 @@ dev = [
 ]
 
 [tool.poetry]
-include = []
+include = [
+    {path = 'src/mapmetnet/data/mpl_styles'},
+    {path = 'src/mapmetnet/data/eez/README.md'},
+]
 
 [tool.yapf]
 based_on_style = "pep8"

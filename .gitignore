@@ -106,3 +106,15 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# MacOS stuff
+*.DS_Store
+
+# General stuff
+*.pdf
+*.png
+
+# Not allowed to share the EEZ directly
+src/mapmetnet/data/eez/*
+# ... except with a basic README to explain what is going on
+!src/mapmetnet/data/eez/README.md

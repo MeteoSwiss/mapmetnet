@@ -26,9 +26,29 @@ from cartopy import geodesic
 
 # Import from this package
 from .logger import log_func_call
+from .errors import MapmetnetError
 
 # Instantiate the module logger
 logger = logging.getLogger(__name__)
+
+
+@log_func_call(logger)
+def format_var_name(variable: str) -> str:
+    """ Simple routine to format variable names for nicer plotting. """
+
+    match variable:
+        case 'temperature':
+            return 'Temperature'
+        case 'pressure':
+            return 'Pressure'
+        case 'zonal_wind':
+            return 'Zonal Wind'
+        case 'meridional_wind':
+            return 'Meridional Wind'
+        case 'humidity':
+            return 'Relative Humidity'
+
+    raise MapmetnetError(f"Unknown variable name: {variable}")
 
 
 @log_func_call(logger)
@@ -170,7 +190,7 @@ def set_mplstyle(func: Callable) -> Callable:
         """ The core function, where the magic happens. """
 
         # Where are all the plotting parameter files ?
-        pth = Path(__file__).parent / 'mpl_styles'
+        pth = Path(__file__).parent / 'data' / 'mpl_styles'
 
         # First, always extract the 'base' mapmetnet plotting parameters
         with open(pth / 'base.mplstyle', encoding='utf-8') as fil:
