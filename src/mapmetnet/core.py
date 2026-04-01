@@ -875,8 +875,8 @@ class GBONMapper(StationMapper):
                 combined_geoms += [geom]
 
             # Export the station list to file.
-            sub_pdf.write_csv(f'WDQMS_{iso_a3}_{station_type}_{var_name}_{interval}' +
-                              f'_{date}_{lvls[0]}.csv')
+            #sub_pdf.write_csv(f'WDQMS_{iso_a3}_{station_type}_{var_name}_{interval}' +
+            #                  f'_{date}_{lvls[0]}.csv')
 
         # As a final step, compute the combined surface fraction from all layers ...
         if influence_radius is not None:
