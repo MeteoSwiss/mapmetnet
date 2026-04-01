@@ -24,7 +24,7 @@ from shapely import geometry as sgeom
 from cartopy import geodesic
 
 
-# Import from soffmapper
+# Import from this package
 from .logger import log_func_call
 
 # Instantiate the module logger
@@ -172,7 +172,7 @@ def set_mplstyle(func: Callable) -> Callable:
         # Where are all the plotting parameter files ?
         pth = Path(__file__).parent / 'mpl_styles'
 
-        # First, always extract the 'base' soffmapper plotting parameters
+        # First, always extract the 'base' mapmetnet plotting parameters
         with open(pth / 'base.mplstyle', encoding='utf-8') as fil:
             logger.debug("Loading the 'base' plotting style")
             prms = yaml.safe_load(fil)

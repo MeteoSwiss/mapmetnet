@@ -30,7 +30,7 @@ EEZ_PATH = Path(__file__).parent / 'eez'
 #: str: EEZ shapefile name
 EEZ_FN = 'eez_boundaries_v12.shp'
 
-#: str: Copyright statement for soffmapper
+#: str: Copyright statement for mapmetnet
 COPY_MAPMETNET = f'Created with mapmetnet v{__version__} (https://github.com/MeteoSwiss/mapmetnet).'
 
 #: str: Copyright statement for cartopy
