@@ -15,8 +15,13 @@ include = ["CHANGELOG.rst"]
 packages = [{include = "*", from="src"}]
 requires-python = ">=3.11"
 dependencies = [
-    "polars",
-    "requests",
+    "astropy",
+    "cartopy",
+    "matplotlib",
+    "numpy",
+    "pyyaml",
+    "shapely",
+    "wmoutils",
 ]
 keywords = ["meteorology", "map", "network", "climate", "data", "utilities"]
 classifiers = [
