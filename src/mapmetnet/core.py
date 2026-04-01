@@ -279,84 +279,58 @@ class CountryMapper():
         #    terrain = cimgt.Stamen(style='background-terrain')
         #    self.ax_map.add_image(terrain)
 
-        elif which == 'elevation':
-            URL = 'http://gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi'
-            wmts = WebMapTileService(URL)
-            self.ax_map.add_wmts(wmts, 'SRTM_Color_Index')
-
-            self._copyright_statement += '\n' + "Borders and places from " + \
-                COPY_NE + " Terrain elevation by the NASA SRTM (v3), from " + COPY_GIBS
-
-            # Load the png, and get it ready for plotting
-            cb_img = gibs.get_cb_img('SRTM_Color_Index_V.svg')
-
-            # Plot it
-            self.ax_clb.imshow(cb_img)
-            self.ax_clb.axis('off')
-        elif which == 'lightning':
-            URL = 'http://gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi'
-            wmts = WebMapTileService(URL)
-            self.ax_map.add_wmts(wmts,
-                'LIS_Very_High_Resolution_Lightning_Full_Climatology_LIS_Mean_Flash_Rate')
-
-            self._copyright_statement += '\n' + "Borders and places from " + \
-                COPY_NE + " Mean Lightning Flash Rate (1998-2014) by the LIS, from " + COPY_GIBS
-
-            # Load the png, and get it ready for plotting
-            cb_img = gibs.get_cb_img(
-                'LIS_Very_High_Resolution_Lightning_Full_Climatology_LIS_Mean_Flash_Rate_V.svg')
-
-            # Plot it
-            self.ax_clb.imshow(cb_img)
-            self.ax_clb.axis('off')
-
-        elif which == 'pop-density':
+        elif which in ['elevation', 'lightning', 'pop-density', 'croplands', 'human-footprint']:
+            # Deal with all the NASA GIBS layers
             url = 'http://gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi'
             wmts = WebMapTileService(url)
-            self.ax_map.add_wmts(wmts, 'GPW_Population_Density_2020')
 
-            self._copyright_statement += '\n' + "Borders and places from " + \
-                COPY_NE + " UN-Adjusted pop. density (2020) from " + COPY_GIBS
+            if which == 'elevation':
+                self.ax_map.add_wmts(wmts, 'SRTM_Color_Index')
+                self._copyright_statement += '\n' + "Borders and places from " + \
+                    COPY_NE + " Terrain elevation by the NASA SRTM (v3), from " + COPY_GIBS
+                # Load the png, and get it ready for plotting
+                cb_img = gibs.get_cb_img('SRTM_Color_Index_V.svg')
 
-            # Load the png, and get it ready for plotting
-            cb_img = gibs.get_cb_img('GPW_Population_Density_2000_V.svg')
+            elif which == 'lightning':
+                self.ax_map.add_wmts(
+                    wmts, 'LIS_Very_High_Resolution_Lightning_Full_Climatology_LIS_Mean_Flash_Rate')
+                self._copyright_statement += '\n' + "Borders and places from " + \
+                    COPY_NE + " Mean Lightning Flash Rate (1998-2014) by the LIS, from " + COPY_GIBS
+                # Load the png, and get it ready for plotting
+                cb_img = gibs.get_cb_img(
+                    'LIS_Very_High_Resolution_Lightning_Full_Climatology_LIS_Mean_Flash_Rate_V.svg')
 
-            # Plot it
-            self.ax_clb.imshow(cb_img)
-            self.ax_clb.axis('off')
+            elif which == 'pop-density':
+                self.ax_map.add_wmts(wmts, 'GPW_Population_Density_2020')
+                self._copyright_statement += '\n' + "Borders and places from " + \
+                    COPY_NE + " UN-Adjusted pop. density (2020) from " + COPY_GIBS
+                # Load the png, and get it ready for plotting
+                cb_img = gibs.get_cb_img('GPW_Population_Density_2000_V.svg')
 
-        elif which == 'croplands':
-            url = 'http://gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi'
-            wmts = WebMapTileService(url)
-            self.ax_map.add_wmts(wmts, 'Agricultural_Lands_Croplands_2000')
+            elif which == 'croplands':
+                self.ax_map.add_wmts(wmts, 'Agricultural_Lands_Croplands_2000')
+                self._copyright_statement += '\n' + "Borders and places from " + \
+                    COPY_NE + " Global Agricultural Lands, v1 (2000) from " + COPY_GIBS
+                # Load the png, and get it ready for plotting
+                cb_img = gibs.get_cb_img('Agricultural_Lands_Croplands_2000_V.svg')
 
-            self._copyright_statement += '\n' + "Borders and places from " + \
-                COPY_NE + " Global Agricultural Lands, v1 (2000) from " + COPY_GIBS
+            elif which == 'human-footprint':
+                self.ax_map.add_wmts(wmts, 'Human_Footprint_1995-2004')
+                self._copyright_statement += '\n' + "Borders and places from " + \
+                    COPY_NE + " Global Human Footprint (Geographic), v2 (1995-2004) from " + \
+                    COPY_GIBS
+                # Load the png, and get it ready for plotting
+                cb_img = gibs.get_cb_img('Human_Footprint_1995-2004_V.svg')
 
-            # Load the png, and get it ready for plotting
-            cb_img = gibs.get_cb_img('Agricultural_Lands_Croplands_2000_V.svg')
+            else:
+                raise MapmetnetError(f"Unknown background: {which}")
 
-            # Plot it
-            self.ax_clb.imshow(cb_img)
-            self.ax_clb.axis('off')
-
-        elif which == 'human-footprint':
-            url = 'http://gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi'
-            wmts = WebMapTileService(url)
-            self.ax_map.add_wmts(wmts, 'Human_Footprint_1995-2004')
-
-            self._copyright_statement += '\n' + "Borders and places from " + \
-                COPY_NE + " Global Human Footprint (Geographic), v2 (1995-2004) from " + COPY_GIBS
-
-            # Load the png, and get it ready for plotting
-            cb_img = gibs.get_cb_img('Human_Footprint_1995-2004_V.svg')
-
-            # Plot it
+            # Finally, plot the colorbar
             self.ax_clb.imshow(cb_img)
             self.ax_clb.axis('off')
 
         else:
-            raise MapmetnetError(f"Unknown background style: {which}")
+            raise MapmetnetError(f"Unknown background: {which}")
 
     @log_func_call(logger)
     def _add_rivers_and_lakes(self):
