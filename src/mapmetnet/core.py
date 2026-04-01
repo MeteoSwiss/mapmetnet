@@ -479,12 +479,6 @@ class NetworkMapper(Mapper):
             #                   hatch='////',
             #                   alpha=1, label='Overlap')
 
-        # Compute the country surface fraction covered ...
-        #combined_area = self.get_surface_fraction(combined_geoms)
-        #intersect_area = self.get_surface_fraction(intersect_geoms)
-        #lab = r'Overlap'
-        #if legend == 'specific':
-        #    lab += f' [{100 * intersect_area:.1f}%]'
 
         return combined_geoms, intersect_geoms
 
@@ -843,6 +837,7 @@ class GBONMapper(CountryMapper):
                    station_type: str = 'surface',
                    var_name: str = 'temperature',
                    interval: str = 'monthly',
+                   category: str = 'availability',
                    date: str = '2026-01',
                    iso_a3: str | None = None,
                    wigos_ids: list | None = None,
@@ -855,6 +850,7 @@ class GBONMapper(CountryMapper):
             var_name (str, optional): name of variable to plot. Defaults to 'temperature'.
             interval (str, optional): assessment interval, i.e. one of
                 ['monthly', 'daily', 'six_hour']. Defaults to 'monthly'.
+            category (str, optional): assessment category. Defaults to 'availability'.
             date (str, optional): date of the availability assessment. Defaults to '2023-11'.
             iso_a3 (str, optional): station country code as ISO alpha 3.
                 Defaults to None = target country.
@@ -885,7 +881,11 @@ class GBONMapper(CountryMapper):
 
         # Get the data straight from WDQMS
         # TODO: allow to select other parameters
-        pdf = wmoutils.query.query_wdqms('gbon', station_type, interval, 'availability',
+        if category == 'availability':
+            which = 'gbon'
+        else:
+            which = 'nwp'
+        pdf = wmoutils.query.query_wdqms(which, station_type, interval, category,
                                          var_name, date)
 
         # Filter the values needed for the country
@@ -902,6 +902,8 @@ class GBONMapper(CountryMapper):
         # Now deal with each WDQMS color individually - store them so that I can compute the
         # full (combine) surface fraction as well.
         combined_geoms = []
+        # TODO: the following essentially assumes that we are looking at availability. If we
+        # want to look at quality, we need to look at another column ('rms'), etc ...
         for lvls in WDQMS_COLORS.items():
             sub_pdf = pdf.filter(pl.col('color code') == lvls[0])
 
@@ -948,6 +950,7 @@ class GBONMapper(CountryMapper):
                      station_type: str = 'surface',
                      var_name: str = 'temperature',
                      interval: str = 'monthly',
+                     category: str = 'availability',
                      date: str = '2026-01',
                      wigos_ids: list | None = None,
                      show_influence_area: bool = True,
@@ -967,6 +970,7 @@ class GBONMapper(CountryMapper):
             var_name (str): name of variable, e.g. 'Temperature'.
             interval (str, optional): assessment interval, i.e. one of
                 ['monthly', 'daily', 'six_hour']. Defaults to 'monthly'.
+            category (str, optional): WDQMS category to query. Defaults to 'availability'.
             date (str, optional): date of the availability assessment. Defaults to '2023-11'.
             wigos_ids (list, optional): Defaults to None. If specified, will be combined with the
                 country code using OR to select stations to be drawn.
@@ -994,6 +998,7 @@ class GBONMapper(CountryMapper):
         self._add_eez()
         self._add_gridlines()
         _ = self._add_wdqms(station_type=station_type, var_name=var_name, interval=interval,
+                            category=category,
                             date=date, wigos_ids=wigos_ids,
                             high_density=high_density,
                             show_influence_area=show_influence_area)
@@ -1001,7 +1006,7 @@ class GBONMapper(CountryMapper):
         self._add_legend()
         hd_txt = ', high-density' if high_density else ''
         self._add_title(f'GBON compliance\n({station_type}{hd_txt})',
-                        subtitle=f'{format_var_name(var_name)}\n{interval} ({date})' +
+                        subtitle=f'{format_var_name(var_name)}\n{interval} {category} ({date})' +
                         '\n\nSource: https://wdqms.wmo.int/\n')
 
         if save_fmts is None:
