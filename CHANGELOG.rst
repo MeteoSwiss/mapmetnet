@@ -1,41 +1,35 @@
-=========
+
 Changelog
-=========
++++++++++
+All notable changes to  will be documented in this file.
 
-Version 0.2.0
--------------
+The format is inspired from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-Features
-''''''''
-
-- Lorem ipsum dolor sit
-- Consectetur adipiscing elit
-- Sed do eiusmod tempor incididunt
-
-Bug Fixes
-'''''''''
-
-- Ut labore et dolore magna aliqua
-
-Breaking Changes
-''''''''''''''''
-
-- Ut enim ad minim veniam
-- Quis nostrud exercitation ullamco laboris
+This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-Version 0.1.0
--------------
+[dev]
+=====
+Added
+------
 
-Features
-''''''''
+Fixed
+-----
 
-- Nisi ut aliquip
-- Ex ea commodo consequat
+Changed
+-------
 
-Bug Fixes
-'''''''''
+Deprecated
+----------
 
-- Duis aute irure dolor in
-- Voluptate velit esse
-- Cillum dolore eu fugiat nulla pariatur excepteur sint oocaecat
+Removed
+-------
+
+Security
+--------
+
+v0.1.0
+======
+Added
+-----
+- [fpavogt] First release.
