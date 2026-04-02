@@ -463,7 +463,7 @@ class NetworkMapper(Mapper):
         # ... add it to the legend
         self._legend_handles[f'stations_{label}_zone'] = \
             mpatches.Patch(facecolor=facecolor, edgecolor=edgecolor,
-                           alpha=0.2, label=r'$D_\text{s}$ ≤ ' + f'{influence_radius} km')
+                           alpha=0.2, label=r'$R$ = ' + f'{influence_radius} km')
 
         # CHeck if the intersect geometry is null
         if not intersect_geoms.is_empty:
@@ -477,7 +477,6 @@ class NetworkMapper(Mapper):
             #    mpatches.Patch(facecolor='none', edgecolor=facecolor, lw=0,
             #                   hatch='////',
             #                   alpha=1, label='Overlap')
-
 
         return combined_geoms, intersect_geoms
 
