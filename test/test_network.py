@@ -9,10 +9,12 @@ Module content: tests for the gbon module
 """
 
 # Import from Python
+import pytest
 import numpy as np
 from cartopy.geodesic import Geodesic
 
 # Import from this package
+from mapmetnet.errors import MapmetnetError
 from mapmetnet.network import get_delaunay_vertices, get_sep_vertices, compute_mean_sep
 
 
@@ -79,3 +81,8 @@ def test_get_sep_vertices():
     assert len(not_so_bad_verts) == 1
 
     assert np.round(np.mean([item/1e3 for _, item in good_verts.items()]), 3) == np.round(md, 3)
+
+    # Check that the code issues an error if some of the points are duplicated
+    pts = np.concatenate((pts, pts[:1]))
+    with pytest.raises(MapmetnetError):
+        get_sep_vertices(pts[:, 0], pts[:, 1])

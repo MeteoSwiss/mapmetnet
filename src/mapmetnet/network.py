@@ -18,6 +18,7 @@ from cartopy.geodesic import Geodesic
 from shapely import LineString, polygonize
 
 # Import from this package
+from .errors import MapmetnetError
 from .logger import log_func_call
 
 # Instantiate the module logger
@@ -78,6 +79,9 @@ def get_sep_vertices(lons: np.ndarray, lats: np.ndarray):
             len(2)-lists of (original) point indices as keys, and their true length as entry
             (measured along Great Circles).
 
+    Raises:
+        MapmetnetError: if some of the input points are duplicated.
+
     The vertices are assembled from the Delaunay set of vertices (derived in 2D using a
     Stereographic projection), with an additional requirement that the mid-point of each vertice be
     closest (strictly) to its nodes, and no other location in the set of coordinates.
@@ -89,6 +93,10 @@ def get_sep_vertices(lons: np.ndarray, lats: np.ndarray):
     within the polygon formed by the "good" vertices.
 
     """
+
+    # Check that there are no duplicated sets of coordinates, as this could cause trouble.
+    if len(np.unique(np.stack([lons, lats], axis=-1), axis=0)) != len(lons):
+        raise MapmetnetError('Duplicated sets of (lat, lon) coordinates.')
 
     # Begin by performing a Delaunay triangulation, adn extract a list of vertices.
     verts = get_delaunay_vertices(lons, lats)
