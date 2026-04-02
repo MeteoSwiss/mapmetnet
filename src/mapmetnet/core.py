@@ -9,7 +9,6 @@ Module contains: core package classes
 """
 
 # Import from Python
-from typing import Optional, Union
 import logging
 import warnings
 
@@ -107,7 +106,7 @@ class Mapper():
         return self._get_ax(2)
 
     @set_mplstyle
-    def _create_fig(self, figid: Optional[int] = None) -> None:
+    def _create_fig(self, figid: int | None = None) -> None:
         """ Creation of plotting areas.
 
         Args:
@@ -363,7 +362,7 @@ class Mapper():
         self.ax_leg.axis('off')
 
     @log_func_call(logger)
-    def _add_title(self, title: str, subtitle: Optional[str] = None) -> None:
+    def _add_title(self, title: str, subtitle: str | None = None) -> None:
         """ Add a title (and posibly a subtitle) to the plot.
 
         Args:
@@ -399,7 +398,7 @@ class NetworkMapper(Mapper):
                       influence_radius: float | int | None = None,
                       facecolor: str | tuple = 'k',
                       edgecolor: str | tuple = 'w',
-                      marker: str = 's', size: Optional[int] = 30,
+                      marker: str = 's', size: int = 30,
                       label: str | None = None,
                       ) -> shapely.geometry:
         """ Add a series of stations to the map.
@@ -572,7 +571,7 @@ class CountryMapper(NetworkMapper):
     """ Parent Mapper class tuned for showing a given country with little else. """
 
     @log_func_call(logger)
-    def __init__(self, country_code: str, mrgid: Optional[int] = None) -> None:
+    def __init__(self, country_code: str, mrgid: int | None = None) -> None:
         """ Basic init routine.
 
             Args:

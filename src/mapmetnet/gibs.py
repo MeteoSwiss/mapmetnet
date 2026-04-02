@@ -9,7 +9,6 @@ Module contains: NASA GIBS tools
 """
 
 # Import from Python
-from typing import Optional
 import logging
 from pathlib import Path
 import numpy as np
@@ -24,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 @log_func_call(logger)
-def get_cb_img(cb_name: str, write_loc: Optional[Path] = Path('.')) -> np.ndarray:
+def get_cb_img(cb_name: str, write_loc: Path = Path('.')) -> np.ndarray:
     """ Basic utility routine to fetch a colorbar from NASA GIBS in SVG format, convert it to
     png, and return it as a numpy array.
 
