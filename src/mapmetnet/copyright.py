@@ -36,6 +36,9 @@ def get_cartopy_msg(projection: str) -> str:
 def get_ne_msg(features: list) -> str:
     """ Get the copyright statement for Natural Earth. """
 
+    if len(features) == 0:
+        return ''
+
     # Join the list of strings into a single one, separated by comma
     msg = ', '.join(features)
 
