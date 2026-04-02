@@ -30,7 +30,7 @@ from owslib.wmts import WebMapTileService
 import wmoutils
 
 # Import from this package
-from .copyright import COPY_MAPMETNET, COPY_CARTOPY, COPY_GIBS, COPY_NE, COPY_EEZ, DISC_MCH
+from .copyright import build_copyright_statement
 from .hardcoded import WDQMS_COLORS, WIDTH_TWOCOL
 from .errors import MapmetnetError, MapmetnetWarning
 from .logger import log_func_call
@@ -70,7 +70,7 @@ class Mapper():
         self._fig = None
         self._axs = []
         self._legend_handles = {}
-        self._copyright_statement = COPY_MAPMETNET + '\n' + COPY_CARTOPY
+        self._copyright = {'mmn': None, 'cartopy': 'Orthographic', 'ne': []}
 
     @property
     def fig(self) -> mplfig:
@@ -128,6 +128,7 @@ class Mapper():
 
         # First, the ax that will hold the map
         ax0 = plt.subplot(gs[:, 0], projection=self._proj)
+
         # Then the supplementary "legend" ax
         axl = plt.subplot(gs[0, 1])
         # Then the supplementary "legend" ax
@@ -181,12 +182,6 @@ class Mapper():
 
         if which is None:
             # Use the Natural Earth "land" feature as default background.
-            #land_feature = cfeature.NaturalEarthFeature(category='physical', name='land',
-            #                                            scale='10m', facecolor=(0.95, 0.95, 0.95))
-            #self.ax_map.add_feature(land_feature)
-            #self.ax_map.add_feature(cfeature.OCEAN.with_scale('10m'))
-
-            #TODO: why are oceans not show correctly ?
             self.ax_map.add_feature(cfeature.OCEAN.with_scale('10m'))
             self.ax_map.add_feature(cfeature.LAND.with_scale('10m'), facecolor=(0.95, 0.95, 0.95))
             # No colorbar required
@@ -199,8 +194,9 @@ class Mapper():
             self.ax_map.background_img(name='NaturalEarthRelief', resolution='high',
                                        extent=list(utils.pad_angular_range(lon_lims, 0.1)) +
                                        list(utils.pad_angular_range(lat_lims, 0.1)))
+            # Add the relevant copyright notice
+            self._copyright['ne'] += ['terrain']
 
-            self._copyright_statement += '\n' + "Terrain from " + COPY_NE
             # No colorbar required
             self.ax_clb.axis('off')
 
@@ -217,38 +213,33 @@ class Mapper():
 
             if which == 'elevation':
                 self.ax_map.add_wmts(wmts, 'SRTM_Color_Index')
-                self._copyright_statement += '\n' + \
-                    " Terrain elevation by the NASA SRTM (v3), from " + COPY_GIBS
+                self._copyright['gibs'] = 'Terrain elevation by NASA SRTM (v3)'
                 # Load the png, and get it ready for plotting
                 cb_img = gibs.get_cb_img('SRTM_Color_Index_V.svg')
 
             elif which == 'lightning':
                 self.ax_map.add_wmts(
                     wmts, 'LIS_Very_High_Resolution_Lightning_Full_Climatology_LIS_Mean_Flash_Rate')
-                self._copyright_statement += '\n' + \
-                    " Mean Lightning Flash Rate (1998-2014) by the LIS, from " + COPY_GIBS
+                self._copyright['gibs'] = 'Mean Lightning Flash Rate (1998-2014) by the LIS'
                 # Load the png, and get it ready for plotting
                 cb_img = gibs.get_cb_img(
                     'LIS_Very_High_Resolution_Lightning_Full_Climatology_LIS_Mean_Flash_Rate_V.svg')
 
             elif which == 'pop-density':
                 self.ax_map.add_wmts(wmts, 'GPW_Population_Density_2020')
-                self._copyright_statement += '\n' +\
-                    " UN-Adjusted pop. density (2020) from " + COPY_GIBS
+                self._copyright['gibs'] = 'UN-Adjusted pop. density (2020)'
                 # Load the png, and get it ready for plotting
                 cb_img = gibs.get_cb_img('GPW_Population_Density_2000_V.svg')
 
             elif which == 'croplands':
                 self.ax_map.add_wmts(wmts, 'Agricultural_Lands_Croplands_2000')
-                self._copyright_statement += '\n' + \
-                    " Global Agricultural Lands, v1 (2000) from " + COPY_GIBS
+                self._copyright['gibs'] = 'Global Agricultural Lands, v1 (2000)'
                 # Load the png, and get it ready for plotting
                 cb_img = gibs.get_cb_img('Agricultural_Lands_Croplands_2000_V.svg')
 
             elif which == 'human-footprint':
                 self.ax_map.add_wmts(wmts, 'Human_Footprint_1995-2004')
-                self._copyright_statement += '\n' + \
-                    " Global Human Footprint (Geographic), v2 (1995-2004) from " + COPY_GIBS
+                self._copyright['gibs'] = 'Global Human Footprint (Geographic), v2 (1995-2004)'
                 # Load the png, and get it ready for plotting
                 cb_img = gibs.get_cb_img('Human_Footprint_1995-2004_V.svg')
 
@@ -268,7 +259,7 @@ class Mapper():
 
         self.ax_map.add_feature(cfeature.RIVERS.with_scale('10m'))
         self.ax_map.add_feature(cfeature.LAKES.with_scale('10m'))
-        self._copyright_statement += '\n' + "Rivers and lakes from " + COPY_NE
+        self._copyright['ne'] += ['rivers', 'lakes']
 
     @log_func_call(logger)
     def _draw_border(self, item, is_disputed: bool = False) -> None:
@@ -326,7 +317,7 @@ class Mapper():
 
             self._draw_border(item, is_disputed=True)
 
-        self._copyright_statement += '\n' + "Borders from " + COPY_NE
+        self._copyright['ne'] += ['borders']
 
     @log_func_call(logger)
     def _add_coast(self) -> None:
@@ -346,9 +337,12 @@ class Mapper():
     def _add_copyright(self) -> None:
         """ Add the copyright notice, based on the content of self._copyright_statement. """
 
-        self.ax_map.text(0.5, -0.03, self._copyright_statement + '\n' + DISC_MCH,
+        self._copyright['mch'] = None
+        txt = build_copyright_statement(self._copyright)
+
+        self.ax_map.text(0.5, -0.03, txt,
                          ha='center', va='bottom', transform=self.ax_map.transAxes,
-                         wrap=True, fontsize=8,
+                         wrap=True, fontsize=7,
                          bbox={'boxstyle': 'square', 'ec': 'k', 'fc': 'w'}, zorder=100)
 
     @log_func_call(logger)
@@ -763,7 +757,7 @@ class CountryMapper(NetworkMapper):
                                        label=label)
 
         # Include a dedicated copyright statement if I have some EEZ boundaries
-        self._copyright_statement += '\n' + COPY_EEZ
+        self._copyright['eez'] = None
 
     @log_func_call(logger)
     def _add_capital(self, ref_radius: int | float | None = None) -> None:
@@ -895,7 +889,7 @@ class GBONMapper(CountryMapper):
         # Filter the values as a function of country and WIGOS ids using the OR criteria
         pdf = pdf.filter((pl.col('country code') == iso_a3) |
                          (pl.col('wigosid').str.contains('|'.join(wigos_ids))))
-        #pdf = pdf.filter(pl.col('latitude') > -60)  # used for Argentina
+        # pdf = pdf.filter(pl.col('latitude') > -60)  # used for Argentina
 
         # Now deal with each WDQMS color individually - store them so that I can compute the
         # full (combine) surface fraction as well.
@@ -917,9 +911,8 @@ class GBONMapper(CountryMapper):
                 combined_geoms += [geom]
 
             # Export the station list to file.
-            #sub_pdf.write_csv(f'WDQMS_{iso_a3}_{station_type}_{var_name}_{interval}' +
+            # sub_pdf.write_csv(f'WDQMS_{iso_a3}_{station_type}_{var_name}_{interval}' +
             #                  f'_{date}_{lvls[0]}.csv')
-
 
         # Let's add the network horizontal resolution to the legend ...
         # ... after we compute it, evidently.

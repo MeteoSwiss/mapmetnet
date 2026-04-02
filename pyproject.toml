@@ -1,6 +1,6 @@
 [project]
 name = "mapmetnet"
-version = "0.0.0"  # DO NOT SET. The version of the package is always set by the CI/CD pipeline.
+version = "0.0.dev0"  # DO NOT SET. The version of the package is always set by the CI/CD pipeline.
 description = "Python library to assemble maps of meteorological networks & station sites. "
 license = "BSD-3-Clause"
 authors = [
