@@ -295,12 +295,12 @@ class Mapper():
             ls = '-'
             lbl = 'Borders'
 
-            if item.attributes['featurecla'] == 'International boundary (verify)':
+            if item.attributes['FEATURECLA'] == 'International boundary (verify)':
                 # Log a warning about the suspicious border.
                 logger.warning("%s-%s border status: %s",
-                               item.attributes['adm0_a3_l'],
-                               item.attributes['adm0_a3_r'],
-                               item.attributes['featurecla'])
+                               item.attributes['ADM0_A3_L'],
+                               item.attributes['ADM0_A3_R'],
+                               item.attributes['FEATURECLA'])
 
         self._legend_handles['border'] = mlines.Line2D(
             [], [], color='k', ls=ls, lw=0.75, label=lbl)
