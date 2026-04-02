@@ -101,4 +101,4 @@ def build_copyright_statement(which: dict) -> str:
             parts.append(part)
 
     # Join the parts and wrap them into a paragraph suitable for plotting
-    return fill(' '.join(parts), width=120)
+    return fill(' '.join(parts), width=160)

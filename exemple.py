@@ -11,7 +11,7 @@ sites = pl.DataFrame({
 
 mymap = NetworkMapper(46.5, 4)
 mymap._create_fig(figid=1)
-mymap._set_map_extent(extent=5)
+mymap._set_map_extent(extent=15)
 mymap._add_background(which=None)
 mymap._add_rivers_and_lakes()
 mymap._add_borders()

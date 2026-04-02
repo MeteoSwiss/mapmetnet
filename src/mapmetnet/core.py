@@ -292,7 +292,7 @@ class Mapper():
                                item.attributes['ADM0_A3_R'],
                                item.attributes['FEATURECLA'])
 
-        self._legend_handles['border'] = mlines.Line2D(
+        self._legend_handles[lbl.lower().replace(' ', '_')] = mlines.Line2D(
             [], [], color='k', ls=ls, lw=0.75, label=lbl)
 
         # Actually draw the borders
@@ -343,7 +343,7 @@ class Mapper():
         self.ax_map.text(0.5, -0.03, txt,
                          ha='center', va='bottom', transform=self.ax_map.transAxes,
                          wrap=True, fontsize=7,
-                         bbox={'boxstyle': 'square', 'ec': 'k', 'fc': 'w'}, zorder=100)
+                         bbox={'boxstyle': 'Round', 'pad': 1, 'ec': 'k', 'fc': 'w'}, zorder=100)
 
     @log_func_call(logger)
     def _add_legend(self) -> None:
