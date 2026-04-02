@@ -16,10 +16,12 @@ packages = [{include = "*", from="src"}]
 requires-python = ">=3.12"
 dependencies = [
     "astropy",
+    "cairosvg",
     "cartopy",
     "matplotlib",
     "numpy",
     "owslib",
+    "pillow",
     "polars",
     "pyyaml",
     "scipy",
