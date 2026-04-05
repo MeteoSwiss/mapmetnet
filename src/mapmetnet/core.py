@@ -804,7 +804,7 @@ class CountryMapper(NetworkMapper):
                                        crs=ccrs.PlateCarree(),
                                        facecolor='none', edgecolor='k', linewidth=1, ls='-.')
             self._legend_handles['scale'] = mlines.Line2D([], [], color='k', ls='-.',
-                                                          label=f'R = {ref_radius} km')
+                                                          label=rf'$R$ = {ref_radius} km')
 
     @log_func_call(logger)
     def get_surface_fraction(self, geom):

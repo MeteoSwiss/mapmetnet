@@ -22,7 +22,7 @@ Getting Started
 
 This package is under active development. You can expect regular breaking changes, poor
 documentation, and rapidly evolving APIs. If you want to use the package, please reach out to the
-developers (see contact information below) and we will be happy to help you get started.
+developers and we will be happy to help you get started.
 
 For the daring users out there, here is a quick exemple to get you started:
 
