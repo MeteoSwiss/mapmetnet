@@ -19,6 +19,7 @@ import numpy as np
 from numpy import ndarray
 from astropy.coordinates import angular_separation
 import matplotlib.pyplot as plt
+import matplotlib.path as mplp
 import shapely
 from shapely import geometry as sgeom
 from cartopy import geodesic
@@ -203,3 +204,60 @@ def set_mplstyle(func: Callable) -> Callable:
             return out
 
     return inner_deco
+
+
+@log_func_call(logger)
+def crosshair(inner_r: float = 1., pa: float = 0.) -> mplp.Path:
+    ''' The path of a crosshair marker, useful for indicating targets without crowding the field.
+
+    Args:
+        inner_r (float, optional): the inner radius of the crosshair, expressed in bar length.
+            Defaults to 1 (gap = bar length = 1/3 marker width).
+        pa (float, optional): the position angle of the crosshair, in degrees.
+            Defaults to 0.
+
+    Returns:
+        mplp.Path: the path of the crosshair marker.
+
+    Example:
+        >>> ...
+        >>> ax.plot(... marker=crosshair(inner_r=1, pa=0), ...)
+        >>> ...
+
+   '''
+
+    # Define the vertices
+    verts = [(-1.5, 0),
+             (-0.5*inner_r, 0),
+             (0, 0.5*inner_r),
+             (0, 1.5),
+             (0.5*inner_r, 0),
+             (1.5, 0),
+             (0, -0.5*inner_r),
+             (0, -1.5),
+             (-1.5, 0),
+             (-1.5, 0),
+             ]
+    # Compute the rotation matrix
+    pa = np.radians(pa)
+    rot_mat = np.matrix([[np.cos(pa), -np.sin(pa)], [np.sin(pa), np.cos(pa)]])
+
+    # Rotate the vertices
+    for (v, vert) in enumerate(verts):
+        verts[v] = (vert*rot_mat).A[0]
+
+    # Define the drawing codes
+    codes = [mplp.Path.MOVETO,
+             mplp.Path.LINETO,
+             mplp.Path.MOVETO,
+             mplp.Path.LINETO,
+             mplp.Path.MOVETO,
+             mplp.Path.LINETO,
+             mplp.Path.MOVETO,
+             mplp.Path.LINETO,
+             mplp.Path.MOVETO,
+             mplp.Path.CLOSEPOLY
+             ]
+
+    # Create and return the path
+    return mplp.Path(verts, codes)

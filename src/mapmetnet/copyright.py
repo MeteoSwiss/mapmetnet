@@ -16,13 +16,23 @@ from cartopy import __version__ as cartopy_version
 from . import __version__
 
 
-def get_mmn_msg() -> str:
-    """ Get the copyright statement for mapmetnet. """
+def get_mmn_msg(when: str | None = None) -> str:
+    """ Get the copyright statement for mapmetnet.
 
-    return f'Created with mapmetnet v{__version__}.'
+    Args:
+        when: The date when the map was created, in a human-readable format. Optional.
+
+    """
+
+    if when is not None:
+        msg = f' on {when}.'
+    else:
+        msg = '.'
+
+    return f'Created with mapmetnet v{__version__}' + msg
 
 
-def get_cartopy_msg(projection: str) -> str:
+def get_cartopy_msg(projection: str | None = None) -> str:
     """ Get the copyright statement for cartopy.
 
     Args:
@@ -30,7 +40,12 @@ def get_cartopy_msg(projection: str) -> str:
 
     """
 
-    return f'{projection} projection generated using cartopy v{cartopy_version}, Met Office.'
+    if projection is None:
+        start = 'P'
+    else:
+        start = f'{projection} p'
+
+    return start + f'rojection generated using cartopy v{cartopy_version}, Met Office.'
 
 
 def get_ne_msg(features: list) -> str:
@@ -77,7 +92,7 @@ def get_mch_msg() -> str:
     return msg
 
 
-def build_copyright_statement(which: dict) -> str:
+def build_copyright_statement(which: dict, width: int | None = 160) -> str:
     """ Build a copyright statement for the map, based on the different elements that are
     included in it.
 
@@ -85,6 +100,8 @@ def build_copyright_statement(which: dict) -> str:
         which (dict): a dictionary with the different elements to include in the copyright
             statement. The keys of the dict should be the same as the names of the functions
             defined above, and the values should be the arguments to feed to those functions.
+        width (int, optional): the width to use for wrapping the text. Defaults to 160. If None,
+            no wrapping will be applied.
 
     """
 
@@ -103,5 +120,8 @@ def build_copyright_statement(which: dict) -> str:
                 part = func()
             parts.append(part)
 
+    if width is None:
+        return ' '.join(parts)
+
     # Join the parts and wrap them into a paragraph suitable for plotting
-    return fill(' '.join(parts), width=160)
+    return fill(' '.join(parts), width=width)

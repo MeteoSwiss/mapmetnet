@@ -43,34 +43,22 @@ from .utils import set_mplstyle, format_var_name
 logger = logging.getLogger(__name__)
 
 
-class Mapper():
-    """ Grand-Parent Mapper class tuned for making a map with little else. """
+class Plotter():
+    """ Great-grand Parent Plotter class, to hold basic plotting utilities. """
 
     @log_func_call(logger)
-    def __init__(self, lat: float, lon: float) -> None:
+    def __init__(self, when: str | None = None) -> None:
         """ Basic init routine.
 
-            Args:
-                lat (float): The latitude of the map center.
-                lon (float): The longitude of the map center.
-
-            Raises: ValueError, TypeError
+        Args:
+            when: The date when the map was created, in a human-readable format. Optional.
 
         """
-
-        # Set the central coordinates and the extent of the map
-        self._center_lat = lat
-        self._center_lon = lon
-
-        # Set the default map projection
-        self._proj = ccrs.Orthographic(
-            central_longitude=self._center_lon, central_latitude=self._center_lat)
 
         # Let's also create the other atribute that will become relevant later on
         self._fig = None
         self._axs = []
-        self._legend_handles = {}
-        self._copyright = {'mmn': None, 'cartopy': 'Orthographic', 'ne': []}
+        self._copyright = {'mmn': when}
 
     @property
     def fig(self) -> mplfig:
@@ -89,6 +77,49 @@ class Mapper():
                           MapmetnetWarning)
             return None
         return self._axs[ax_id]
+
+    @staticmethod
+    def show():
+        """ Wrapper around plt.show() """
+        plt.show()
+
+    @staticmethod
+    @set_mplstyle
+    def savefig(fname, dpi=None):
+        """ Wrapper around plt.savefig() """
+        plt.savefig(fname, dpi=dpi)
+
+
+class Mapper(Plotter):
+    """ Grand-Parent Mapper class tuned for making a map with little else. """
+
+    @log_func_call(logger)
+    def __init__(self, lat: float, lon: float) -> None:
+        """ Basic init routine.
+
+            Args:
+                lat (float): The latitude of the map center.
+                lon (float): The longitude of the map center.
+
+            Raises: ValueError, TypeError
+
+        """
+
+        # Trigger the base class init
+        super().__init__()
+
+        # Set the central coordinates and the extent of the map
+        self._center_lat = lat
+        self._center_lon = lon
+
+        # Set the default map projection
+        self._proj = ccrs.Orthographic(
+            central_longitude=self._center_lon, central_latitude=self._center_lat)
+
+        # Let's also create the other atribute that will become relevant later on
+        self._legend_handles = {}
+        self._copyright['cartopy'] = 'Orthographic'
+        self._copyright['ne'] = []
 
     @property
     def ax_map(self):
@@ -371,17 +402,6 @@ class Mapper():
         self.ax_leg.text(0.5, 1.0, subtitle, transform=self.ax_leg.transAxes,
                          ha='center', va='top', fontsize=12)
 
-    @staticmethod
-    def show():
-        """ Wrapper around plt.show() """
-        plt.show()
-
-    @staticmethod
-    @set_mplstyle
-    def savefig(fname, dpi=None):
-        """ Wrapper around plt.savefig() """
-        plt.savefig(fname, dpi=dpi)
-
 
 class NetworkMapper(Mapper):
     """ Child NetworkMapper class tuned to show stations from a given list. """
@@ -467,7 +487,7 @@ class NetworkMapper(Mapper):
                                        hatch='////',
                                        linewidth=0, ls='-', alpha=1)
 
-            #self._legend_handles[f'stations_{label}_zone_intersect'] = \
+            # self._legend_handles[f'stations_{label}_zone_intersect'] = \
             #    mpatches.Patch(facecolor='none', edgecolor=facecolor, lw=0,
             #                   hatch='////',
             #                   alpha=1, label='Overlap')
@@ -514,7 +534,8 @@ class NetworkMapper(Mapper):
             color (str|tuple, optional): line color. Defaults to 'k'.
             thres (float, optional): if set, vertices longer than this value (in km) will be drawned
                 with dashes instead.
-            drop_not_so_bad (bool optional): if True, the not_so_bad vertices will be ignored.
+            drop_not_so_bad (bool, optional): if True, the not_so_bad vertices will be ignored.
+                Defaults to False.
             **kwargs (optional): all other arguments will be fed to the plot() function.
 
         Returns:
@@ -525,14 +546,9 @@ class NetworkMapper(Mapper):
         # First, identify the neighbor stations and their connectinfg vertices
         pts = stations.select(pl.col("longitude", "latitude")).to_numpy()
 
-        # Next, find the vertices
-        good_verts, _, not_so_bad_verts = network.get_sep_vertices(pts[:, 0], pts[:, 1])
-
-        if not drop_not_so_bad:
-            good_verts = good_verts | not_so_bad_verts
-
-        # From these, compute the mean separation
-        mean_sep = network.compute_mean_sep(good_verts)/1.e3  # in km
+        # Next, find the good vertices and their mean separation
+        mean_sep, good_verts = network.get_mean_sep(pts[:, 0], pts[:, 1],
+                                                    drop_not_so_bad=drop_not_so_bad)
 
         # Add these to the map
         for vert, dist in good_verts.items():

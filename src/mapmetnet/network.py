@@ -26,44 +26,31 @@ logger = logging.getLogger(__name__)
 
 
 @log_func_call(logger)
-def get_delaunay_vertices(lons: np.ndarray, lats: np.ndarray, **kwargs) -> set:
-    """ Run a Delaunay triangulation on a series of coordinates, and assemble the list of
-    resulting vertices.
+def get_mean_sep(lons: np.ndarray, lats: np.ndarray, drop_not_so_bad=False) -> tuple:
+    """ Compute the mean separation between a series of coordinates on Earth.
 
     Args:
         lons (np.ndarray): array of longitudes, in fractional degrees.
         lats (np.ndarray): array of latitudes, in fractional degrees.
-        **kwargs: any other keyword arguments will be fed to cartopy.crs.Stereographic()
+        drop_not_so_bad (bool, optional): if True, the not_so_bad vertices will be ignored.
+            Defaults to False.
 
-    Return:
-        list: the list of individual vertices, provided as len(2)-lists of (original) point indices.
-
-
-    This routine performs a Delaunay triangulation using the point coordinates converted to a
-    Stereographic projection. This allows to run a 2D Delaunay triangulation where the
-    identified pairs of 'connected' stations are the same as those that would be ientified if
-    the triangulation was performed on the surface of the sphere.
-
-    See Saalfeld, Cartography and Geographic Information Science, Vol. 26, No.4, 1999, pp. 289-296.
-    https://www.tandfonline.com/doi/pdf/10.1559/152304099782294168
-
+    Returns:
+        mean_sep (float): the mean separation between the coordinates, in km.
+        verts (dict): the vertices used to compute the mean separation, provided as a dict.
     """
 
-    assert len(lats) == len(lons), "Length mismatch for lons and lats"
+    # Step 1: find the vertices connecting the different locations
+    good_verts, _, not_so_bad_verts = get_sep_vertices(lons, lats)
 
-    # First things first: transform the lon-lat "PlateCarree" coordinates
-    # onto a Stereographic projection.
-    stereo = ccrs.Stereographic(**kwargs)
-    stereo_pts = stereo.transform_points(ccrs.PlateCarree(), lons, lats)
+    # Step 2: merge the not-so-bad vertices if warranted
+    if not drop_not_so_bad:
+        good_verts = good_verts | not_so_bad_verts
 
-    # Run the Delauney triangulation on these coordinates
-    tri = Delaunay(stereo_pts[:, :2])
+    # Step 3: compute the mean separation along all the good vertices
+    mean_sep = compute_mean_sep(good_verts)/1.e3  # in km
 
-    # Assemble the list of vertices derived from Delaunay
-    # All credits go to https://stackoverflow.com/questions/64530316 for this great line
-    verts = set([tuple(sorted(edge)) for item in tri.simplices for edge in combinations(item, 2)])
-
-    return verts
+    return mean_sep, good_verts
 
 
 @log_func_call(logger)
@@ -165,6 +152,47 @@ def get_sep_vertices(lons: np.ndarray, lats: np.ndarray):
     bad_verts = {item for item in bad_verts if item not in not_so_bad_verts}
 
     return good_verts, bad_verts, not_so_bad_verts
+
+
+@log_func_call(logger)
+def get_delaunay_vertices(lons: np.ndarray, lats: np.ndarray, **kwargs) -> set:
+    """ Run a Delaunay triangulation on a series of coordinates, and assemble the list of
+    resulting vertices.
+
+    Args:
+        lons (np.ndarray): array of longitudes, in fractional degrees.
+        lats (np.ndarray): array of latitudes, in fractional degrees.
+        **kwargs: any other keyword arguments will be fed to cartopy.crs.Stereographic()
+
+    Return:
+        list: the list of individual vertices, provided as len(2)-lists of (original) point indices.
+
+
+    This routine performs a Delaunay triangulation using the point coordinates converted to a
+    Stereographic projection. This allows to run a 2D Delaunay triangulation where the
+    identified pairs of 'connected' stations are the same as those that would be ientified if
+    the triangulation was performed on the surface of the sphere.
+
+    See Saalfeld, Cartography and Geographic Information Science, Vol. 26, No.4, 1999, pp. 289-296.
+    https://www.tandfonline.com/doi/pdf/10.1559/152304099782294168
+
+    """
+
+    assert len(lats) == len(lons), "Length mismatch for lons and lats"
+
+    # First things first: transform the lon-lat "PlateCarree" coordinates
+    # onto a Stereographic projection.
+    stereo = ccrs.Stereographic(**kwargs)
+    stereo_pts = stereo.transform_points(ccrs.PlateCarree(), lons, lats)
+
+    # Run the Delauney triangulation on these coordinates
+    tri = Delaunay(stereo_pts[:, :2])
+
+    # Assemble the list of vertices derived from Delaunay
+    # All credits go to https://stackoverflow.com/questions/64530316 for this great line
+    verts = set([tuple(sorted(edge)) for item in tri.simplices for edge in combinations(item, 2)])
+
+    return verts
 
 
 @log_func_call(logger)
