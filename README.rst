@@ -24,9 +24,20 @@ This package is under active development. You can expect regular breaking change
 documentation, and rapidly evolving APIs. If you want to use the package, please reach out to the
 developers and we will be happy to help you get started.
 
-For the daring users out there, here is a quick exemple to get you started:
+For the daring users out there, here is a quick exemple to get you started with network maps:
 
 .. literalinclude:: ./exemple.py
+
+Alternatively, if you want to create a site diagnostic plot, you can do it like this:
+
+.. code-block:: python
+
+    from mapmetnet.site import WigosSite
+
+    mysite = WigosSite('0-20000-0-06610')
+    # Alternarively, if you the site does not have a WIGOS ID:
+    # mysite = Site(lat=+46.811578, lon=+6.942472, name='My secret site')
+    mysite.site_view(save_fn='tmp.pdf', show=False)
 
 
 Development Setup with Poetry

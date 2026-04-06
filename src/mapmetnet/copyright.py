@@ -45,7 +45,7 @@ def get_cartopy_msg(projection: str | None = None) -> str:
     else:
         start = f'{projection} p'
 
-    return start + f'rojection generated using cartopy v{cartopy_version}, Met Office.'
+    return start + f'rojection via cartopy v{cartopy_version}, Met Office.'
 
 
 def get_ne_msg(features: list) -> str:
