@@ -1,5 +1,5 @@
 """
-Copyright (c) 2023-2024 MeteoSwiss, contributors listed in AUTHORS.
+Copyright (c) 2026 MeteoSwiss, contributors listed in AUTHORS.
 
 Distributed under the terms of the 3-Clause BSD License.
 
@@ -9,13 +9,19 @@ Module contains: relevant copyright notices
 """
 
 # Import from Python
+import logging
 from textwrap import fill
 from cartopy import __version__ as cartopy_version
 
 # Import from this module
 from . import __version__
+from .logger import log_func_call
+
+# Instantiate the module logger
+logger = logging.getLogger(__name__)
 
 
+@log_func_call(logger)
 def get_mmn_msg(when: str | None = None) -> str:
     """ Get the copyright statement for mapmetnet.
 
@@ -32,6 +38,7 @@ def get_mmn_msg(when: str | None = None) -> str:
     return f'Created with mapmetnet v{__version__}' + msg
 
 
+@log_func_call(logger)
 def get_cartopy_msg(projection: str | None = None) -> str:
     """ Get the copyright statement for cartopy.
 
@@ -48,6 +55,7 @@ def get_cartopy_msg(projection: str | None = None) -> str:
     return start + f'rojection via cartopy v{cartopy_version}, Met Office.'
 
 
+@log_func_call
 def get_ne_msg(features: list) -> str:
     """ Get the copyright statement for Natural Earth. """
 
@@ -62,6 +70,7 @@ def get_ne_msg(features: list) -> str:
     return f'{msg} from Natural Earth.'
 
 
+@log_func_call(logger)
 def get_gibs_msg(feature: str) -> str:
     """ Get the copyright statement for NASA GIBS. """
 
@@ -70,6 +79,7 @@ def get_gibs_msg(feature: str) -> str:
     return msg
 
 
+@log_func_call(logger)
 def get_eez_msg() -> str:
     """ Get the copyright statement for EEZ. """
 
@@ -80,6 +90,7 @@ def get_eez_msg() -> str:
     return msg
 
 
+@log_func_call(logger)
 def get_mch_msg() -> str:
     """ Get the disclaimer statement for MeteoSwiss. """
 
@@ -92,6 +103,7 @@ def get_mch_msg() -> str:
     return msg
 
 
+@log_func_call(logger)
 def build_copyright_statement(which: dict, width: int | None = 160) -> str:
     """ Build a copyright statement for the map, based on the different elements that are
     included in it.

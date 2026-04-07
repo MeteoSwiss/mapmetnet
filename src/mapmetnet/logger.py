@@ -1,5 +1,5 @@
 """
-Copyright (c) 2023-2024 MeteoSwiss, contributors listed in AUTHORS.
+Copyright (c) 2026 MeteoSwiss, contributors listed in AUTHORS.
 
 Distributed under the terms of the 3-Clause BSD License.
 
@@ -9,13 +9,13 @@ Module contains: logging utilities
 """
 
 # Import from Python
-import logging
+from logging import Logger
 import inspect
 from typing import Callable
 from functools import wraps
 
 
-def log_func_call(logger: logging.Logger) -> Callable:
+def log_func_call(logger: Logger) -> Callable:
     """ Intended as a decorator to log function calls.
 
     Args:

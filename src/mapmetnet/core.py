@@ -1,5 +1,5 @@
 """
-Copyright (c) 2023-2024 MeteoSwiss, contributors listed in AUTHORS.
+Copyright (c) 2026 MeteoSwiss, contributors listed in AUTHORS.
 
 Distributed under the terms of the 3-Clause BSD License.
 
@@ -87,7 +87,9 @@ class Plotter():
     @set_mplstyle
     def savefig(fname, dpi=None):
         """ Wrapper around plt.savefig() """
-        plt.savefig(fname, dpi=dpi)
+
+        if fname is not None:
+            plt.savefig(fname, dpi=dpi)
 
 
 class Mapper(Plotter):
@@ -230,12 +232,6 @@ class Mapper(Plotter):
 
             # No colorbar required
             self.ax_clb.axis('off')
-
-        #elif which == 'stamen':
-        # Stamen terrain tiles could be a good option, but they can no longer be easily accessed.
-        # https://stackoverflow.com/questions/77248120
-        #    terrain = cimgt.Stamen(style='background-terrain')
-        #    self.ax_map.add_image(terrain)
 
         elif which in ['elevation', 'lightning', 'pop-density', 'croplands', 'human-footprint']:
             # Deal with all the NASA GIBS layers

@@ -9,7 +9,6 @@ Module contains: classes related to individual sites
 """
 
 # Import from Python
-import copy
 import logging
 from datetime import datetime, UTC
 
@@ -21,7 +20,6 @@ from cartopy.io.img_tiles import GoogleTiles, OSM
 import cartopy.crs as ccrs
 from astropy.coordinates import Angle
 from astropy.units import deg as deg_unit
-from tomlkit import key
 from wmoutils.query import query_oscar_surface
 
 # Import from this package
