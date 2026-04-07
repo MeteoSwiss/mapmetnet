@@ -20,6 +20,10 @@ from .hardcoded import USR_BKG_PATH
 # via the pyproject.toml file (using poetry).
 __version__ = getversion("mapmetnet")
 
+# Make sure users can do things like import mapmetnet -> mapmetnet.site.etc ...
+# Side note: this also fixes a warning with Sphinx related to duplicated loggers ...
+__all__ = ['site', 'core']
+
 # Instantiate the module logger
 logger = logging.getLogger(__name__)
 # Hide any log messages if the user did not instantiate any handler
