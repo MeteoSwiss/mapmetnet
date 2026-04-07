@@ -647,7 +647,8 @@ class CountryMapper(NetworkMapper):
                     lon_min: float | None = None,
                     lon_max: float | None = None,
                     lat_min: float | None = None,
-                    lat_max: float | None = None) -> None:
+                    lat_max: float | None = None,
+                    squarify: bool = True,) -> None:
         """ Center the map on the target country.
 
         We want to fit the entire country and all its EEZ, possibly with some padding.
@@ -658,6 +659,7 @@ class CountryMapper(NetworkMapper):
             lon_max (foat, optional): if set, will override the maximum longitude of the map.
             lat_min (foat, optional): if set, will override the minimum latitude of the map.
             lat_max (foat, optional): if set, will override the maximum latitude of the map.
+            squarify (bool, optional): if True, the map will be squarified. Defaults to True.
         """
 
         # Start from the country extent ...
@@ -688,7 +690,8 @@ class CountryMapper(NetworkMapper):
                 lat_lims[lat_id] = lat
 
         # ... and make it square ...
-        lon_lims, lat_lims = utils.squarify_extent(lon_lims, lat_lims)
+        if squarify:
+            lon_lims, lat_lims = utils.squarify_extent(lon_lims, lat_lims)
 
         #  ... to finally be able to set the plot extent
         self.ax_map.set_extent(tuple(lon_lims)+tuple(lat_lims))
