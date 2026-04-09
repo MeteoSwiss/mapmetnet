@@ -240,11 +240,12 @@ def crosshair(inner_r: float = 1., pa: float = 0.) -> mplp.Path:
              ]
     # Compute the rotation matrix
     pa = np.radians(pa)
-    rot_mat = np.matrix([[np.cos(pa), -np.sin(pa)], [np.sin(pa), np.cos(pa)]])
+    rot_mat = np.array([[np.cos(pa), -np.sin(pa)], [np.sin(pa), np.cos(pa)]])
 
     # Rotate the vertices
     for (v, vert) in enumerate(verts):
-        verts[v] = (vert*rot_mat).A[0]
+
+        verts[v] = vert@rot_mat
 
     # Define the drawing codes
     codes = [mplp.Path.MOVETO,
