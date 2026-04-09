@@ -1,11 +1,11 @@
 """
-Copyright (c) 2023-2024 MeteoSwiss, contributors listed in AUTHORS.
+Copyright (c) 2026 MeteoSwiss, contributors listed in AUTHORS.
 
 Distributed under the terms of the 3-Clause BSD License.
 
 SPDX-License-Identifier: BSD-3-Clause
 
-Module content: tests for the gbon module
+Module content: tests for the network module
 """
 
 # Import from Python

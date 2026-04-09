@@ -298,6 +298,13 @@ class Mapper(Plotter):
             is_disputed (bool, optional): if True, the border will be drawn with a dotted line
                 anbd tagged accordingly.
 
+        .. Warning::
+            This function is used both for the regular borders and the disputed area borders, and
+            it assesses the nature of the border based on both the Natural Earth attributes and
+            the ISO attributes. If any of these sources flags a border as disputed, then it will
+            be drawn as such, and a warning will be triggered to make sure the user is aware of
+            this.
+
         """
 
         # Check if the country bounds overlap with the extent of the map
