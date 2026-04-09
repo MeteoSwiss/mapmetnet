@@ -55,7 +55,7 @@ def get_cartopy_msg(projection: str | None = None) -> str:
     return start + f'rojection via cartopy v{cartopy_version}, Met Office.'
 
 
-@log_func_call
+@log_func_call(logger)
 def get_ne_msg(features: list) -> str:
     """ Get the copyright statement for Natural Earth. """
 
