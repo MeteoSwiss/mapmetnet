@@ -295,6 +295,8 @@ class Mapper(Plotter):
         Args:
             item: a Natural Earth record containing the geometry to add, and the relevant
                 attributes to build the legend handle.
+            is_disputed (bool, optional): if True, the border will be drawn with a dotted line
+                anbd tagged accordingly.
 
         """
 
@@ -303,21 +305,28 @@ class Mapper(Plotter):
                                     self.ax_map.get_extent(crs=ccrs.PlateCarree())):
             return
 
+        # Assess the nature of the border
+        # 1) according to Natural Earth
+        is_ne_disputed = item.attributes['FEATURECLA'] != 'International boundary (verify)'
+        # 2) according to ISO
+        is_iso_disputed = item.attributes['FCLASS_ISO'] in ['Unrecognized',
+                                                            'Disputed (please verify)']
+
         # Tweak the look of things depending on the border type ...
-        if is_disputed:
+        if is_disputed or is_ne_disputed or is_iso_disputed:
             ls = ':'
             lbl = 'Borders (unsettled)'
+
+            # Trigger a warning, to make sure the user is aware that one border is problematic
+            msg = f"Unsettled border: {item.attributes['ADM0_LEFT']} - " + \
+                f"{item.attributes['ADM0_RIGHT']}"
+            logger.warning(msg)
+            # This is sufficiently important to raise a visible warning as well ...
+            warnings.warn(msg, MapmetnetWarning)
 
         else:
             ls = '-'
             lbl = 'Borders'
-
-            if item.attributes['FEATURECLA'] == 'International boundary (verify)':
-                # Log a warning about the suspicious border.
-                logger.warning("%s-%s border status: %s",
-                               item.attributes['ADM0_A3_L'],
-                               item.attributes['ADM0_A3_R'],
-                               item.attributes['FEATURECLA'])
 
         self._legend_handles[lbl.lower().replace(' ', '_')] = mlines.Line2D(
             [], [], color='k', ls=ls, lw=0.75, label=lbl)
