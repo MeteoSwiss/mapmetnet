@@ -115,8 +115,8 @@ class Mapper(Plotter):
         self._center_lon = lon
 
         # Set the default map projection
-        self._proj = ccrs.Orthographic(
-            central_longitude=self._center_lon, central_latitude=self._center_lat)
+        self._proj = ccrs.Orthographic(central_longitude=self._center_lon,
+                                       central_latitude=self._center_lat)
 
         # Let's also create the other atribute that will become relevant later on
         self._legend_handles = {}
@@ -318,7 +318,8 @@ class Mapper(Plotter):
             lbl = 'Borders (unsettled)'
 
             # Trigger a warning, to make sure the user is aware that one border is problematic
-            msg = f"Unsettled border: {item.attributes['ADM0_LEFT']} - " + \
+            msg = f"Unsettled border [{item.attributes['NAME']}]: " +\
+                f"{item.attributes['ADM0_LEFT']} - " + \
                 f"{item.attributes['ADM0_RIGHT']}"
             logger.warning(msg)
             # This is sufficiently important to raise a visible warning as well ...
@@ -359,6 +360,58 @@ class Mapper(Plotter):
     def _add_coast(self) -> None:
         """ Add the coastline to the map. """
         self.ax_map.add_feature(cfeature.COASTLINE.with_scale('10m'), edgecolor='k', lw=0.75)
+
+    @log_func_call(logger)
+    def _highlight_country(self, iso_alpha3: str | list,
+                           show_names: bool = False) -> None:
+        """ Highlight a given set of countries on the map, by covering the other ones with
+        a semi-transparent white layer.
+
+        Args:
+            iso_alpha3 (str | list): the 3-letter ISO code of the country (or countries) to
+                highlight.
+            show_names (bool, optional): if True, will display the names of non-highlighted
+                countries. Defaults to False.
+
+        """
+
+        if isinstance(iso_alpha3, str):
+            iso_alpha3 = [iso_alpha3]
+
+        # Loop through all the countries, and only deal with those that overlap with
+        # the plotting area
+        for item in get_ne_records(resolution='10m', category='cultural',
+                                   name='admin_0_map_units'):
+
+            # Check if the country bounds overlap with the extent of the map
+            if not utils.is_overlapping(item.geometry,
+                                        self.ax_map.get_extent(crs=ccrs.PlateCarree())):
+                continue
+
+            # Fill the neighboring countries with semi-transparent white
+            if item.attributes['ISO_A3'] not in iso_alpha3:
+                self.ax_map.add_geometries(item.geometry, crs=ccrs.PlateCarree(),
+                                           facecolor=(1, 1, 1), alpha=0.7,
+                                           edgecolor='none',
+                                           label=item.attributes['ADM0_A3'])
+
+            # Add the names of the countries, but only if the country centroid falls within the map.
+            lon_lims = np.array(self.lon_lims)
+            lat_lims = np.array(self.lat_lims)
+
+            if lon_lims[0] < item.geometry.centroid.x < lon_lims[1] and \
+               lat_lims[0] < item.geometry.centroid.y < lat_lims[1] and \
+               item.attributes['LABELRANK'] < 10 and \
+               item.attributes['ISO_A3'] not in iso_alpha3 and \
+               show_names:
+
+                self.ax_map.annotate(item.attributes['NAME'],
+                                     xy=(item.geometry.centroid.x, item.geometry.centroid.y),
+                                     xytext=(0, 0), textcoords='offset fontsize',
+                                     color=(0.25, 0.25, 0.25), fontsize=11,
+                                     ha='center', va='center',
+                                     path_effects=[mplpe.withStroke(linewidth=0.2, foreground="w")],
+                                     transform=ccrs.PlateCarree())
 
     @log_func_call(logger)
     def _add_gridlines(self):
@@ -702,55 +755,25 @@ class CountryMapper(NetworkMapper):
         self.ax_map.set_extent(tuple(lon_lims)+tuple(lat_lims))
 
     @log_func_call(logger)
-    def _highlight_country(self, iso_alpha3: str | None = None,
-                           show_names=False) -> None:
-        """ Highlight a given target country on the map.
+    def _highlight_country(self, iso_alpha3: str | list | None = None,
+                           show_names: bool = False) -> None:
+        """ Highlight a given (set of) country(ies) on the map, by covering the other ones with a
+        semi-transparent white layer.
 
         Args:
-            iso_alpha3 (str, optional): the 3-letter ISO code of the country to highlight. If None
-                (default), will use self.country_code.
+            iso_alpha3 (str | list | None, optional): the 3-letter ISO code of the country
+                (or countries) to highlight. If None (default), will use self.country_code.
             show_names (bool, optional): if True, will display the names of neighboring countries.
                 Defaults to False.
 
         """
 
+        # If nothign specified, highlight the target country
         if iso_alpha3 is None:
             iso_alpha3 = self.country_code
 
-        # Loop through all the countries, and only deal with those that overlap with
-        # the plotting area
-        for item in get_ne_records(resolution='10m', category='cultural',
-                                   name='admin_0_map_units'):
-
-            # Check if the country bounds overlap with the extent of the map
-            if not utils.is_overlapping(item.geometry,
-                                        self.ax_map.get_extent(crs=ccrs.PlateCarree())):
-                continue
-
-            # Fill the neighboring countries with semi-transparent white
-            if item.attributes['ISO_A3'] != iso_alpha3:
-                self.ax_map.add_geometries(item.geometry, crs=ccrs.PlateCarree(),
-                                           facecolor=(1, 1, 1), alpha=0.7,
-                                           edgecolor='none',
-                                           label=item.attributes['ADM0_A3'])
-
-            # Add the names of the countries, but only if the country centroid falls within the map.
-            lon_lims = np.array(self.lon_lims)
-            lat_lims = np.array(self.lat_lims)
-
-            if lon_lims[0] < item.geometry.centroid.x < lon_lims[1] and \
-               lat_lims[0] < item.geometry.centroid.y < lat_lims[1] and \
-               item.attributes['LABELRANK'] < 10 and \
-               item.attributes['ISO_A3'] != iso_alpha3 and \
-               show_names:
-
-                self.ax_map.annotate(item.attributes['NAME'],
-                                     xy=(item.geometry.centroid.x, item.geometry.centroid.y),
-                                     xytext=(0, 0), textcoords='offset fontsize',
-                                     color=(0.25, 0.25, 0.25), fontsize=11,
-                                     ha='center', va='center',
-                                     path_effects=[mplpe.withStroke(linewidth=0.2, foreground="w")],
-                                     transform=ccrs.PlateCarree())
+        # Call the relevant Parent method to do the actual work
+        super()._highlight_country(iso_alpha3=iso_alpha3, show_names=show_names)
 
     @log_func_call(logger)
     def _add_eez(self) -> None:
