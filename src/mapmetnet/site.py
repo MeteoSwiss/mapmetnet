@@ -18,6 +18,7 @@ from shapely.geometry import Polygon
 from cartopy.geodesic import Geodesic
 from cartopy.io.img_tiles import GoogleTiles, OSM
 import cartopy.crs as ccrs
+from cartopy.mpl.geoaxes import GeoAxes
 from astropy.coordinates import Angle
 from astropy.units import deg as deg_unit
 from wmoutils.query import query_oscar_surface
@@ -63,7 +64,7 @@ class Site(Plotter):
         self._panel_zooms = [20, 18, 17, 13]
         self._panel_types = ['satellite'] * 3 + ['street']
         self._panel_imgs = [self._panel_type_to_img(pt) for pt in self._panel_types]
-        self._panel_extents = [None] * 4
+        self._panel_extents: list = [None] * 4
         self._copyright['cartopy'] = None
         self._name = name
 
@@ -193,7 +194,7 @@ class Site(Plotter):
                        facecolor='none', edgecolor='w', s=scl,
                        lw=1.5, transform=ccrs.PlateCarree())
 
-    def _draw_circle(self, radius: float, ax: plt.Axes) -> None:
+    def _draw_circle(self, radius: float, ax: GeoAxes) -> None:
         """ Draw a circle of a given radius around the central location.
 
         Args:
@@ -222,8 +223,8 @@ class Site(Plotter):
         if title is None:
             title = self._name if self._name is not None else ''
 
-        self._fig.text(0.03, 0.99, f'{title}',
-                       fontsize=20, fontweight='bold', va='top', ha='left')
+        self.fig.text(0.03, 0.99, f'{title}',
+                      fontsize=20, fontweight='bold', va='top', ha='left')
 
     def _add_coords(self) -> None:
         """ Add the coordinates of the site to the figure. """
@@ -236,19 +237,19 @@ class Site(Plotter):
                                              sep=':', precision=3, alwayssign=True)} N | " + \
                       f'{lon_angle.to_string(unit=deg_unit,
                                              sep=":", precision=3, alwayssign=True)} E'
-        self._fig.text(0.97, 0.99,
-                       full_coords, va='top', fontsize=20, fontweight='bold', ha='right')
-        self._fig.text(0.97, 0.965,
-                       rf'{self._lat:+.6f} N | {self._lon:+.6f} E',
-                       # | {alt:+.1f} m',
-                       fontsize=11, fontweight='normal', va='top', ha='right')
+        self.fig.text(0.97, 0.99,
+                      full_coords, va='top', fontsize=20, fontweight='bold', ha='right')
+        self.fig.text(0.97, 0.965,
+                      rf'{self._lat:+.6f} N | {self._lon:+.6f} E',
+                      # | {alt:+.1f} m',
+                      fontsize=11, fontweight='normal', va='top', ha='right')
 
     def _add_copyright(self) -> None:
         """ Add the necessary copyright statement. """
 
         # Let's also add the time of creation at the bottom of the figure, including the timezone
-        self._fig.text(0.97, 0.01, build_copyright_statement(self._copyright, width=None),
-                       va='bottom', ha='right', fontsize=11, color='gray')
+        self.fig.text(0.97, 0.01, build_copyright_statement(self._copyright, width=None),
+                      va='bottom', ha='right', fontsize=11, color='gray')
 
     def site_view(self, figid: int | None = None,
                   show_ref_circles: bool = True,

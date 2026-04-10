@@ -16,15 +16,17 @@ import numpy as np
 import polars as pl
 
 from matplotlib import pyplot as plt
-from matplotlib.pyplot import figure as mplfig
+from matplotlib.figure import Figure as mplfig
 from matplotlib.gridspec import GridSpec
 import matplotlib.patheffects as mplpe
 import matplotlib.lines as mlines
 import matplotlib.patches as mpatches
 
 import shapely
+from shapely import geometry as sgeom
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
+from cartopy.mpl.geoaxes import GeoAxes
 from owslib.wmts import WebMapTileService
 
 import wmoutils
@@ -56,13 +58,15 @@ class Plotter():
         """
 
         # Let's also create the other atribute that will become relevant later on
-        self._fig = None
-        self._axs = []
-        self._copyright = {'mmn': when}
+        self._fig: mplfig | None = None
+        self._axs: list = []
+        self._copyright: dict = {'mmn': when}
 
     @property
     def fig(self) -> mplfig:
         """ The Matplotlib figure instance holding the map. """
+        if self._fig is None:
+            raise MapmetnetError("Figure not created yet.")
         return self._fig
 
     @property
@@ -70,22 +74,22 @@ class Plotter():
         """ The list of Matplotlib axes holding the various figure elements. """
         return self._axs
 
-    def _get_ax(self, ax_id):
+    def _get_ax(self, ax_id: int) -> plt.Axes | GeoAxes:
         """ Get a sepcific ax given its id. """
         if len(self.axs) < ax_id + 1:
             warnings.warn(f'len(self.axs) [{len(self.axs)}] < ax_id + 1 [{ax_id + 1}].',
                           MapmetnetWarning)
-            return None
+            raise MapmetnetError(f"No ax with id {ax_id}.")
         return self._axs[ax_id]
 
     @staticmethod
-    def show():
+    def show() -> None:
         """ Wrapper around plt.show() """
         plt.show()
 
     @staticmethod
     @set_mplstyle
-    def savefig(fname, dpi=None):
+    def savefig(fname: str | None, dpi: int | None = None) -> None:
         """ Wrapper around plt.savefig() """
 
         if fname is not None:
@@ -128,22 +132,22 @@ class Mapper(Plotter):
                                        central_latitude=self._center_lat)
 
         # Let's also create the other atribute that will become relevant later on
-        self._legend_handles = {}
+        self._legend_handles: dict = {}
         self._copyright['cartopy'] = 'Orthographic'
         self._copyright['ne'] = []
 
     @property
-    def ax_map(self):
+    def ax_map(self) -> GeoAxes:
         """ The Matplotlib axis holding the map. """
         return self._get_ax(0)
 
     @property
-    def ax_leg(self):
+    def ax_leg(self) -> plt.Axes:
         """ The Matplotlib axis holding the legend. """
         return self._get_ax(1)
 
     @property
-    def ax_clb(self):
+    def ax_clb(self) -> plt.Axes:
         """ The Matplotlib axis holding the colorbar. """
         return self._get_ax(2)
 
@@ -185,7 +189,8 @@ class Mapper(Plotter):
         """
 
         #  ... to finally be able to set the plot extent
-        self.ax_map.set_extent(tuple(self._lon_lims)+tuple(self._lat_lims))
+        if self.ax_map is not None:
+            self.ax_map.set_extent(tuple(self._lon_lims)+tuple(self._lat_lims))
 
     @log_func_call(logger)
     def _set_map_lims(self,
@@ -230,15 +235,19 @@ class Mapper(Plotter):
     @property
     def true_lon_lims(self) -> tuple:
         """ The longitude limits of the map. """
+        if self.ax_map is None:
+            return (None, None)
         return self.ax_map.get_extent(crs=ccrs.PlateCarree())[:2]
 
     @property
     def true_lat_lims(self) -> tuple:
         """ The latitude limits of the map. """
+        if self.ax_map is None:
+            return (None, None)
         return self.ax_map.get_extent(crs=ccrs.PlateCarree())[2:]
 
     @log_func_call(logger)
-    def _add_background(self, which: str | None = None):
+    def _add_background(self, which: str | None = None) -> None:
         """ Add a background to the map.
 
         Args:
@@ -320,7 +329,7 @@ class Mapper(Plotter):
             raise MapmetnetError(f"Unknown background: {which}")
 
     @log_func_call(logger)
-    def _add_rivers_and_lakes(self):
+    def _add_rivers_and_lakes(self) -> None:
         """ Add rivers and lakes to the map. """
 
         self.ax_map.add_feature(cfeature.RIVERS.with_scale('10m'))
@@ -462,7 +471,7 @@ class Mapper(Plotter):
                                      transform=ccrs.PlateCarree())
 
     @log_func_call(logger)
-    def _add_gridlines(self):
+    def _add_gridlines(self) -> None:
         """ Add the lat/lon gridlines. """
 
         gl = self.ax_map.gridlines(draw_labels=True, ls='-', lw=0.25, color='k')
@@ -505,8 +514,9 @@ class Mapper(Plotter):
         self.ax_leg.text(0.5, 1.1, title,
                          transform=self.ax_leg.transAxes, weight='bold',
                          ha='center', va='top', fontsize=13)
-        self.ax_leg.text(0.5, 1.0, subtitle, transform=self.ax_leg.transAxes,
-                         ha='center', va='top', fontsize=12)
+        if subtitle is not None:
+            self.ax_leg.text(0.5, 1.0, subtitle, transform=self.ax_leg.transAxes,
+                             ha='center', va='top', fontsize=12)
 
 
 class NetworkMapper(Mapper):
@@ -601,7 +611,7 @@ class NetworkMapper(Mapper):
         return combined_geoms, intersect_geoms
 
     @log_func_call(logger)
-    def _add_geom_union_outline(self, geoms: list, label: str | None = None):
+    def _add_geom_union_outline(self, geoms: list, label: str | None = None) -> None:
         """ Given a list of geometries, draw the outline of their union.
 
         Args:
@@ -631,7 +641,7 @@ class NetworkMapper(Mapper):
                         color: str | tuple = 'k',
                         thres: float | None = None,
                         drop_not_so_bad: bool = False,
-                        **kwargs) -> float:
+                        **kwargs: str) -> float:
         """ Given a set of stations, compute the neighbors and draw the connection on the map.
 
         Args:
@@ -760,7 +770,7 @@ class CountryMapper(NetworkMapper):
         return self._eez
 
     @property
-    def mrgid(self) -> str:
+    def mrgid(self) -> int | None:
         """ Marine Regions Geographic IDentifier. """
         return self._mrgid
 
@@ -891,13 +901,15 @@ class CountryMapper(NetworkMapper):
                                                           label=rf'$R$ = {ref_radius} km')
 
     @log_func_call(logger)
-    def get_surface_fraction(self, geom):
+    def get_surface_fraction(self, geom: sgeom) -> float:
         """ Compute the target country's surface fraction of a given geometry.set
 
         Args:
             geom (shapely geometry): the geometry to assess
 
-        Returns: float
+        Returns:
+            float: the fraction of the target country's surface that is covered by the
+                input geometry.
         """
 
         area = shapely.area(shapely.intersection(self.country.geometry, geom))
@@ -918,7 +930,7 @@ class GBONMapper(CountryMapper):
                    iso_a3: str | None = None,
                    wigos_ids: list | None = None,
                    show_influence_area: bool = True,
-                   high_density: bool = False):
+                   high_density: bool = False) -> tuple[float, float | None]:
         """ Add all WDQMS station statistics of the target country to the map.
 
         Args:

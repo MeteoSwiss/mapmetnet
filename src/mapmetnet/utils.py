@@ -9,7 +9,7 @@ Module contains: general utility functions
 """
 
 # Import from Python
-from typing import Union, Callable
+from typing import Callable
 from functools import wraps
 import logging
 from pathlib import Path
@@ -53,7 +53,8 @@ def format_var_name(variable: str) -> str:
 
 
 @log_func_call(logger)
-def pad_angular_range(ang_range: Union[list, tuple, ndarray], pad_fraction: float):
+def pad_angular_range(ang_range: list | tuple | ndarray,
+                      pad_fraction: float) -> list | tuple | ndarray:
     """ Pad a given angular range by a fraction of the range (on both sides).
 
     Args:
@@ -79,7 +80,7 @@ def pad_angular_range(ang_range: Union[list, tuple, ndarray], pad_fraction: floa
 
 
 @log_func_call(logger)
-def squarify_extent(lon_lims: ndarray, lat_lims: ndarray):
+def squarify_extent(lon_lims: ndarray, lat_lims: ndarray) -> tuple[ndarray, ndarray]:
     """ Adjust longitude and latitude limits to get a squar-ish map extent.
 
     Args:
@@ -130,7 +131,7 @@ def is_overlapping(geom: sgeom, extent: tuple) -> bool:
 
 
 @log_func_call(logger)
-def get_circle_geom(lon: float, lat: float, radius: float):
+def get_circle_geom(lon: float, lat: float, radius: float) -> sgeom:
     """ Given a lat-lon positon and radius, build a circle geometry.
 
     Args:
@@ -187,7 +188,7 @@ def set_mplstyle(func: Callable) -> Callable:
     """
 
     @wraps(func)  # This black magic is required for Sphinx to still pickup the func docstrings.
-    def inner_deco(*args, **kwargs) -> Callable:
+    def inner_deco(*args: str, **kwargs: str) -> Callable:
         """ The core function, where the magic happens. """
 
         # Where are all the plotting parameter files ?
@@ -227,17 +228,10 @@ def crosshair(inner_r: float = 1., pa: float = 0.) -> mplp.Path:
    '''
 
     # Define the vertices
-    verts = [(-1.5, 0),
-             (-0.5*inner_r, 0),
-             (0, 0.5*inner_r),
-             (0, 1.5),
-             (0.5*inner_r, 0),
-             (1.5, 0),
-             (0, -0.5*inner_r),
-             (0, -1.5),
-             (-1.5, 0),
-             (-1.5, 0),
-             ]
+    verts: list = [
+        (-1.5, 0.), (-0.5*inner_r, 0.), (0, 0.5*inner_r), (0, 1.5), (0.5*inner_r, 0.),
+        (1.5, 0.), (0., -0.5*inner_r), (0., -1.5), (-1.5, 0.), (-1.5, 0.),
+        ]
     # Compute the rotation matrix
     pa = np.radians(pa)
     rot_mat = np.array([[np.cos(pa), -np.sin(pa)], [np.sin(pa), np.cos(pa)]])

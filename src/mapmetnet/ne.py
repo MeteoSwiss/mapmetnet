@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 def get_ne_records(resolution: str = '10m',
                    category: str = 'cultural',
                    name: str = 'admin_0_map_units',
-                   fmt='iterator'):
+                   fmt: str = 'iterator'):
     """ Wrapper routine to extract Natural Earth shapefile Records.
 
     For a list of available options, see: https://www.naturalearthdata.com/features/

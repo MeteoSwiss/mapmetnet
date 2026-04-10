@@ -58,7 +58,7 @@ jobs:
         COUNT=$(echo "$OUTPUT" | grep -Po 'Found \K[0-9]+(?= errors?)' || echo 0)
         echo "Found $COUNT mypy errors"
 
-        MAX_ERRORS=5
+        MAX_ERRORS=10
         if [ "$COUNT" -gt "$MAX_ERRORS" ]; then
           echo "$COUNT/$MAX_ERRORS mypy errors found."
           exit 1

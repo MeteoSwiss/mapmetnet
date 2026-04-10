@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 
 @log_func_call(logger)
-def get_mean_sep(lons: np.ndarray, lats: np.ndarray, drop_not_so_bad=False) -> tuple:
+def get_mean_sep(lons: np.ndarray, lats: np.ndarray, drop_not_so_bad: bool = False) -> tuple:
     """ Compute the mean separation between a series of coordinates on Earth.
 
     Args:
@@ -54,7 +54,7 @@ def get_mean_sep(lons: np.ndarray, lats: np.ndarray, drop_not_so_bad=False) -> t
 
 
 @log_func_call(logger)
-def get_sep_vertices(lons: np.ndarray, lats: np.ndarray):
+def get_sep_vertices(lons: np.ndarray, lats: np.ndarray) -> tuple[dict, dict, dict]:
     """ Assemble a list of vertices separating a series of coordinates on Earth.
 
     Args:
@@ -99,8 +99,8 @@ def get_sep_vertices(lons: np.ndarray, lats: np.ndarray):
     geo = Geodesic()
 
     # Let's now make two piles of vertices. The ones we like, and the ones we do not.
-    good_verts = {}
-    bad_verts = {}
+    good_verts: dict = {}
+    bad_verts: dict = {}
 
     # Let's check them all one by one, and decide which is which
     for vert in verts:
@@ -142,7 +142,7 @@ def get_sep_vertices(lons: np.ndarray, lats: np.ndarray):
     good_polys = polygonize(good_segs)
 
     # Now check which bad line segments are contained within the geometry
-    not_so_bad_verts = {}
+    not_so_bad_verts: dict = {}
     for (vert, dist) in bad_verts.items():
         if good_polys.covers(LineString(pts[vert, :])):
             # This bad vertex does not look so bad after all ... !
@@ -155,7 +155,7 @@ def get_sep_vertices(lons: np.ndarray, lats: np.ndarray):
 
 
 @log_func_call(logger)
-def get_delaunay_vertices(lons: np.ndarray, lats: np.ndarray, **kwargs) -> set:
+def get_delaunay_vertices(lons: np.ndarray, lats: np.ndarray, **kwargs: str) -> set:
     """ Run a Delaunay triangulation on a series of coordinates, and assemble the list of
     resulting vertices.
 
