@@ -21,22 +21,16 @@ Submodules
 .. toctree::
    :maxdepth: 1
 
+   /autoapi/mapmetnet/copyright/index
+   /autoapi/mapmetnet/core/index
+   /autoapi/mapmetnet/eez/index
    /autoapi/mapmetnet/errors/index
+   /autoapi/mapmetnet/gibs/index
    /autoapi/mapmetnet/hardcoded/index
    /autoapi/mapmetnet/logger/index
+   /autoapi/mapmetnet/ne/index
+   /autoapi/mapmetnet/network/index
+   /autoapi/mapmetnet/site/index
    /autoapi/mapmetnet/utils/index
 
-
-Attributes
-----------
-
-.. autoapisummary::
-
-   mapmetnet.logger
-
-
-Package Contents
-----------------
-
-.. py:data:: logger
 

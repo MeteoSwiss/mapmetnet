@@ -1,0 +1,121 @@
+mapmetnet.network
+=================
+
+.. py:module:: mapmetnet.network
+
+.. autoapi-nested-parse::
+
+   Copyright (c) 2026 MeteoSwiss, contributors listed in AUTHORS.
+
+   Distributed under the terms of the 3-Clause BSD License.
+
+   SPDX-License-Identifier: BSD-3-Clause
+
+   Module contains: utility functions related to network characterization
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   mapmetnet.network.logger
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   mapmetnet.network.get_mean_sep
+   mapmetnet.network.get_sep_vertices
+   mapmetnet.network.get_delaunay_vertices
+   mapmetnet.network.compute_mean_sep
+
+
+Module Contents
+---------------
+
+.. py:data:: logger
+
+.. py:function:: get_mean_sep(lons: numpy.ndarray, lats: numpy.ndarray, drop_not_so_bad: bool = False) -> tuple
+
+   Compute the mean separation between a series of coordinates on Earth.
+
+   :Parameters: * **lons** (*np.ndarray*) -- array of longitudes, in fractional degrees.
+                * **lats** (*np.ndarray*) -- array of latitudes, in fractional degrees.
+                * **drop_not_so_bad** (*bool, optional*) -- if True, the not_so_bad vertices will be ignored.
+                  Defaults to False.
+
+   :returns: the mean separation between the coordinates, in km.
+             verts (dict): the vertices used to compute the mean separation, provided as a dict.
+   :rtype: mean_sep (float)
+
+
+.. py:function:: get_sep_vertices(lons: numpy.ndarray, lats: numpy.ndarray) -> tuple[dict, dict, dict]
+
+   Assemble a list of vertices separating a series of coordinates on Earth.
+
+   :Parameters: * **lons** (*np.ndarray*) -- array of longitudes, in fractional degrees.
+                * **lats** (*np.ndarray*) -- array of latitudes, in fractional degrees.
+
+   :returns:
+
+             dicts with the vertex nodes provided as
+                 len(2)-lists of (original) point indices as keys, and their true length as entry
+                 (measured along Great Circles).
+   :rtype: good_verts, bad_verts, not_so_bad_verts
+
+   :raises MapmetnetError: if some of the input points are duplicated.
+
+   The vertices are assembled from the Delaunay set of vertices (derived in 2D using a
+   Stereographic projection), with an additional requirement that the mid-point of each vertice be
+   closest (strictly) to its nodes, and no other location in the set of coordinates.
+
+   Vertices that respect this conditions strictly are provided in good_verts.
+
+   Vertices that do not respect this criterium are listed in bad_verts and not_so_bad_verts.
+   The only difference between these two sets is that vertices inside not_so_bad_verts are located
+   within the polygon formed by the "good" vertices.
+
+
+
+.. py:function:: get_delaunay_vertices(lons: numpy.ndarray, lats: numpy.ndarray, **kwargs: str) -> set
+
+   Run a Delaunay triangulation on a series of coordinates, and assemble the list of
+   resulting vertices.
+
+   :Parameters: * **lons** (*np.ndarray*) -- array of longitudes, in fractional degrees.
+                * **lats** (*np.ndarray*) -- array of latitudes, in fractional degrees.
+                * **\*\*kwargs** -- any other keyword arguments will be fed to cartopy.crs.Stereographic()
+
+   :returns: the list of individual vertices, provided as len(2)-lists of (original) point indices.
+   :rtype: list
+
+   This routine performs a Delaunay triangulation using the point coordinates converted to a
+   Stereographic projection. This allows to run a 2D Delaunay triangulation where the
+   identified pairs of 'connected' stations are the same as those that would be ientified if
+   the triangulation was performed on the surface of the sphere.
+
+   See Saalfeld, Cartography and Geographic Information Science, Vol. 26, No.4, 1999, pp. 289-296.
+   https://www.tandfonline.com/doi/pdf/10.1559/152304099782294168
+
+
+
+.. py:function:: compute_mean_sep(verts: dict) -> float
+
+   Compute the mean vertex length given a set of vertices.
+
+   :Parameters: **verts** (*dict*) -- dictionnary of vertices, where each key contains a single vertex nodes, and
+                the entries are their respective lengths (computed elsewhere).
+
+   :returns: the mean vertex node
+   :rtype: float
+
+   .. todo::
+
+      This routine is specificly tied to the format of verts assembled in get_sep_vertices().
+      It could make a lot of sense to create a dedicated Class for these at some point ...
+
+

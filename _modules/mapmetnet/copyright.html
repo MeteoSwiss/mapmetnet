@@ -1,0 +1,659 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mapmetnet.copyright &#8212; mapmetnet</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=7f76b32a3354e82990f2"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2" />
+
+    <script src="../../_static/documentation_options.js?v=9d5d88cc"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/mapmetnet/copyright';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.17.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = '_static/switcher_config.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="dev" />
+    <meta name="docbuild:last-update" content="2026-04-10"/>
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/app-icon_meteoswiss_rounded_rgb.png" class="logo__image only-light" alt=""/>
+    <img src="../../_static/app-icon_meteoswiss_rounded_rgb.png" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">mapmetnet</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../network.html">
+    Network maps
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../gbon.html">
+    Horizontal resolution
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../site.html">
+    Site sat-views
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../autoapi/index.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../network.html">
+    Network maps
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../gbon.html">
+    Horizontal resolution
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../site.html">
+    Site sat-views
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../autoapi/index.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">mapmetnet.copyright</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for mapmetnet.copyright</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2026 MeteoSwiss, contributors listed in AUTHORS.</span>
+
+<span class="sd">Distributed under the terms of the 3-Clause BSD License.</span>
+
+<span class="sd">SPDX-License-Identifier: BSD-3-Clause</span>
+
+<span class="sd">Module contains: relevant copyright notices</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Import from Python</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">textwrap</span><span class="w"> </span><span class="kn">import</span> <span class="n">fill</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cartopy</span><span class="w"> </span><span class="kn">import</span> <span class="n">__version__</span> <span class="k">as</span> <span class="n">cartopy_version</span>
+
+<span class="c1"># Import from this module</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">__version__</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">log_func_call</span>
+
+<span class="c1"># Instantiate the module logger</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="get_mmn_msg">
+<a class="viewcode-back" href="../../autoapi/mapmetnet/copyright/index.html#mapmetnet.copyright.get_mmn_msg">[docs]</a>
+<span class="nd">@log_func_call</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_mmn_msg</span><span class="p">(</span><span class="n">when</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Get the copyright statement for mapmetnet.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        when: The date when the map was created, in a human-readable format. Optional.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">when</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39; on </span><span class="si">{</span><span class="n">when</span><span class="si">}</span><span class="s1">.&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span>
+
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Created with mapmetnet v</span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">msg</span></div>
+
+
+
+<div class="viewcode-block" id="get_cartopy_msg">
+<a class="viewcode-back" href="../../autoapi/mapmetnet/copyright/index.html#mapmetnet.copyright.get_cartopy_msg">[docs]</a>
+<span class="nd">@log_func_call</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_cartopy_msg</span><span class="p">(</span><span class="n">projection</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Get the copyright statement for cartopy.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        projection: The name of the cartopy projection used to generate the map.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">projection</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="s1">&#39;P&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">projection</span><span class="si">}</span><span class="s1"> p&#39;</span>
+
+    <span class="k">return</span> <span class="n">start</span> <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39;rojection via cartopy v</span><span class="si">{</span><span class="n">cartopy_version</span><span class="si">}</span><span class="s1">, Met Office.&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="get_ne_msg">
+<a class="viewcode-back" href="../../autoapi/mapmetnet/copyright/index.html#mapmetnet.copyright.get_ne_msg">[docs]</a>
+<span class="nd">@log_func_call</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_ne_msg</span><span class="p">(</span><span class="n">features</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Get the copyright statement for Natural Earth. &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="c1"># Join the list of strings into a single one, separated by comma</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+
+    <span class="c1"># Capitalize the first letter of the message</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="n">msg</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s1"> from Natural Earth.&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="get_gibs_msg">
+<a class="viewcode-back" href="../../autoapi/mapmetnet/copyright/index.html#mapmetnet.copyright.get_gibs_msg">[docs]</a>
+<span class="nd">@log_func_call</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_gibs_msg</span><span class="p">(</span><span class="n">feature</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Get the copyright statement for NASA GIBS. &quot;&quot;&quot;</span>
+
+    <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">feature</span><span class="si">}</span><span class="s2">, from NASA&#39;s Global Imagery Browse Services (GIBS), &quot;</span> <span class="o">+</span> \
+        <span class="s2">&quot;part of NASA&#39;s Earth Observing System Data and Information System (EOSDIS).&quot;</span>
+    <span class="k">return</span> <span class="n">msg</span></div>
+
+
+
+<div class="viewcode-block" id="get_eez_msg">
+<a class="viewcode-back" href="../../autoapi/mapmetnet/copyright/index.html#mapmetnet.copyright.get_eez_msg">[docs]</a>
+<span class="nd">@log_func_call</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_eez_msg</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Get the copyright statement for EEZ. &quot;&quot;&quot;</span>
+
+    <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;EEZ maritime boundaries from Flanders Marine Institute (2023), &quot;</span> <span class="o">+</span> \
+        <span class="s2">&quot;Maritime Boundaries Geodatabase: &quot;</span> <span class="o">+</span> \
+        <span class="s2">&quot;Maritime Boundaries and Exclusive Economic Zones (200NM), version 12.&quot;</span>  <span class="c1"># + \</span>
+    <span class="c1"># &quot;available online at https://www.marineregions.org/ (https://doi.org/10.14284/632).&quot;</span>
+    <span class="k">return</span> <span class="n">msg</span></div>
+
+
+
+<div class="viewcode-block" id="get_mch_msg">
+<a class="viewcode-back" href="../../autoapi/mapmetnet/copyright/index.html#mapmetnet.copyright.get_mch_msg">[docs]</a>
+<span class="nd">@log_func_call</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_mch_msg</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Get the disclaimer statement for MeteoSwiss. &quot;&quot;&quot;</span>
+
+    <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Disclaimer: the designations employed in this map do not imply the expression of &quot;</span> <span class="o">+</span> \
+        <span class="s2">&quot;any opinion whatsoever on the part of MeteoSwiss concerning the legal status of any &quot;</span> <span class="o">+</span> \
+        <span class="s2">&quot;country, area, or territory or of its authorities, or concerning the delimitation of &quot;</span> <span class="o">+</span> \
+        <span class="s2">&quot;its borders. The depiction and use of boundaries, geographic names and related data &quot;</span> <span class="o">+</span> \
+        <span class="s2">&quot;are not warranted to be error free nor do they necessarily imply official endorsement &quot;</span> <span class="o">+</span> \
+        <span class="s2">&quot;by MeteoSwiss.&quot;</span>
+    <span class="k">return</span> <span class="n">msg</span></div>
+
+
+
+<div class="viewcode-block" id="build_copyright_statement">
+<a class="viewcode-back" href="../../autoapi/mapmetnet/copyright/index.html#mapmetnet.copyright.build_copyright_statement">[docs]</a>
+<span class="nd">@log_func_call</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_copyright_statement</span><span class="p">(</span><span class="n">which</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">160</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Build a copyright statement for the map, based on the different elements that are</span>
+<span class="sd">    included in it.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        which (dict): a dictionary with the different elements to include in the copyright</span>
+<span class="sd">            statement. The keys of the dict should be the same as the names of the functions</span>
+<span class="sd">            defined above, and the values should be the arguments to feed to those functions.</span>
+<span class="sd">        width (int, optional): the width to use for wrapping the text. Defaults to 160. If None,</span>
+<span class="sd">            no wrapping will be applied.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Initialize an empty list to store the different parts of the copyright statement</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Iterate over the possible dictionnary keys, and generate the relevant copyright if warranted.</span>
+    <span class="c1"># Doing so allows to maintain a set order of sentences.</span>
+
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;mmn&#39;</span><span class="p">,</span> <span class="s1">&#39;cartopy&#39;</span><span class="p">,</span> <span class="s1">&#39;ne&#39;</span><span class="p">,</span> <span class="s1">&#39;gibs&#39;</span><span class="p">,</span> <span class="s1">&#39;eez&#39;</span><span class="p">,</span> <span class="s1">&#39;mch&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">which</span><span class="p">:</span>
+            <span class="n">func</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;get_</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">_msg&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">which</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">part</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">which</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">part</span> <span class="o">=</span> <span class="n">func</span><span class="p">()</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">part</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">width</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
+
+    <span class="c1"># Join the parts and wrap them into a paragraph suitable for plotting</span>
+    <span class="k">return</span> <span class="n">fill</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item"><!-- This will display the version of the docs -->
+mapmetnet, version: dev-d2e5263</div>
+      
+        <div class="footer-item"><p class="last-updated">
+  Last updated on 2026-04-10.
+  <br/>
+</p></div>
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, MeteoSwiss.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.0.
+</p></div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -5,7 +5,7 @@ mapmetnet.hardcoded
 
 .. autoapi-nested-parse::
 
-   Copyright (c) 2023-2024 MeteoSwiss, contributors listed in AUTHORS.
+   Copyright (c) 2026 MeteoSwiss, contributors listed in AUTHORS.
 
    Distributed under the terms of the 3-Clause BSD License.
 
@@ -25,12 +25,6 @@ Attributes
    mapmetnet.hardcoded.USR_BKG_PATH
    mapmetnet.hardcoded.EEZ_PATH
    mapmetnet.hardcoded.EEZ_FN
-   mapmetnet.hardcoded.COPY_MAPMETNET
-   mapmetnet.hardcoded.COPY_CARTOPY
-   mapmetnet.hardcoded.COPY_NE
-   mapmetnet.hardcoded.COPY_GIBS
-   mapmetnet.hardcoded.COPY_EEZ
-   mapmetnet.hardcoded.DISC_MCH
    mapmetnet.hardcoded.WDQMS_COLORS
 
 
@@ -53,73 +47,6 @@ Module Contents
 
 .. py:data:: EEZ_FN
    :value: 'eez_boundaries_v12.shp'
-
-
-.. py:data:: COPY_MAPMETNET
-   :value: 'Created with mapmetnet vUninferable (https://github.com/MeteoSwiss/mapmetnet).'
-
-
-.. py:data:: COPY_CARTOPY
-
-.. py:data:: COPY_NE
-   :value: 'Natural Earth.'
-
-
-.. py:data:: COPY_GIBS
-   :value: Multiline-String
-
-   .. raw:: html
-
-      <details><summary>Show Value</summary>
-
-   .. code-block:: python
-
-      """NASA's Global Imagery Browse Services (GIBS),
-      part of NASA's Earth Observing System Data and Information System (EOSDIS)."""
-
-   .. raw:: html
-
-      </details>
-
-
-
-.. py:data:: COPY_EEZ
-   :value: Multiline-String
-
-   .. raw:: html
-
-      <details><summary>Show Value</summary>
-
-   .. code-block:: python
-
-      """EEZ maritime boundaries from Flanders Marine Institute (2023),
-      Maritime Boundaries Geodatabase: Maritime Boundaries and Exclusive Economic Zones (200NM), version 12,
-      available online at https://www.marineregions.org/ (https://doi.org/10.14284/632)."""
-
-   .. raw:: html
-
-      </details>
-
-
-
-.. py:data:: DISC_MCH
-   :value: Multiline-String
-
-   .. raw:: html
-
-      <details><summary>Show Value</summary>
-
-   .. code-block:: python
-
-      """Disclaimer: the designations employed in this map do not imply the expression of any opinion whatsoever
-      on the part of MeteoSwiss concerning the legal status of any country, area, or territory or of its authorities,
-      or concerning the delimitation of its borders. The depiction and use of boundaries, geographic names and related
-      data are not warranted to be error free nor do they necessarily imply official endorsement by MeteoSwiss."""
-
-   .. raw:: html
-
-      </details>
-
 
 
 .. py:data:: WDQMS_COLORS

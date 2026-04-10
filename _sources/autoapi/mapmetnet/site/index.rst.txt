@@ -1,0 +1,69 @@
+mapmetnet.site
+==============
+
+.. py:module:: mapmetnet.site
+
+.. autoapi-nested-parse::
+
+   Copyright (c) 2026 MeteoSwiss, contributors listed in AUTHORS.
+
+   Distributed under the terms of the 3-Clause BSD License.
+
+   SPDX-License-Identifier: BSD-3-Clause
+
+   Module contains: classes related to individual sites
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   mapmetnet.site.logger
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   mapmetnet.site.Site
+   mapmetnet.site.WigosSite
+
+
+Module Contents
+---------------
+
+.. py:data:: logger
+
+.. py:class:: Site(lat: float, lon: float, name: str | None = None)
+
+   Bases: :py:obj:`mapmetnet.core.Plotter`
+
+
+   Parent Site class.
+
+
+   .. py:method:: site_view(figid: int | None = None, show_ref_circles: bool = True, save_fn: str | None = None, show: bool = False) -> None
+
+      Create the default mapmetnet site view.
+
+      :Parameters: * **figid** (*int, optional*) -- the matplotlib figure ID.
+                     Will first close it if it already exists.
+                   * **show_ref_circles** (*bool, optional*) -- whether to show the reference circles
+                     of 100m, 30m, and 10m in radius. Defaults to True.
+                   * **save_fn** (*str, optional*) -- the filename to save the figure as.
+                     If None, the figure will not be saved. Defaults to None.
+                   * **show** (*bool, optional*) -- whether to show the figure. Defaults to False.
+
+
+
+.. py:class:: WigosSite(wigosId: str)
+
+   Bases: :py:obj:`Site`
+
+
+   Class for WIGOS sites.
+
+

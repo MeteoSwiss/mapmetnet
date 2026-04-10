@@ -28,12 +28,14 @@ Functions
 
 .. autoapisummary::
 
+   mapmetnet.utils.format_var_name
    mapmetnet.utils.pad_angular_range
    mapmetnet.utils.squarify_extent
    mapmetnet.utils.is_overlapping
    mapmetnet.utils.get_circle_geom
    mapmetnet.utils.get_overlap_geom
    mapmetnet.utils.set_mplstyle
+   mapmetnet.utils.crosshair
 
 
 Module Contents
@@ -41,7 +43,12 @@ Module Contents
 
 .. py:data:: logger
 
-.. py:function:: pad_angular_range(ang_range: Union[list, tuple, numpy.ndarray], pad_fraction: float)
+.. py:function:: format_var_name(variable: str) -> str
+
+   Simple routine to format variable names for nicer plotting.
+
+
+.. py:function:: pad_angular_range(ang_range: list | tuple | numpy.ndarray, pad_fraction: float) -> list | tuple | numpy.ndarray
 
    Pad a given angular range by a fraction of the range (on both sides).
 
@@ -53,7 +60,7 @@ Module Contents
 
 
 
-.. py:function:: squarify_extent(lon_lims: numpy.ndarray, lat_lims: numpy.ndarray)
+.. py:function:: squarify_extent(lon_lims: numpy.ndarray, lat_lims: numpy.ndarray) -> tuple[numpy.ndarray, numpy.ndarray]
 
    Adjust longitude and latitude limits to get a squar-ish map extent.
 
@@ -75,7 +82,7 @@ Module Contents
 
 
 
-.. py:function:: get_circle_geom(lon: float, lat: float, radius: float)
+.. py:function:: get_circle_geom(lon: float, lat: float, radius: float) -> shapely.geometry
 
    Given a lat-lon positon and radius, build a circle geometry.
 
@@ -110,5 +117,24 @@ Module Contents
    This is a simpler version of the Decorator that only loads the basic matplotlib style
    specified in mpl_styles/base.mplstyle.
 
+
+
+.. py:function:: crosshair(inner_r: float = 1.0, pa: float = 0.0) -> matplotlib.path.Path
+
+   The path of a crosshair marker, useful for indicating targets without crowding the field.
+
+   :Parameters: * **inner_r** (*float, optional*) -- the inner radius of the crosshair, expressed in bar length.
+                  Defaults to 1 (gap = bar length = 1/3 marker width).
+                * **pa** (*float, optional*) -- the position angle of the crosshair, in degrees.
+                  Defaults to 0.
+
+   :returns: the path of the crosshair marker.
+   :rtype: mplp.Path
+
+   .. rubric:: Example
+
+   >>> ...
+   >>> ax.plot(... marker=crosshair(inner_r=1, pa=0), ...)
+   >>> ...
 
 
