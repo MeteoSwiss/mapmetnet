@@ -96,12 +96,13 @@ class Mapper(Plotter):
     """ Grand-Parent Mapper class tuned for making a map with little else. """
 
     @log_func_call(logger)
-    def __init__(self, lat: float, lon: float) -> None:
+    def __init__(self, lat: float, lon: float, extent: float | None) -> None:
         """ Basic init routine.
 
             Args:
                 lat (float): The latitude of the map center.
                 lon (float): The longitude of the map center.
+                extent (float | None): The map extent in degrees.
 
             Raises: ValueError, TypeError
 
@@ -113,6 +114,14 @@ class Mapper(Plotter):
         # Set the central coordinates and the extent of the map
         self._center_lat = lat
         self._center_lon = lon
+
+        # Compute and store the map limits
+        if extent is not None:
+            self._lon_lims = np.array([-extent/2., extent/2.]) + self._center_lon
+            self._lat_lims = np.array([-extent/2., extent/2.]) + self._center_lat
+        else:
+            self._lat_lims = np.array([np.nan, np.nan])
+            self._lon_lims = np.array([np.nan, np.nan])
 
         # Set the default map projection
         self._proj = ccrs.Orthographic(central_longitude=self._center_lon,
@@ -171,31 +180,61 @@ class Mapper(Plotter):
         self._axs = [ax0, axl, axc]
 
     @log_func_call(logger)
-    def _set_map_extent(self, extent: float = 10.0) -> None:
+    def _apply_extent(self) -> None:
         """ Set the map extent (symetric along N-S and E-W).
+        """
+
+        #  ... to finally be able to set the plot extent
+        self.ax_map.set_extent(tuple(self._lon_lims)+tuple(self._lat_lims))
+
+    @log_func_call(logger)
+    def _set_map_lims(self,
+                      lon_min: float | None = None,
+                      lon_max: float | None = None,
+                      lat_min: float | None = None,
+                      lat_max: float | None = None,
+                      squarify: bool = True) -> None:
+        """ Adjust the map limits.
 
         Args:
-            extent (float, optional): the map extent in degrees. Defaults to 10.0.
+            lon_min (foat, optional): if set, will override the minimum longitude of the map.
+            lon_max (foat, optional): if set, will override the maximum longitude of the map.
+            lat_min (foat, optional): if set, will override the minimum latitude of the map.
+            lat_max (foat, optional): if set, will override the maximum latitude of the map.
+            squarify (bool, optional): if True, the map will be squarified. Defaults to True.
         """
 
         # Start from the country extent ...
-        lon_lims = np.array([-extent/2., extent/2.]) + self._center_lon
-        lat_lims = np.array([-extent/2., extent/2.]) + self._center_lat
+        lon_lims = self._lon_lims
+        lat_lims = self._lat_lims
+
+        # ... deal with user-set limits
+        for lon_id, lon in enumerate([lon_min, lon_max]):
+            if lon is not None:
+                lon_lims[lon_id] = lon
+        for lat_id, lat in enumerate([lat_min, lat_max]):
+            if lat is not None:
+                lat_lims[lat_id] = lat
 
         # ... and make it square ...
-        lon_lims, lat_lims = utils.squarify_extent(lon_lims, lat_lims)
+        if squarify:
+            lon_lims, lat_lims = utils.squarify_extent(lon_lims, lat_lims)
 
-        #  ... to finally be able to set the plot extent
-        self.ax_map.set_extent(tuple(lon_lims)+tuple(lat_lims))
+        # .. to finally store it back.
+        self._lon_lims = lon_lims
+        self._lat_lims = lat_lims
+
+        # And apply them
+        self._apply_extent()
 
     @property
-    def lon_lims(self) -> tuple:
+    def true_lon_lims(self) -> tuple:
         """ The longitude limits of the map. """
         return self.ax_map.get_extent(crs=ccrs.PlateCarree())[:2]
 
     @property
-    def lat_lims(self) -> tuple:
-        """ The longitude limits of the map. """
+    def true_lat_lims(self) -> tuple:
+        """ The latitude limits of the map. """
         return self.ax_map.get_extent(crs=ccrs.PlateCarree())[2:]
 
     @log_func_call(logger)
@@ -221,8 +260,8 @@ class Mapper(Plotter):
             self.ax_clb.axis('off')
 
         elif which == 'ne':
-            lon_lims = np.array(self.lon_lims)
-            lat_lims = np.array(self.lat_lims)
+            lon_lims = np.array(self.true_lon_lims)
+            lat_lims = np.array(self.true_lat_lims)
 
             self.ax_map.background_img(name='NaturalEarthRelief', resolution='high',
                                        extent=list(utils.pad_angular_range(lon_lims, 0.1)) +
@@ -388,7 +427,7 @@ class Mapper(Plotter):
         # Loop through all the countries, and only deal with those that overlap with
         # the plotting area
         for item in get_ne_records(resolution='10m', category='cultural',
-                                   name='admin_0_map_units'):
+                                   name='admin_0_countries'):
 
             # Check if the country bounds overlap with the extent of the map
             if not utils.is_overlapping(item.geometry,
@@ -396,6 +435,8 @@ class Mapper(Plotter):
                 continue
 
             # Fill the neighboring countries with semi-transparent white
+            # TODO: Checking ISO_A3 is not enough. We should alkso check SOV_A3 and maybe
+            # some other attributes, because not everyone has an ISO_A3 ...
             if item.attributes['ISO_A3'] not in iso_alpha3:
                 self.ax_map.add_geometries(item.geometry, crs=ccrs.PlateCarree(),
                                            facecolor=(1, 1, 1), alpha=0.7,
@@ -403,8 +444,8 @@ class Mapper(Plotter):
                                            label=item.attributes['ADM0_A3'])
 
             # Add the names of the countries, but only if the country centroid falls within the map.
-            lon_lims = np.array(self.lon_lims)
-            lat_lims = np.array(self.lat_lims)
+            lon_lims = np.array(self.true_lon_lims)
+            lat_lims = np.array(self.true_lat_lims)
 
             if lon_lims[0] < item.geometry.centroid.x < lon_lims[1] and \
                lat_lims[0] < item.geometry.centroid.y < lat_lims[1] and \
@@ -685,7 +726,23 @@ class CountryMapper(NetworkMapper):
 
         # Let's now trigger the Parent init
         super().__init__(lat=self.country.geometry.centroid.y,
-                         lon=self.country.geometry.centroid.x)
+                         lon=self.country.geometry.centroid.x,
+                         extent=None)
+
+        # Override the map limits based on the country bounds ...
+        self._lon_lims = np.array(self.country.bounds[0::2])
+        self._lat_lims = np.array(self.country.bounds[1::2])
+
+        # ... then expand them further with the EEZ ...
+        for item in self.eez:
+            if item.bounds[0] < self._lon_lims[0]:
+                self._lon_lims[0] = item.bounds[0]
+            if item.bounds[1] < self._lat_lims[0]:
+                self._lat_lims[0] = item.bounds[1]
+            if item.bounds[2] > self._lon_lims[1]:
+                self._lon_lims[1] = item.bounds[2]
+            if item.bounds[3] > self._lat_lims[1]:
+                self._lat_lims[1] = item.bounds[3]
 
     @property
     def country_code(self) -> str:
@@ -708,15 +765,14 @@ class CountryMapper(NetworkMapper):
         return self._mrgid
 
     @log_func_call(logger)
-    def _center_map(self, pad_frac: float = 0.1,
-                    lon_min: float | None = None,
-                    lon_max: float | None = None,
-                    lat_min: float | None = None,
-                    lat_max: float | None = None,
-                    squarify: bool = True,) -> None:
-        """ Center the map on the target country.
-
-        We want to fit the entire country and all its EEZ, possibly with some padding.
+    def _set_map_lims(self,
+                      lon_min: float | None = None,
+                      lon_max: float | None = None,
+                      lat_min: float | None = None,
+                      lat_max: float | None = None,
+                      squarify: bool = True,
+                      pad_frac: float = 0.1) -> None:
+        """ Adjust the map limits.
 
         Args:
             pad_frac (float, optional): padding fraction around the edges. Defaults to 0.1 (=10%).
@@ -727,39 +783,13 @@ class CountryMapper(NetworkMapper):
             squarify (bool, optional): if True, the map will be squarified. Defaults to True.
         """
 
-        # Start from the country extent ...
-        lon_lims = np.array(self.country.bounds[0::2])
-        lat_lims = np.array(self.country.bounds[1::2])
+        # Add some padding all around ...
+        self._lon_lims = utils.pad_angular_range(self._lon_lims, pad_frac)
+        self._lat_lims = utils.pad_angular_range(self._lat_lims, pad_frac)
 
-        # ... then expand as needed with the EEZ ...
-        for item in self.eez:
-            if item.bounds[0] < lon_lims[0]:
-                lon_lims[0] = item.bounds[0]
-            if item.bounds[1] < lat_lims[0]:
-                lat_lims[0] = item.bounds[1]
-            if item.bounds[2] > lon_lims[1]:
-                lon_lims[1] = item.bounds[2]
-            if item.bounds[3] > lat_lims[1]:
-                lat_lims[1] = item.bounds[3]
-
-        # ... add some padding around ...
-        lon_lims = utils.pad_angular_range(lon_lims, pad_frac)
-        lat_lims = utils.pad_angular_range(lat_lims, pad_frac)
-
-        # ... deal with user-set limits
-        for lon_id, lon in enumerate([lon_min, lon_max]):
-            if lon is not None:
-                lon_lims[lon_id] = lon
-        for lat_id, lat in enumerate([lat_min, lat_max]):
-            if lat is not None:
-                lat_lims[lat_id] = lat
-
-        # ... and make it square ...
-        if squarify:
-            lon_lims, lat_lims = utils.squarify_extent(lon_lims, lat_lims)
-
-        #  ... to finally be able to set the plot extent
-        self.ax_map.set_extent(tuple(lon_lims)+tuple(lat_lims))
+        # Then use the Parent method to apply the other requests
+        super()._set_map_lims(lon_min=lon_min, lon_max=lon_max, lat_min=lat_min, lat_max=lat_max,
+                              squarify=squarify)
 
     @log_func_call(logger)
     def _highlight_country(self, iso_alpha3: str | list | None = None,
@@ -1002,8 +1032,9 @@ class GBONMapper(CountryMapper):
                      high_density: bool = False,
                      show_country_names: bool = False,
                      ref_radius: float | int | None = None,
-                     save_fmts: str | list | None = None):
-        """ All-in-one routine to generate a fully-fledged map.
+                     save_fmts: str | list | None = None,
+                     show: bool = False) -> str | None:
+        """ All-in-one routine to generate a fully-fledged GBON Country map.
 
         Args:
             figid (int, optional): the matplotlib figure ID.
@@ -1029,11 +1060,16 @@ class GBONMapper(CountryMapper):
                 radius around the capital.
             save_fmts (str|list, optional): a str or list of str of formats to save the map to,
                 e.g. ['pdf', 'png']. Defaults to None (= no figure saved).
+            show (bool, optional): if True, will call plt.show() at the end. Defaults to False.
+
+        Returns:
+            str: the filename of the saved figure, if save_fmts was not None. Otherwise, None.
 
         """
 
         self._create_fig(figid=figid)
-        self._center_map(pad_frac=pad_frac)
+        self._set_map_lims(pad_frac=pad_frac, squarify=True)
+        self._apply_extent()
         self._add_background(which=background)
         self._add_rivers_and_lakes()
         self._add_borders()
@@ -1055,9 +1091,9 @@ class GBONMapper(CountryMapper):
                         '\n\nSource: https://wdqms.wmo.int/\n')
 
         if save_fmts is None:
-            return
+            return None
 
-        fn = f"SOFF_GBON_map_{self.country_code}_{station_type}_{var_name.replace(' ', '-')}"
+        fn = f"GBON_map_{self.country_code}_{station_type}_{var_name.replace(' ', '-')}"
         if high_density:
             fn += '_high-density'
         if background is None:
@@ -1066,4 +1102,8 @@ class GBONMapper(CountryMapper):
 
         for fmt in save_fmts:
             self.savefig(fn + f'.{fmt}', dpi=300)
-        plt.show()
+
+        if show:
+            self.show()
+
+        return fn
