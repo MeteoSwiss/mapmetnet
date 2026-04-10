@@ -12,10 +12,10 @@ Module content: tests for the core module
 import pytest
 
 # Import from this package
-from mapmetnet.core import CountryMapper
+from mapmetnet.core import CountryMapper, GBONMapper
 
 
-def test_CountryMapper_init():
+def test_countrymapper_init():
     """ Basic __init__ tests for the CountryMapper base class. """
 
     # Default behavior
@@ -34,3 +34,22 @@ def test_CountryMapper_init():
         CountryMapper('CH')
     with pytest.raises(TypeError):
         CountryMapper('CHE', mrgid='37')
+
+
+def test_gbonmapper_all_in_one():
+    """ All-in-one test for GBONMapper."""
+
+    che_map = GBONMapper('CHE', mrgid=None)
+    che_map.generate_map(figid=1,
+                         pad_frac=0.1,
+                         background=None,
+                         ref_radius=50,
+                         station_type='surface',
+                         var_name='temperature',
+                         interval='monthly',
+                         category='availability',
+                         date='2026-01',
+                         high_density=True,
+                         show_influence_area=True,
+                         save_fmts=['pdf'],
+                         show=False)
