@@ -81,10 +81,9 @@ class Site(Plotter):
 
         if panel_type == 'satellite':
             return [GoogleTiles(style='satellite'), '© Google Maps']
-        elif panel_type == 'street':
+        if panel_type == 'street':
             return [OSM(), '© OpenStreetMap']
-        else:
-            raise MapmetnetError(f'Unknown panel type {panel_type}.')
+        raise MapmetnetError(f'Unknown panel type {panel_type}.')
 
     @set_mplstyle
     def _create_fig(self, figid: int | None = None) -> None:
@@ -142,7 +141,8 @@ class Site(Plotter):
         self.axs[which].text(0.99, 0.01, self._panel_imgs[which][1],
                              transform=self.axs[which].transAxes,
                              fontsize=8, color='k', ha='right', va='bottom',
-                             bbox=dict(facecolor='white', alpha=0.5, edgecolor='none', pad=2))
+                             bbox={'facecolor': 'white', 'alpha': 0.5, 'edgecolor': 'none',
+                                   'pad': 2})
 
         # Add the scale of the frame as a title
         if (width := self._panel_widths[which]) >= 1000:
@@ -158,7 +158,7 @@ class Site(Plotter):
                              ha='left', va='top', transform=self.axs[which].transAxes,
                              # wrap=True,
                              fontsize=12,
-                             bbox=dict(facecolor='white', alpha=1, edgecolor='none', pad=3),
+                             bbox={'facecolor': 'white', 'alpha': 1, 'edgecolor': 'none', 'pad': 3},
                              zorder=100)
 
     def _show_footprints(self) -> None:
@@ -301,7 +301,7 @@ class WigosSite(Site):
 
         if len(entry) == 0:
             raise MapmetnetError(f'No entry found for WIGOS ID {wigosId}.')
-        elif len(entry) > 1:
+        if len(entry) > 1:
             raise MapmetnetError(f'Multiple entries found for WIGOS ID {wigosId} ?!')
 
         super().__init__(entry.item(row=0, column='latitude'),
