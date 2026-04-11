@@ -3,9 +3,9 @@ mapmetnet
 
 Welcome to the documentation of ``mapmetnet``. This Python library has 3 primary intended uses:
 
-1. the assembly of meteorological **network maps**,
-2. the computation of the **horizontal resolution** (in the `GBON`_ sense) of a given network, and
-3. the generation of **sat-view** diagrams for individual observing sites.
+1. the assembly of meteorological :doc:`network maps <network>`,
+2. the computation of the :doc:`horizontal resolution <gbon>` (in the `GBON`_ sense) of a given network, and
+3. the generation of :doc:`sat-view <site>` diagrams for individual observing sites.
 
 Please refer to the relevant sections of the documentation below to learn more.
 
