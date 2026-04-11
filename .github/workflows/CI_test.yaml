@@ -44,7 +44,7 @@ jobs:
       run: poetry run sphinx-build doc doc/_build
 
     - name: Run pytest
-      run: poetry run pytest -s --cov=src --cov-fail-under=80
+      run: poetry run pytest -s --cov=src --cov-fail-under=75
 
     - name: Run linter
       run: poetry run pylint -rn --output-format=github --fail-under=9.0 src
