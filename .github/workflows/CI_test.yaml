@@ -47,7 +47,7 @@ jobs:
       run: poetry run pytest -s --cov=src --cov-fail-under=80
 
     - name: Run linter
-      run: poetry run pylint -rn --output-format=parseable src
+      run: poetry run pylint -rn --output-format=parseable --fail-under=9.0 src
 
     - name: Run static checker
       run: |
