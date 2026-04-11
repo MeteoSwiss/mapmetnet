@@ -1,0 +1,57 @@
+# This workflow will install Python dependencies and run tests with the latest Python
+# version.
+#
+# This specific action will be run weekly. The goal is
+# to catch any new issue as soon as possible. As an added bonus, this action can also be triggered
+# manually for any branch of one's choosing.
+#
+# Copyright (c) 2026 MeteoSwiss, created by Frédéric Vogt; frederic.vogt@meteoswiss.ch
+
+name: CI_test_weekly
+
+on:
+  workflow_dispatch:  # Allow to trigger the weekly tests manually
+  schedule:
+    - cron: '43 21 * * 0'  # Run at 21:43 UTC every Sunday
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the main branch if this is a scheduled test
+    # The idea for this Action is to spot issues with new dependency versions as soon as they
+    # are released.
+    - name: Checkout current repository (main branch)
+      if: ${{ github.event_name == 'schedule' }}
+      uses: actions/checkout@v4
+      with:
+        repository: MeteoSwiss/mapmetnet
+        ref: main
+
+    # Alternatively, checkout whichever branch was selected by the user upon the manual trigger.
+    - name: Checkout current repository (custom branch)
+      if: ${{ github.event_name == 'workflow_dispatch' }}
+      uses: actions/checkout@v4
+      with:
+        repository: MeteoSwiss/mapmetnet
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'  # Use the latest available Python version
+
+    - name: Install poetry
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install poetry
+
+    - name: Install dependencies
+      run: poetry install
+
+    - name: Run pytest
+      run: poetry run pytest -s
+
+    - name: Run linter
+      run: poetry run pylint -rn --output-format=github --fail-under=9.0  src
+
