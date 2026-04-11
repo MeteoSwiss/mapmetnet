@@ -49,7 +49,8 @@ html_theme_options = {
 
 # Disable left side navigation of specific pages, since they are empty
 # (BUG in theme: https://github.com/pydata/pydata-sphinx-theme/issues/1662)
-html_sidebars = {"usage": [], "changelog": [], "migration_guide": [], "site": []}
+html_sidebars = {"usage": [], "changelog": [], "migration_guide": [], "site": [], "gbon": [],
+                 "network": []}
 
 napoleon_use_param = False  # improve parameters description
 add_module_names = False  # avoid the display of redundant module names
