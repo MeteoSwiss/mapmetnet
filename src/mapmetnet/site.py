@@ -20,7 +20,7 @@ from cartopy.io.img_tiles import GoogleTiles, OSM
 import cartopy.crs as ccrs
 from cartopy.mpl.geoaxes import GeoAxes
 from astropy.coordinates import Angle
-from astropy.units import deg as deg_unit
+from astropy.units import deg as deg_unit  # pylint: disable=no-name-in-module
 from wmoutils.query import query_oscar_surface
 
 # Import from this package
