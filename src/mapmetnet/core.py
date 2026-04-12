@@ -444,7 +444,7 @@ class Mapper(Plotter):
                 continue
 
             # Fill the neighboring countries with semi-transparent white
-            # TODO: Checking ISO_A3 is not enough. We should alkso check SOV_A3 and maybe
+            # TODO: Checking ISO_A3 is not enough. We should also check SOV_A3 and maybe
             # some other attributes, because not everyone has an ISO_A3 ...
             if item.attributes['ISO_A3'] not in iso_alpha3:
                 self.ax_map.add_geometries(item.geometry, crs=ccrs.PlateCarree(),
@@ -662,12 +662,12 @@ class NetworkMapper(Mapper):
         # First, identify the neighbor stations and their connectinfg vertices
         pts = stations.select(pl.col("longitude", "latitude")).to_numpy()
 
-        # Next, find the good vertices and their mean separation
-        mean_sep, good_verts = network.get_mean_sep(pts[:, 0], pts[:, 1],
-                                                    drop_not_so_bad=drop_not_so_bad)
+        # Next, find the (good) neighbor vertices and their mean separation
+        mean_sep, _, neighbor_verts = network.get_mean_sep(pts[:, 0], pts[:, 1],
+                                                           drop_not_so_bad=drop_not_so_bad)
 
         # Add these to the map
-        for vert, dist in good_verts.items():
+        for vert, dist in neighbor_verts.items():
             if thres is not None and dist > thres*1e3:
                 ls = '--'
             else:

@@ -15,7 +15,7 @@ from cartopy.geodesic import Geodesic
 
 # Import from this package
 from mapmetnet.errors import MapmetnetError
-from mapmetnet.network import get_delaunay_vertices, get_sep_vertices, compute_mean_sep
+from mapmetnet.network import get_delaunay_vertices, get_neighbors, compute_mean_sep
 
 
 def test_get_delaunay_vertices():
@@ -48,11 +48,12 @@ def test_get_delaunay_vertices():
 def test_compute_mean_sep():
     """ Test the ability to compute the mean vertex lengths given a dict of vertices. """
 
-    assert compute_mean_sep({(0, 1): 1, (0, 2): 2, (1, 2): 6}) == 3
+    assert compute_mean_sep({(0, 1): 1, (0, 2): 2, (1, 2): 6})[0] == 3  # mean should be 3
+    assert compute_mean_sep({(0, 1): 1, (0, 2): 2, (1, 2): 6})[1] == 2  # median should be 2
 
 
-def test_get_sep_vertices():
-    """ Test the ability to derive lists of separation vertices between locations. """
+def test_get_neighbors():
+    """ Test the ability to derive lists of neighbor vertices between locations. """
 
     # Setup a basic Geodesic to play with Great Circles
     geo = Geodesic()
@@ -74,15 +75,19 @@ def test_get_sep_vertices():
     md = 1/4 * (scale*3 + dist13)
 
     # Test it
-    good_verts, bad_verts, not_so_bad_verts = get_sep_vertices(pts[:, 0], pts[:, 1])
+    neighbors, not_neighbors, not_so_bad_neighbors = get_neighbors(pts[:, 0], pts[:, 1])
 
-    assert len(good_verts) == 4
-    assert len(bad_verts) == 0
-    assert len(not_so_bad_verts) == 1
+    # Make sure I get the correct type
+    for item in [neighbors, not_neighbors, not_so_bad_neighbors]:
+        assert isinstance(item, dict)
 
-    assert np.round(np.mean([item/1e3 for _, item in good_verts.items()]), 3) == np.round(md, 3)
+    assert len(neighbors) == 4
+    assert len(not_neighbors) == 0
+    assert len(not_so_bad_neighbors) == 1
+
+    assert np.round(np.mean([item/1e3 for _, item in neighbors.items()]), 3) == np.round(md, 3)
 
     # Check that the code issues an error if some of the points are duplicated
     pts = np.concatenate((pts, pts[:1]))
     with pytest.raises(MapmetnetError):
-        get_sep_vertices(pts[:, 0], pts[:, 1])
+        get_neighbors(pts[:, 0], pts[:, 1])

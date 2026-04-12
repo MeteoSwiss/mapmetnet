@@ -32,29 +32,34 @@ def get_mean_sep(lons: np.ndarray, lats: np.ndarray, drop_not_so_bad: bool = Fal
     Args:
         lons (np.ndarray): array of longitudes, in fractional degrees.
         lats (np.ndarray): array of latitudes, in fractional degrees.
-        drop_not_so_bad (bool, optional): if True, the not_so_bad vertices will be ignored.
+        drop_not_so_bad (bool, optional): if True, the not_so_bad neighbors will be ignored.
             Defaults to False.
 
     Returns:
-        mean_sep (float): the mean separation between the coordinates, in km.
-        verts (dict): the vertices used to compute the mean separation, provided as a dict.
+        float, float, dict: the mean separation (in km), the median separation (in km), and the
+        neighbor vertices used to compute the mean separation.
+
+    See :py:func:`get_neighbors` for more details on the identification of neighbor vertices used
+    to compute the mean separation.
     """
 
     # Step 1: find the vertices connecting the different locations
-    good_verts, _, not_so_bad_verts = get_sep_vertices(lons, lats)
+    neighbors, _, not_so_bad_neighbors = get_neighbors(lons, lats)
 
     # Step 2: merge the not-so-bad vertices if warranted
     if not drop_not_so_bad:
-        good_verts = good_verts | not_so_bad_verts
+        neighbors = neighbors | not_so_bad_neighbors
 
     # Step 3: compute the mean separation along all the good vertices
-    mean_sep = compute_mean_sep(good_verts)/1.e3  # in km
+    mean_sep, median_sep = compute_mean_sep(neighbors)
+    mean_sep /= 1.e3  # m to km
+    median_sep /= 1.e3  # m to km
 
-    return mean_sep, good_verts
+    return mean_sep, median_sep, neighbors
 
 
 @log_func_call(logger)
-def get_sep_vertices(lons: np.ndarray, lats: np.ndarray) -> tuple[dict, dict, dict]:
+def get_neighbors(lons: np.ndarray, lats: np.ndarray) -> tuple[dict, dict, dict]:
     """ Assemble a list of vertices separating a series of coordinates on Earth.
 
     Args:
@@ -62,22 +67,45 @@ def get_sep_vertices(lons: np.ndarray, lats: np.ndarray) -> tuple[dict, dict, di
         lats (np.ndarray): array of latitudes, in fractional degrees.
 
     Returns:
-        good_verts, bad_verts, not_so_bad_verts: dicts with the vertex nodes provided as
-            len(2)-lists of (original) point indices as keys, and their true length as entry
-            (measured along Great Circles).
+        dict, dict, dict: "good" neighbor vertices, "bad" neighbor vertices, and "not so bad"
+        neighbor vertices, where the dict keys are len(2)-lists of the (original) point indices, and
+        the entries are their respective lengths (measured along Great Circles).
 
     Raises:
         MapmetnetError: if some of the input points are duplicated.
 
-    The vertices are assembled from the Delaunay set of vertices (derived in 2D using a
-    Stereographic projection), with an additional requirement that the mid-point of each vertice be
-    closest (strictly) to its nodes, and no other location in the set of coordinates.
+    This function implements a robust and unambiguous method for identifying "neighboring" nodes
+    in a given network. It was first introduced in Appendix A of the SOFF National Contribution Plan
+    for the Democratic Republic of Congo (see `Vogt et al., 2024`_) to which we refer the
+    interested reader for more details. What follows is a summary of this document.
 
-    Vertices that respect this conditions strictly are provided in good_verts.
+    The "potentially neighboring" vertices are identified via a Delaunay triangulation
+    (see :py:func:`get_delaunay_vertices`).
 
-    Vertices that do not respect this criterium are listed in bad_verts and not_so_bad_verts.
-    The only difference between these two sets is that vertices inside not_so_bad_verts are located
-    within the polygon formed by the "good" vertices.
+    This approach is warranted by the fact that the Delaunay triangulation is the dual graph of
+    the Voronoi tessellation: a most natural way to define the "immediate neighborhood" of a set of
+    nodes. Specifically, a Voronoi tessellation defines unique polygons around each node in a set,
+    where each polygon contains all the locations that are closer to one specific node than to any
+    other node in the set. Neighboring nodes are those that share a common Voronoi cell edge - a
+    criteria which essentially corresponds to the Delaunay triangulation.
+
+    While a Delaunay triangulation allows to identify "mathematical" neighbors, not all of these
+    would typically be considered as being neighbors in the "physical" sense (thinking of stations
+    in the real world). To sort the "true" neighboring vertices from the rest, we use the following
+    *mid-point criteria*:
+
+    **Vertices listed as "good" neighbors are those for which the mid-point is closest (strictly) to
+    its end nodes than to any other node in the set.**
+
+    Vertices that do not respect this criterium are provided in "bad" neighbors and
+    "not so bad" neighbors. The only difference between these two sets is that vertices inside
+    "not so bad" neighbors are located within a (closed) polygon formed by "good" neighbors.
+
+    Essentially, this mid-point criteria is used as a simple way to cull vertices towards the outer
+    edges of the network, that one would not typically associated to the concept of "neighboring"
+    stations.
+
+    .. _Vogt et al., 2024: https://www.un-soff.org/wp-content/uploads/2025/02/Democratic-Republic-of-Congo-GBON-National-Gap-Analysis.pdf.
 
     """
 
@@ -99,8 +127,8 @@ def get_sep_vertices(lons: np.ndarray, lats: np.ndarray) -> tuple[dict, dict, di
     geo = Geodesic()
 
     # Let's now make two piles of vertices. The ones we like, and the ones we do not.
-    good_verts: dict = {}
-    bad_verts: dict = {}
+    neighbors: dict = {}
+    not_neighbors: dict = {}
 
     # Let's check them all one by one, and decide which is which
     for vert in verts:
@@ -126,32 +154,35 @@ def get_sep_vertices(lons: np.ndarray, lats: np.ndarray) -> tuple[dict, dict, di
         if not all([item in vert for item in min_dist_ids]):
             # Keep a dictionnary where the vertex nodes are the key, and the vertex distance the
             # value.
-            bad_verts[vert] = dist
+            not_neighbors[vert] = dist
             continue
 
         # ... ok, seems, like we have a "good" vertex. Let's store it for later.
-        good_verts[vert] = dist
+        neighbors[vert] = dist
 
-    # The good/bad criteria above works well to cull the bad *outer* vertices of the default
-    # Delaunay triangulation. However, it can at times also cull *inner* vertices that some users
-    # may possibly want to keep. To allow this, we build a polygon from the good vertices,
-    # and keep track of the *bad* ones that are covered by it ... and are therefore "not that bad".
+    # The good/bad criteria above works well to cull the *outer* vertices of the default
+    # Delaunay triangulation that one would not typically associate with "neighbor" sites.
+    # However, it can at times also cull *inner* vertices that some users
+    # may possibly want to keep. To circumvent this, we build a polygon from the good neighbor
+    # vertices, and keep track of the *bad* ones that are covered by it ... and are therefore "not
+    # that bad".
 
     # First, we assemble the good polygons.
-    good_segs = [LineString(pts[vert, :]) for vert in good_verts]
+    good_segs = [LineString(pts[vert, :]) for vert in neighbors]
     good_polys = polygonize(good_segs)
 
     # Now check which bad line segments are contained within the geometry
-    not_so_bad_verts: dict = {}
-    for (vert, dist) in bad_verts.items():
+    not_so_bad_neighbors: dict = {}
+    for (vert, dist) in not_neighbors.items():
         if good_polys.covers(LineString(pts[vert, :])):
             # This bad vertex does not look so bad after all ... !
-            not_so_bad_verts[vert] = dist
+            not_so_bad_neighbors[vert] = dist
 
-    # Let's adjust the list of bad_verts, to avoid duplicates
-    bad_verts = {item for item in bad_verts if item not in not_so_bad_verts}
+    # Let's adjust the list of not_neighbors, to avoid duplicates
+    not_neighbors = {key: item for key, item in not_neighbors.items()
+                     if key not in not_so_bad_neighbors}
 
-    return good_verts, bad_verts, not_so_bad_verts
+    return neighbors, not_neighbors, not_so_bad_neighbors
 
 
 @log_func_call(logger)
@@ -169,11 +200,12 @@ def get_delaunay_vertices(lons: np.ndarray, lats: np.ndarray, **kwargs: str) -> 
 
 
     This routine performs a Delaunay triangulation using the point coordinates converted to a
-    Stereographic projection. This allows to run a 2D Delaunay triangulation where the
-    identified pairs of 'connected' stations are the same as those that would be ientified if
+    Stereographic projection. This allows to run a 2D (instead of 3D) Delaunay triangulation where
+    the identified pairs of *neighbor* stations are the same as those that would be ientified if
     the triangulation was performed on the surface of the sphere.
 
     See Saalfeld, Cartography and Geographic Information Science, Vol. 26, No.4, 1999, pp. 289-296.
+
     https://www.tandfonline.com/doi/pdf/10.1559/152304099782294168
 
     """
@@ -196,19 +228,19 @@ def get_delaunay_vertices(lons: np.ndarray, lats: np.ndarray, **kwargs: str) -> 
 
 
 @log_func_call(logger)
-def compute_mean_sep(verts: dict) -> float:
-    """ Compute the mean vertex length given a set of vertices.
+def compute_mean_sep(verts: dict) -> tuple[float, float]:
+    """ Compute the mean and median vertex length given a set of vertices.
 
     Args:
         verts (dict): dictionnary of vertices, where each key contains a single vertex nodes, and
             the entries are their respective lengths (computed elsewhere).
 
     Returns:
-        float: the mean vertex node
+        tuple[float, float]: the mean and median vertex lengths.
 
-    TODO:
-        This routine is specificly tied to the format of verts assembled in get_sep_vertices().
-        It could make a lot of sense to create a dedicated Class for these at some point ...
     """
 
-    return np.mean([item for _, item in verts.items()])
+    # Assemble a list of separations
+    seps = [item for _, item in verts.items()]
+
+    return np.mean(seps), np.median(seps)
