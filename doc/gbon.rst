@@ -1,7 +1,0 @@
-Horizontal resolution
-=======================
-
-
-Coming soon.
-
-
