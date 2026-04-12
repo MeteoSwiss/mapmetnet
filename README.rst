@@ -7,7 +7,6 @@
 .. image:: https://img.shields.io/pypi/l/mapmetnet.svg
     :target: https://pypi.org/project/mapmetnet/
 
-
 .. image:: https://github.com/MeteoSwiss/mapmetnet/actions/workflows/CI_test.yaml/badge.svg
     :target: https://github.com/MeteoSwiss/mapmetnet/actions/workflows/CI_test.yaml
 
