@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2" />
 
-    <script src="../../_static/documentation_options.js?v=bec3962f"></script>
+    <script src="../../_static/documentation_options.js?v=d18aeb40"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/mapmetnet/core';</script>
@@ -56,7 +56,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
-    <meta name="docbuild:last-update" content="2026-04-11"/>
+    <meta name="docbuild:last-update" content="2026-04-12"/>
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -159,7 +159,7 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../gbon.html">
+  <a class="nav-link nav-internal" href="../../mean_sep.html">
     Horizontal resolution
   </a>
 </li>
@@ -291,7 +291,7 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../gbon.html">
+  <a class="nav-link nav-internal" href="../../mean_sep.html">
     Horizontal resolution
   </a>
 </li>
@@ -872,7 +872,7 @@
                 <span class="k">continue</span>
 
             <span class="c1"># Fill the neighboring countries with semi-transparent white</span>
-            <span class="c1"># TODO: Checking ISO_A3 is not enough. We should alkso check SOV_A3 and maybe</span>
+            <span class="c1"># TODO: Checking ISO_A3 is not enough. We should also check SOV_A3 and maybe</span>
             <span class="c1"># some other attributes, because not everyone has an ISO_A3 ...</span>
             <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s1">&#39;ISO_A3&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">iso_alpha3</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">ax_map</span><span class="o">.</span><span class="n">add_geometries</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
@@ -1093,12 +1093,12 @@
         <span class="c1"># First, identify the neighbor stations and their connectinfg vertices</span>
         <span class="n">pts</span> <span class="o">=</span> <span class="n">stations</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;longitude&quot;</span><span class="p">,</span> <span class="s2">&quot;latitude&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
 
-        <span class="c1"># Next, find the good vertices and their mean separation</span>
-        <span class="n">mean_sep</span><span class="p">,</span> <span class="n">good_verts</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">get_mean_sep</span><span class="p">(</span><span class="n">pts</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">pts</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
-                                                    <span class="n">drop_not_so_bad</span><span class="o">=</span><span class="n">drop_not_so_bad</span><span class="p">)</span>
+        <span class="c1"># Next, find the (good) neighbor vertices and their mean separation</span>
+        <span class="n">mean_sep</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">neighbor_verts</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">get_mean_sep</span><span class="p">(</span><span class="n">pts</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">pts</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
+                                                           <span class="n">drop_not_so_bad</span><span class="o">=</span><span class="n">drop_not_so_bad</span><span class="p">)</span>
 
         <span class="c1"># Add these to the map</span>
-        <span class="k">for</span> <span class="n">vert</span><span class="p">,</span> <span class="n">dist</span> <span class="ow">in</span> <span class="n">good_verts</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">vert</span><span class="p">,</span> <span class="n">dist</span> <span class="ow">in</span> <span class="n">neighbor_verts</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">thres</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">dist</span> <span class="o">&gt;</span> <span class="n">thres</span><span class="o">*</span><span class="mf">1e3</span><span class="p">:</span>
                 <span class="n">ls</span> <span class="o">=</span> <span class="s1">&#39;--&#39;</span>
             <span class="k">else</span><span class="p">:</span>
@@ -1601,10 +1601,10 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-mapmetnet, version: dev-8ae88ad</div>
+mapmetnet, version: dev-3b5e47c</div>
       
         <div class="footer-item"><p class="last-updated">
-  Last updated on 2026-04-11.
+  Last updated on 2026-04-12.
   <br/>
 </p></div>
       

@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2" />
 
-    <script src="../../_static/documentation_options.js?v=bec3962f"></script>
+    <script src="../../_static/documentation_options.js?v=d18aeb40"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/mapmetnet/network';</script>
@@ -56,7 +56,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
-    <meta name="docbuild:last-update" content="2026-04-11"/>
+    <meta name="docbuild:last-update" content="2026-04-12"/>
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -159,7 +159,7 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../gbon.html">
+  <a class="nav-link nav-internal" href="../../mean_sep.html">
     Horizontal resolution
   </a>
 </li>
@@ -291,7 +291,7 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../gbon.html">
+  <a class="nav-link nav-internal" href="../../mean_sep.html">
     Horizontal resolution
   </a>
 </li>
@@ -451,32 +451,37 @@
 <span class="sd">    Args:</span>
 <span class="sd">        lons (np.ndarray): array of longitudes, in fractional degrees.</span>
 <span class="sd">        lats (np.ndarray): array of latitudes, in fractional degrees.</span>
-<span class="sd">        drop_not_so_bad (bool, optional): if True, the not_so_bad vertices will be ignored.</span>
+<span class="sd">        drop_not_so_bad (bool, optional): if True, the not_so_bad neighbors will be ignored.</span>
 <span class="sd">            Defaults to False.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        mean_sep (float): the mean separation between the coordinates, in km.</span>
-<span class="sd">        verts (dict): the vertices used to compute the mean separation, provided as a dict.</span>
+<span class="sd">        float, float, dict: the mean separation (in km), the median separation (in km), and the</span>
+<span class="sd">        neighbor vertices used to compute the mean separation.</span>
+
+<span class="sd">    See :py:func:`get_neighbors` for more details on the identification of neighbor vertices used</span>
+<span class="sd">    to compute the mean separation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Step 1: find the vertices connecting the different locations</span>
-    <span class="n">good_verts</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">not_so_bad_verts</span> <span class="o">=</span> <span class="n">get_sep_vertices</span><span class="p">(</span><span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">)</span>
+    <span class="n">neighbors</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">not_so_bad_neighbors</span> <span class="o">=</span> <span class="n">get_neighbors</span><span class="p">(</span><span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">)</span>
 
     <span class="c1"># Step 2: merge the not-so-bad vertices if warranted</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">drop_not_so_bad</span><span class="p">:</span>
-        <span class="n">good_verts</span> <span class="o">=</span> <span class="n">good_verts</span> <span class="o">|</span> <span class="n">not_so_bad_verts</span>
+        <span class="n">neighbors</span> <span class="o">=</span> <span class="n">neighbors</span> <span class="o">|</span> <span class="n">not_so_bad_neighbors</span>
 
     <span class="c1"># Step 3: compute the mean separation along all the good vertices</span>
-    <span class="n">mean_sep</span> <span class="o">=</span> <span class="n">compute_mean_sep</span><span class="p">(</span><span class="n">good_verts</span><span class="p">)</span><span class="o">/</span><span class="mf">1.e3</span>  <span class="c1"># in km</span>
+    <span class="n">mean_sep</span><span class="p">,</span> <span class="n">median_sep</span> <span class="o">=</span> <span class="n">compute_mean_sep</span><span class="p">(</span><span class="n">neighbors</span><span class="p">)</span>
+    <span class="n">mean_sep</span> <span class="o">/=</span> <span class="mf">1.e3</span>  <span class="c1"># m to km</span>
+    <span class="n">median_sep</span> <span class="o">/=</span> <span class="mf">1.e3</span>  <span class="c1"># m to km</span>
 
-    <span class="k">return</span> <span class="n">mean_sep</span><span class="p">,</span> <span class="n">good_verts</span></div>
+    <span class="k">return</span> <span class="n">mean_sep</span><span class="p">,</span> <span class="n">median_sep</span><span class="p">,</span> <span class="n">neighbors</span></div>
 
 
 
-<div class="viewcode-block" id="get_sep_vertices">
-<a class="viewcode-back" href="../../autoapi/mapmetnet/network/index.html#mapmetnet.network.get_sep_vertices">[docs]</a>
+<div class="viewcode-block" id="get_neighbors">
+<a class="viewcode-back" href="../../mean_sep.html#mapmetnet.network.get_neighbors">[docs]</a>
 <span class="nd">@log_func_call</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_sep_vertices</span><span class="p">(</span><span class="n">lons</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">lats</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_neighbors</span><span class="p">(</span><span class="n">lons</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">lats</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Assemble a list of vertices separating a series of coordinates on Earth.</span>
 
 <span class="sd">    Args:</span>
@@ -484,22 +489,45 @@
 <span class="sd">        lats (np.ndarray): array of latitudes, in fractional degrees.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        good_verts, bad_verts, not_so_bad_verts: dicts with the vertex nodes provided as</span>
-<span class="sd">            len(2)-lists of (original) point indices as keys, and their true length as entry</span>
-<span class="sd">            (measured along Great Circles).</span>
+<span class="sd">        dict, dict, dict: &quot;good&quot; neighbor vertices, &quot;bad&quot; neighbor vertices, and &quot;not so bad&quot;</span>
+<span class="sd">        neighbor vertices, where the dict keys are len(2)-lists of the (original) point indices, and</span>
+<span class="sd">        the entries are their respective lengths (measured along Great Circles).</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        MapmetnetError: if some of the input points are duplicated.</span>
 
-<span class="sd">    The vertices are assembled from the Delaunay set of vertices (derived in 2D using a</span>
-<span class="sd">    Stereographic projection), with an additional requirement that the mid-point of each vertice be</span>
-<span class="sd">    closest (strictly) to its nodes, and no other location in the set of coordinates.</span>
+<span class="sd">    This function implements a robust and unambiguous method for identifying &quot;neighboring&quot; nodes</span>
+<span class="sd">    in a given network. It was first introduced in Appendix A of the SOFF National Contribution Plan</span>
+<span class="sd">    for the Democratic Republic of Congo (see `Vogt et al., 2024`_) to which we refer the</span>
+<span class="sd">    interested reader for more details. What follows is a summary of this document.</span>
 
-<span class="sd">    Vertices that respect this conditions strictly are provided in good_verts.</span>
+<span class="sd">    The &quot;potentially neighboring&quot; vertices are identified via a Delaunay triangulation</span>
+<span class="sd">    (see :py:func:`get_delaunay_vertices`).</span>
 
-<span class="sd">    Vertices that do not respect this criterium are listed in bad_verts and not_so_bad_verts.</span>
-<span class="sd">    The only difference between these two sets is that vertices inside not_so_bad_verts are located</span>
-<span class="sd">    within the polygon formed by the &quot;good&quot; vertices.</span>
+<span class="sd">    This approach is warranted by the fact that the Delaunay triangulation is the dual graph of</span>
+<span class="sd">    the Voronoi tessellation: a most natural way to define the &quot;immediate neighborhood&quot; of a set of</span>
+<span class="sd">    nodes. Specifically, a Voronoi tessellation defines unique polygons around each node in a set,</span>
+<span class="sd">    where each polygon contains all the locations that are closer to one specific node than to any</span>
+<span class="sd">    other node in the set. Neighboring nodes are those that share a common Voronoi cell edge - a</span>
+<span class="sd">    criteria which essentially corresponds to the Delaunay triangulation.</span>
+
+<span class="sd">    While a Delaunay triangulation allows to identify &quot;mathematical&quot; neighbors, not all of these</span>
+<span class="sd">    would typically be considered as being neighbors in the &quot;physical&quot; sense (thinking of stations</span>
+<span class="sd">    in the real world). To sort the &quot;true&quot; neighboring vertices from the rest, we use the following</span>
+<span class="sd">    *mid-point criteria*:</span>
+
+<span class="sd">    **Vertices listed as &quot;good&quot; neighbors are those for which the mid-point is closest (strictly) to</span>
+<span class="sd">    its end nodes than to any other node in the set.**</span>
+
+<span class="sd">    Vertices that do not respect this criterium are provided in &quot;bad&quot; neighbors and</span>
+<span class="sd">    &quot;not so bad&quot; neighbors. The only difference between these two sets is that vertices inside</span>
+<span class="sd">    &quot;not so bad&quot; neighbors are located within a (closed) polygon formed by &quot;good&quot; neighbors.</span>
+
+<span class="sd">    Essentially, this mid-point criteria is used as a simple way to cull vertices towards the outer</span>
+<span class="sd">    edges of the network, that one would not typically associated to the concept of &quot;neighboring&quot;</span>
+<span class="sd">    stations.</span>
+
+<span class="sd">    .. _Vogt et al., 2024: https://www.un-soff.org/wp-content/uploads/2025/02/Democratic-Republic-of-Congo-GBON-National-Gap-Analysis.pdf.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -521,8 +549,8 @@
     <span class="n">geo</span> <span class="o">=</span> <span class="n">Geodesic</span><span class="p">()</span>
 
     <span class="c1"># Let&#39;s now make two piles of vertices. The ones we like, and the ones we do not.</span>
-    <span class="n">good_verts</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">bad_verts</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">neighbors</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">not_neighbors</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="c1"># Let&#39;s check them all one by one, and decide which is which</span>
     <span class="k">for</span> <span class="n">vert</span> <span class="ow">in</span> <span class="n">verts</span><span class="p">:</span>
@@ -548,37 +576,40 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">([</span><span class="n">item</span> <span class="ow">in</span> <span class="n">vert</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">min_dist_ids</span><span class="p">]):</span>
             <span class="c1"># Keep a dictionnary where the vertex nodes are the key, and the vertex distance the</span>
             <span class="c1"># value.</span>
-            <span class="n">bad_verts</span><span class="p">[</span><span class="n">vert</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span>
+            <span class="n">not_neighbors</span><span class="p">[</span><span class="n">vert</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span>
             <span class="k">continue</span>
 
         <span class="c1"># ... ok, seems, like we have a &quot;good&quot; vertex. Let&#39;s store it for later.</span>
-        <span class="n">good_verts</span><span class="p">[</span><span class="n">vert</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span>
+        <span class="n">neighbors</span><span class="p">[</span><span class="n">vert</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span>
 
-    <span class="c1"># The good/bad criteria above works well to cull the bad *outer* vertices of the default</span>
-    <span class="c1"># Delaunay triangulation. However, it can at times also cull *inner* vertices that some users</span>
-    <span class="c1"># may possibly want to keep. To allow this, we build a polygon from the good vertices,</span>
-    <span class="c1"># and keep track of the *bad* ones that are covered by it ... and are therefore &quot;not that bad&quot;.</span>
+    <span class="c1"># The good/bad criteria above works well to cull the *outer* vertices of the default</span>
+    <span class="c1"># Delaunay triangulation that one would not typically associate with &quot;neighbor&quot; sites.</span>
+    <span class="c1"># However, it can at times also cull *inner* vertices that some users</span>
+    <span class="c1"># may possibly want to keep. To circumvent this, we build a polygon from the good neighbor</span>
+    <span class="c1"># vertices, and keep track of the *bad* ones that are covered by it ... and are therefore &quot;not</span>
+    <span class="c1"># that bad&quot;.</span>
 
     <span class="c1"># First, we assemble the good polygons.</span>
-    <span class="n">good_segs</span> <span class="o">=</span> <span class="p">[</span><span class="n">LineString</span><span class="p">(</span><span class="n">pts</span><span class="p">[</span><span class="n">vert</span><span class="p">,</span> <span class="p">:])</span> <span class="k">for</span> <span class="n">vert</span> <span class="ow">in</span> <span class="n">good_verts</span><span class="p">]</span>
+    <span class="n">good_segs</span> <span class="o">=</span> <span class="p">[</span><span class="n">LineString</span><span class="p">(</span><span class="n">pts</span><span class="p">[</span><span class="n">vert</span><span class="p">,</span> <span class="p">:])</span> <span class="k">for</span> <span class="n">vert</span> <span class="ow">in</span> <span class="n">neighbors</span><span class="p">]</span>
     <span class="n">good_polys</span> <span class="o">=</span> <span class="n">polygonize</span><span class="p">(</span><span class="n">good_segs</span><span class="p">)</span>
 
     <span class="c1"># Now check which bad line segments are contained within the geometry</span>
-    <span class="n">not_so_bad_verts</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">vert</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span> <span class="ow">in</span> <span class="n">bad_verts</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">not_so_bad_neighbors</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">vert</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span> <span class="ow">in</span> <span class="n">not_neighbors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">if</span> <span class="n">good_polys</span><span class="o">.</span><span class="n">covers</span><span class="p">(</span><span class="n">LineString</span><span class="p">(</span><span class="n">pts</span><span class="p">[</span><span class="n">vert</span><span class="p">,</span> <span class="p">:])):</span>
             <span class="c1"># This bad vertex does not look so bad after all ... !</span>
-            <span class="n">not_so_bad_verts</span><span class="p">[</span><span class="n">vert</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span>
+            <span class="n">not_so_bad_neighbors</span><span class="p">[</span><span class="n">vert</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span>
 
-    <span class="c1"># Let&#39;s adjust the list of bad_verts, to avoid duplicates</span>
-    <span class="n">bad_verts</span> <span class="o">=</span> <span class="p">{</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">bad_verts</span> <span class="k">if</span> <span class="n">item</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">not_so_bad_verts</span><span class="p">}</span>
+    <span class="c1"># Let&#39;s adjust the list of not_neighbors, to avoid duplicates</span>
+    <span class="n">not_neighbors</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">item</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">not_neighbors</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                     <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">not_so_bad_neighbors</span><span class="p">}</span>
 
-    <span class="k">return</span> <span class="n">good_verts</span><span class="p">,</span> <span class="n">bad_verts</span><span class="p">,</span> <span class="n">not_so_bad_verts</span></div>
+    <span class="k">return</span> <span class="n">neighbors</span><span class="p">,</span> <span class="n">not_neighbors</span><span class="p">,</span> <span class="n">not_so_bad_neighbors</span></div>
 
 
 
 <div class="viewcode-block" id="get_delaunay_vertices">
-<a class="viewcode-back" href="../../autoapi/mapmetnet/network/index.html#mapmetnet.network.get_delaunay_vertices">[docs]</a>
+<a class="viewcode-back" href="../../mean_sep.html#mapmetnet.network.get_delaunay_vertices">[docs]</a>
 <span class="nd">@log_func_call</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_delaunay_vertices</span><span class="p">(</span><span class="n">lons</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">lats</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Run a Delaunay triangulation on a series of coordinates, and assemble the list of</span>
@@ -594,11 +625,12 @@
 
 
 <span class="sd">    This routine performs a Delaunay triangulation using the point coordinates converted to a</span>
-<span class="sd">    Stereographic projection. This allows to run a 2D Delaunay triangulation where the</span>
-<span class="sd">    identified pairs of &#39;connected&#39; stations are the same as those that would be ientified if</span>
+<span class="sd">    Stereographic projection. This allows to run a 2D (instead of 3D) Delaunay triangulation where</span>
+<span class="sd">    the identified pairs of *neighbor* stations are the same as those that would be ientified if</span>
 <span class="sd">    the triangulation was performed on the surface of the sphere.</span>
 
 <span class="sd">    See Saalfeld, Cartography and Geographic Information Science, Vol. 26, No.4, 1999, pp. 289-296.</span>
+
 <span class="sd">    https://www.tandfonline.com/doi/pdf/10.1559/152304099782294168</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -624,22 +656,22 @@
 <div class="viewcode-block" id="compute_mean_sep">
 <a class="viewcode-back" href="../../autoapi/mapmetnet/network/index.html#mapmetnet.network.compute_mean_sep">[docs]</a>
 <span class="nd">@log_func_call</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_mean_sep</span><span class="p">(</span><span class="n">verts</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute the mean vertex length given a set of vertices.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_mean_sep</span><span class="p">(</span><span class="n">verts</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute the mean and median vertex length given a set of vertices.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        verts (dict): dictionnary of vertices, where each key contains a single vertex nodes, and</span>
 <span class="sd">            the entries are their respective lengths (computed elsewhere).</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        float: the mean vertex node</span>
+<span class="sd">        tuple[float, float]: the mean and median vertex lengths.</span>
 
-<span class="sd">    TODO:</span>
-<span class="sd">        This routine is specificly tied to the format of verts assembled in get_sep_vertices().</span>
-<span class="sd">        It could make a lot of sense to create a dedicated Class for these at some point ...</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="n">item</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">verts</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span></div>
+    <span class="c1"># Assemble a list of separations</span>
+    <span class="n">seps</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">verts</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">seps</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">seps</span><span class="p">)</span></div>
 
 </pre></div>
 
@@ -679,10 +711,10 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-mapmetnet, version: dev-8ae88ad</div>
+mapmetnet, version: dev-3b5e47c</div>
       
         <div class="footer-item"><p class="last-updated">
-  Last updated on 2026-04-11.
+  Last updated on 2026-04-12.
   <br/>
 </p></div>
       

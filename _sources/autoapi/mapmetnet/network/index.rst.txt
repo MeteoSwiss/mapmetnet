@@ -29,7 +29,7 @@ Functions
 .. autoapisummary::
 
    mapmetnet.network.get_mean_sep
-   mapmetnet.network.get_sep_vertices
+   mapmetnet.network.get_neighbors
    mapmetnet.network.get_delaunay_vertices
    mapmetnet.network.compute_mean_sep
 
@@ -45,39 +45,63 @@ Module Contents
 
    :Parameters: * **lons** (*np.ndarray*) -- array of longitudes, in fractional degrees.
                 * **lats** (*np.ndarray*) -- array of latitudes, in fractional degrees.
-                * **drop_not_so_bad** (*bool, optional*) -- if True, the not_so_bad vertices will be ignored.
+                * **drop_not_so_bad** (*bool, optional*) -- if True, the not_so_bad neighbors will be ignored.
                   Defaults to False.
 
-   :returns: the mean separation between the coordinates, in km.
-             verts (dict): the vertices used to compute the mean separation, provided as a dict.
-   :rtype: mean_sep (float)
+   :returns: the mean separation (in km), the median separation (in km), and the
+             neighbor vertices used to compute the mean separation.
+   :rtype: float, float, dict
+
+   See :py:func:`get_neighbors` for more details on the identification of neighbor vertices used
+   to compute the mean separation.
 
 
-.. py:function:: get_sep_vertices(lons: numpy.ndarray, lats: numpy.ndarray) -> tuple[dict, dict, dict]
+.. py:function:: get_neighbors(lons: numpy.ndarray, lats: numpy.ndarray) -> tuple[dict, dict, dict]
 
    Assemble a list of vertices separating a series of coordinates on Earth.
 
    :Parameters: * **lons** (*np.ndarray*) -- array of longitudes, in fractional degrees.
                 * **lats** (*np.ndarray*) -- array of latitudes, in fractional degrees.
 
-   :returns:
-
-             dicts with the vertex nodes provided as
-                 len(2)-lists of (original) point indices as keys, and their true length as entry
-                 (measured along Great Circles).
-   :rtype: good_verts, bad_verts, not_so_bad_verts
+   :returns: "good" neighbor vertices, "bad" neighbor vertices, and "not so bad"
+             neighbor vertices, where the dict keys are len(2)-lists of the (original) point indices, and
+             the entries are their respective lengths (measured along Great Circles).
+   :rtype: dict, dict, dict
 
    :raises MapmetnetError: if some of the input points are duplicated.
 
-   The vertices are assembled from the Delaunay set of vertices (derived in 2D using a
-   Stereographic projection), with an additional requirement that the mid-point of each vertice be
-   closest (strictly) to its nodes, and no other location in the set of coordinates.
+   This function implements a robust and unambiguous method for identifying "neighboring" nodes
+   in a given network. It was first introduced in Appendix A of the SOFF National Contribution Plan
+   for the Democratic Republic of Congo (see `Vogt et al., 2024`_) to which we refer the
+   interested reader for more details. What follows is a summary of this document.
 
-   Vertices that respect this conditions strictly are provided in good_verts.
+   The "potentially neighboring" vertices are identified via a Delaunay triangulation
+   (see :py:func:`get_delaunay_vertices`).
 
-   Vertices that do not respect this criterium are listed in bad_verts and not_so_bad_verts.
-   The only difference between these two sets is that vertices inside not_so_bad_verts are located
-   within the polygon formed by the "good" vertices.
+   This approach is warranted by the fact that the Delaunay triangulation is the dual graph of
+   the Voronoi tessellation: a most natural way to define the "immediate neighborhood" of a set of
+   nodes. Specifically, a Voronoi tessellation defines unique polygons around each node in a set,
+   where each polygon contains all the locations that are closer to one specific node than to any
+   other node in the set. Neighboring nodes are those that share a common Voronoi cell edge - a
+   criteria which essentially corresponds to the Delaunay triangulation.
+
+   While a Delaunay triangulation allows to identify "mathematical" neighbors, not all of these
+   would typically be considered as being neighbors in the "physical" sense (thinking of stations
+   in the real world). To sort the "true" neighboring vertices from the rest, we use the following
+   *mid-point criteria*:
+
+   **Vertices listed as "good" neighbors are those for which the mid-point is closest (strictly) to
+   its end nodes than to any other node in the set.**
+
+   Vertices that do not respect this criterium are provided in "bad" neighbors and
+   "not so bad" neighbors. The only difference between these two sets is that vertices inside
+   "not so bad" neighbors are located within a (closed) polygon formed by "good" neighbors.
+
+   Essentially, this mid-point criteria is used as a simple way to cull vertices towards the outer
+   edges of the network, that one would not typically associated to the concept of "neighboring"
+   stations.
+
+   .. _Vogt et al., 2024: https://www.un-soff.org/wp-content/uploads/2025/02/Democratic-Republic-of-Congo-GBON-National-Gap-Analysis.pdf.
 
 
 
@@ -94,28 +118,24 @@ Module Contents
    :rtype: list
 
    This routine performs a Delaunay triangulation using the point coordinates converted to a
-   Stereographic projection. This allows to run a 2D Delaunay triangulation where the
-   identified pairs of 'connected' stations are the same as those that would be ientified if
+   Stereographic projection. This allows to run a 2D (instead of 3D) Delaunay triangulation where
+   the identified pairs of *neighbor* stations are the same as those that would be ientified if
    the triangulation was performed on the surface of the sphere.
 
    See Saalfeld, Cartography and Geographic Information Science, Vol. 26, No.4, 1999, pp. 289-296.
+
    https://www.tandfonline.com/doi/pdf/10.1559/152304099782294168
 
 
 
-.. py:function:: compute_mean_sep(verts: dict) -> float
+.. py:function:: compute_mean_sep(verts: dict) -> tuple[float, float]
 
-   Compute the mean vertex length given a set of vertices.
+   Compute the mean and median vertex length given a set of vertices.
 
    :Parameters: **verts** (*dict*) -- dictionnary of vertices, where each key contains a single vertex nodes, and
                 the entries are their respective lengths (computed elsewhere).
 
-   :returns: the mean vertex node
-   :rtype: float
-
-   .. todo::
-
-      This routine is specificly tied to the format of verts assembled in get_sep_vertices().
-      It could make a lot of sense to create a dedicated Class for these at some point ...
+   :returns: the mean and median vertex lengths.
+   :rtype: tuple[float, float]
 
 

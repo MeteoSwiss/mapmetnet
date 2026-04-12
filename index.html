@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2" />
 
-    <script src="_static/documentation_options.js?v=bec3962f"></script>
+    <script src="_static/documentation_options.js?v=d18aeb40"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
@@ -58,7 +58,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
-    <meta name="docbuild:last-update" content="2026-04-11"/>
+    <meta name="docbuild:last-update" content="2026-04-12"/>
   
     
     <script src="_static/searchtools.js"></script>
@@ -161,7 +161,7 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="gbon.html">
+  <a class="nav-link nav-internal" href="mean_sep.html">
     Horizontal resolution
   </a>
 </li>
@@ -293,7 +293,7 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="gbon.html">
+  <a class="nav-link nav-internal" href="mean_sep.html">
     Horizontal resolution
   </a>
 </li>
@@ -394,7 +394,7 @@
 <p>Welcome to the documentation of <code class="docutils literal notranslate"><span class="pre">mapmetnet</span></code>. This Python library has 3 primary intended uses:</p>
 <ol class="arabic simple">
 <li><p>the assembly of meteorological <a class="reference internal" href="network.html"><span class="doc">network maps</span></a>,</p></li>
-<li><p>the computation of the <a class="reference internal" href="gbon.html"><span class="doc">horizontal resolution</span></a> (in the <a class="reference external" href="https://wmo.int/activities/global-basic-observing-network-gbon">GBON</a> sense) of a given network, and</p></li>
+<li><p>the computation of the <a class="reference internal" href="mean_sep.html"><span class="doc">horizontal resolution</span></a> (in the <a class="reference external" href="https://wmo.int/activities/global-basic-observing-network-gbon">GBON</a> sense) of a given network, and</p></li>
 <li><p>the generation of <a class="reference internal" href="site.html"><span class="doc">sat-view</span></a> diagrams for individual observing sites.</p></li>
 </ol>
 <p>Please refer to the relevant sections of the documentation below to learn more.</p>
@@ -409,7 +409,12 @@ contribute to the development of <code class="docutils literal notranslate"><spa
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="network.html">Network maps</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gbon.html">Horizontal resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mean_sep.html">Horizontal resolution</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mean_sep.html#tl-dr">tl;dr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mean_sep.html#neighbors-where-art-thou">Neighbors, where art thou ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mean_sep.html#working-on-the-sphere">Working on the Sphere</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="site.html">Site sat-views</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#dev">[dev]</a></li>
@@ -470,10 +475,10 @@ contribute to the development of <code class="docutils literal notranslate"><spa
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-mapmetnet, version: dev-8ae88ad</div>
+mapmetnet, version: dev-3b5e47c</div>
       
         <div class="footer-item"><p class="last-updated">
-  Last updated on 2026-04-11.
+  Last updated on 2026-04-12.
   <br/>
 </p></div>
       

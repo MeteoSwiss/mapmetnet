@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2" />
 
-    <script src="../../../_static/documentation_options.js?v=bec3962f"></script>
+    <script src="../../../_static/documentation_options.js?v=d18aeb40"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/mapmetnet/network/index';</script>
@@ -59,7 +59,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
-    <meta name="docbuild:last-update" content="2026-04-11"/>
+    <meta name="docbuild:last-update" content="2026-04-12"/>
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -162,7 +162,7 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../gbon.html">
+  <a class="nav-link nav-internal" href="../../../mean_sep.html">
     Horizontal resolution
   </a>
 </li>
@@ -296,7 +296,7 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../gbon.html">
+  <a class="nav-link nav-internal" href="../../../mean_sep.html">
     Horizontal resolution
   </a>
 </li>
@@ -478,14 +478,14 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#mapmetnet.network.get_mean_sep" title="mapmetnet.network.get_mean_sep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_mean_sep</span></code></a>(→ tuple)</p></td>
 <td><p>Compute the mean separation between a series of coordinates on Earth.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mapmetnet.network.get_sep_vertices" title="mapmetnet.network.get_sep_vertices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_sep_vertices</span></code></a>(→ tuple[dict, dict, dict])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mapmetnet.network.get_neighbors" title="mapmetnet.network.get_neighbors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_neighbors</span></code></a>(→ tuple[dict, dict, dict])</p></td>
 <td><p>Assemble a list of vertices separating a series of coordinates on Earth.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#mapmetnet.network.get_delaunay_vertices" title="mapmetnet.network.get_delaunay_vertices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_delaunay_vertices</span></code></a>(→ set)</p></td>
 <td><p>Run a Delaunay triangulation on a series of coordinates, and assemble the list of</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mapmetnet.network.compute_mean_sep" title="mapmetnet.network.compute_mean_sep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_mean_sep</span></code></a>(→ float)</p></td>
-<td><p>Compute the mean vertex length given a set of vertices.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mapmetnet.network.compute_mean_sep" title="mapmetnet.network.compute_mean_sep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_mean_sep</span></code></a>(→ tuple[float, float])</p></td>
+<td><p>Compute the mean and median vertex length given a set of vertices.</p></td>
 </tr>
 </tbody>
 </table>
@@ -507,23 +507,25 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lons</strong> (<em>np.ndarray</em>) – array of longitudes, in fractional degrees.</p></li>
 <li><p><strong>lats</strong> (<em>np.ndarray</em>) – array of latitudes, in fractional degrees.</p></li>
-<li><p><strong>drop_not_so_bad</strong> (<em>bool, optional</em>) – if True, the not_so_bad vertices will be ignored.
+<li><p><strong>drop_not_so_bad</strong> (<em>bool, optional</em>) – if True, the not_so_bad neighbors will be ignored.
 Defaults to False.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>the mean separation between the coordinates, in km.
-verts (dict): the vertices used to compute the mean separation, provided as a dict.</p>
+<dd class="field-even"><p>the mean separation (in km), the median separation (in km), and the
+neighbor vertices used to compute the mean separation.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>mean_sep (float)</p>
+<dd class="field-odd"><p>float, float, dict</p>
 </dd>
 </dl>
+<p>See <a class="reference internal" href="#mapmetnet.network.get_neighbors" title="mapmetnet.network.get_neighbors"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_neighbors()</span></code></a> for more details on the identification of neighbor vertices used
+to compute the mean separation.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="mapmetnet.network.get_sep_vertices">
-<span class="sig-name descname"><span class="pre">get_sep_vertices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/mapmetnet/network.html#get_sep_vertices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mapmetnet.network.get_sep_vertices" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="mapmetnet.network.get_neighbors">
+<span class="sig-name descname"><span class="pre">get_neighbors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/mapmetnet/network.html#get_neighbors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mapmetnet.network.get_neighbors" title="Link to this definition">#</a></dt>
 <dd><p>Assemble a list of vertices separating a series of coordinates on Earth.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -533,27 +535,41 @@ verts (dict): the vertices used to compute the mean separation, provided as a di
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><dl class="simple">
-<dt>dicts with the vertex nodes provided as</dt><dd><p>len(2)-lists of (original) point indices as keys, and their true length as entry
-(measured along Great Circles).</p>
-</dd>
-</dl>
-</p>
+<dd class="field-even"><p>“good” neighbor vertices, “bad” neighbor vertices, and “not so bad”
+neighbor vertices, where the dict keys are len(2)-lists of the (original) point indices, and
+the entries are their respective lengths (measured along Great Circles).</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>good_verts, bad_verts, not_so_bad_verts</p>
+<dd class="field-odd"><p>dict, dict, dict</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="../errors/index.html#mapmetnet.errors.MapmetnetError" title="mapmetnet.errors.MapmetnetError"><strong>MapmetnetError</strong></a> – if some of the input points are duplicated.</p>
 </dd>
 </dl>
-<p>The vertices are assembled from the Delaunay set of vertices (derived in 2D using a
-Stereographic projection), with an additional requirement that the mid-point of each vertice be
-closest (strictly) to its nodes, and no other location in the set of coordinates.</p>
-<p>Vertices that respect this conditions strictly are provided in good_verts.</p>
-<p>Vertices that do not respect this criterium are listed in bad_verts and not_so_bad_verts.
-The only difference between these two sets is that vertices inside not_so_bad_verts are located
-within the polygon formed by the “good” vertices.</p>
+<p>This function implements a robust and unambiguous method for identifying “neighboring” nodes
+in a given network. It was first introduced in Appendix A of the SOFF National Contribution Plan
+for the Democratic Republic of Congo (see <a class="reference external" href="https://www.un-soff.org/wp-content/uploads/2025/02/Democratic-Republic-of-Congo-GBON-National-Gap-Analysis.pdf.">Vogt et al., 2024</a>) to which we refer the
+interested reader for more details. What follows is a summary of this document.</p>
+<p>The “potentially neighboring” vertices are identified via a Delaunay triangulation
+(see <a class="reference internal" href="#mapmetnet.network.get_delaunay_vertices" title="mapmetnet.network.get_delaunay_vertices"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_delaunay_vertices()</span></code></a>).</p>
+<p>This approach is warranted by the fact that the Delaunay triangulation is the dual graph of
+the Voronoi tessellation: a most natural way to define the “immediate neighborhood” of a set of
+nodes. Specifically, a Voronoi tessellation defines unique polygons around each node in a set,
+where each polygon contains all the locations that are closer to one specific node than to any
+other node in the set. Neighboring nodes are those that share a common Voronoi cell edge - a
+criteria which essentially corresponds to the Delaunay triangulation.</p>
+<p>While a Delaunay triangulation allows to identify “mathematical” neighbors, not all of these
+would typically be considered as being neighbors in the “physical” sense (thinking of stations
+in the real world). To sort the “true” neighboring vertices from the rest, we use the following
+<em>mid-point criteria</em>:</p>
+<p><strong>Vertices listed as “good” neighbors are those for which the mid-point is closest (strictly) to
+its end nodes than to any other node in the set.</strong></p>
+<p>Vertices that do not respect this criterium are provided in “bad” neighbors and
+“not so bad” neighbors. The only difference between these two sets is that vertices inside
+“not so bad” neighbors are located within a (closed) polygon formed by “good” neighbors.</p>
+<p>Essentially, this mid-point criteria is used as a simple way to cull vertices towards the outer
+edges of the network, that one would not typically associated to the concept of “neighboring”
+stations.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -577,34 +593,29 @@ resulting vertices.</p>
 </dd>
 </dl>
 <p>This routine performs a Delaunay triangulation using the point coordinates converted to a
-Stereographic projection. This allows to run a 2D Delaunay triangulation where the
-identified pairs of ‘connected’ stations are the same as those that would be ientified if
+Stereographic projection. This allows to run a 2D (instead of 3D) Delaunay triangulation where
+the identified pairs of <em>neighbor</em> stations are the same as those that would be ientified if
 the triangulation was performed on the surface of the sphere.</p>
-<p>See Saalfeld, Cartography and Geographic Information Science, Vol. 26, No.4, 1999, pp. 289-296.
-<a class="reference external" href="https://www.tandfonline.com/doi/pdf/10.1559/152304099782294168">https://www.tandfonline.com/doi/pdf/10.1559/152304099782294168</a></p>
+<p>See Saalfeld, Cartography and Geographic Information Science, Vol. 26, No.4, 1999, pp. 289-296.</p>
+<p><a class="reference external" href="https://www.tandfonline.com/doi/pdf/10.1559/152304099782294168">https://www.tandfonline.com/doi/pdf/10.1559/152304099782294168</a></p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mapmetnet.network.compute_mean_sep">
-<span class="sig-name descname"><span class="pre">compute_mean_sep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/mapmetnet/network.html#compute_mean_sep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mapmetnet.network.compute_mean_sep" title="Link to this definition">#</a></dt>
-<dd><p>Compute the mean vertex length given a set of vertices.</p>
+<span class="sig-name descname"><span class="pre">compute_mean_sep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/mapmetnet/network.html#compute_mean_sep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mapmetnet.network.compute_mean_sep" title="Link to this definition">#</a></dt>
+<dd><p>Compute the mean and median vertex length given a set of vertices.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>verts</strong> (<em>dict</em>) – dictionnary of vertices, where each key contains a single vertex nodes, and
 the entries are their respective lengths (computed elsewhere).</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>the mean vertex node</p>
+<dd class="field-even"><p>the mean and median vertex lengths.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float</p>
+<dd class="field-odd"><p>tuple[float, float]</p>
 </dd>
 </dl>
-<div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
-<p>This routine is specificly tied to the format of verts assembled in get_sep_vertices().
-It could make a lot of sense to create a dedicated Class for these at some point …</p>
-</div>
 </dd></dl>
 
 </section>
@@ -662,7 +673,7 @@ It could make a lot of sense to create a dedicated Class for these at some point
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.network.logger"><code class="docutils literal notranslate"><span class="pre">logger</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.network.get_mean_sep"><code class="docutils literal notranslate"><span class="pre">get_mean_sep()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.network.get_sep_vertices"><code class="docutils literal notranslate"><span class="pre">get_sep_vertices()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.network.get_neighbors"><code class="docutils literal notranslate"><span class="pre">get_neighbors()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.network.get_delaunay_vertices"><code class="docutils literal notranslate"><span class="pre">get_delaunay_vertices()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapmetnet.network.compute_mean_sep"><code class="docutils literal notranslate"><span class="pre">compute_mean_sep()</span></code></a></li>
 </ul>
@@ -692,10 +703,10 @@ It could make a lot of sense to create a dedicated Class for these at some point
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-mapmetnet, version: dev-8ae88ad</div>
+mapmetnet, version: dev-3b5e47c</div>
       
         <div class="footer-item"><p class="last-updated">
-  Last updated on 2026-04-11.
+  Last updated on 2026-04-12.
   <br/>
 </p></div>
       
