@@ -15,7 +15,7 @@ on:
     - cron: '43 21 * * 0'  # Run at 21:43 UTC every Sunday
 
 jobs:
-  pipeline:
+  weekly_test_pipeline:
     runs-on: ubuntu-latest
 
     steps:

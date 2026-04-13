@@ -15,7 +15,7 @@ on:
 
 jobs:
 
-  publish:
+  publish_dev_docs:
     runs-on: ubuntu-latest
 
     permissions:
