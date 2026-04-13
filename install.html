@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>mapmetnet &#8212; mapmetnet</title>
+    <title>Installation &#8212; mapmetnet</title>
   
   
   
@@ -43,7 +43,7 @@
     <script src="_static/documentation_options.js?v=0dee0452"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'install';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.17.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = '_static/switcher_config.json';
@@ -54,7 +54,8 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Installation" href="install.html" />
+    <link rel="next" title="Network maps" href="network.html" />
+    <link rel="prev" title="mapmetnet" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -117,7 +118,7 @@
     
   
 
-<a class="navbar-brand logo" href="#">
+<a class="navbar-brand logo" href="index.html">
   
   
   
@@ -147,14 +148,14 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="#">
+  <a class="nav-link nav-internal" href="index.html">
     Start
   </a>
 </li>
 
 
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="install.html">
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
     Installation
   </a>
 </li>
@@ -277,8 +278,6 @@
       
       
       
-        
-      
       <dialog id="pst-primary-sidebar-modal"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
@@ -296,14 +295,14 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="#">
+  <a class="nav-link nav-internal" href="index.html">
     Start
   </a>
 </li>
 
 
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="install.html">
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
     Installation
   </a>
 </li>
@@ -405,7 +404,31 @@
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article d-print-none"></div>
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Installation</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
               
               
               
@@ -413,45 +436,21 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="mapmetnet">
-<h1>mapmetnet<a class="headerlink" href="#mapmetnet" title="Link to this heading">#</a></h1>
-<p>Welcome to the documentation of <code class="docutils literal notranslate"><span class="pre">mapmetnet</span></code>. This Python library has 3 primary intended uses:</p>
-<ol class="arabic simple">
-<li><p>the assembly of meteorological <a class="reference internal" href="network.html"><span class="doc">network maps</span></a>,</p></li>
-<li><p>the computation of the <a class="reference internal" href="mean_sep.html"><span class="doc">horizontal resolution</span></a> (in the <a class="reference external" href="https://wmo.int/activities/global-basic-observing-network-gbon">GBON</a> sense) of a given network, and</p></li>
-<li><p>the generation of <a class="reference internal" href="site.html"><span class="doc">sat-view</span></a> diagrams for individual observing sites.</p></li>
-</ol>
-<p>Please refer to the relevant sections of the documentation below to learn more.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><code class="docutils literal notranslate"><span class="pre">mapmetnet</span></code> is being developed at MeteoSwiss on Github. If you encounter trouble while
-using <code class="docutils literal notranslate"><span class="pre">mapmetnet</span></code>, please report the issue on the <a class="reference external" href="https://github.com/MeteoSwiss/mapmetnet/issues">GitHub repository</a>. If you wish to
-contribute to the development of <code class="docutils literal notranslate"><span class="pre">mapmetnet</span></code>, please refer to the <a class="reference external" href="https://github.com/MeteoSwiss/mapmetnet/blob/main/CONTRIBUTING.md">contributing guidelines</a>.</p>
+  <section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">mapmetnet</span></code> is <strong>not yet</strong> available on <a class="reference external" href="https://pypi.org/project/mapmetnet/">PyPI</a>, and can <strong>not</strong> be installed using <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>mapmetnet
+</pre></div>
 </div>
-<div class="toctree-wrapper compound">
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Table of contents</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="network.html">Network maps</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mean_sep.html">Horizontal resolution</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="mean_sep.html#tl-dr">tl;dr</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mean_sep.html#neighbors-where-art-thou">Neighbors, where art thou ?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mean_sep.html#working-on-the-sphere">Working on the Sphere</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="site.html">Site sat-views</a></li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#dev">[dev]</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-1-0">v0.1.0</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="autoapi/mapmetnet/index.html">mapmetnet</a></li>
-</ul>
-</li>
-</ul>
+<p>If you are so inclined, you can also install <code class="docutils literal notranslate"><span class="pre">mapmetnet</span></code> from source, via a local clone of
+the relevant <a class="reference external" href="https://github.com/MeteoSwiss/mapmetnet">Github</a> repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/MeteoSwiss/mapmetnet.git
+<span class="nb">cd</span><span class="w"> </span>mapmetnet
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
 </div>
+<p>Please refer to the code <a class="reference external" href="https://github.com/MeteoSwiss/mapmetnet/blob/main/CONTRIBUTING.rst">contributing guidelines</a> for more details, inclduing on how to set
+up a suitable development environment for <code class="docutils literal notranslate"><span class="pre">mapmetnet</span></code> (should you be interested to contribute).</p>
 </section>
 
 
@@ -464,12 +463,21 @@ contribute to the development of <code class="docutils literal notranslate"><spa
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">mapmetnet</p>
+      </div>
+    </a>
     <a class="right-next"
-       href="install.html"
+       href="network.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Installation</p>
+        <p class="prev-next-title">Network maps</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
