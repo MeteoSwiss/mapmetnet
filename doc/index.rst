@@ -24,6 +24,7 @@ Please refer to the relevant sections of the documentation below to learn more.
    :caption: Table of contents
 
    Start <self>
+   install
    network
    mean_sep
    site
