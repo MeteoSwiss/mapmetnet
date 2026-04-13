@@ -4,7 +4,7 @@
 [![license](https://img.shields.io/pypi/l/mapmetnet.svg)](https://pypi.org/project/mapmetnet/)
 [![CI_test](https://github.com/MeteoSwiss/mapmetnet/actions/workflows/CI_test.yaml/badge.svg)](https://github.com/MeteoSwiss/mapmetnet/actions/workflows/CI_test.yaml)
 [![CI_test_weekly](https://github.com/MeteoSwiss/mapmetnet/actions/workflows/CI_test_weekly.yaml/badge.svg)](https://github.com/MeteoSwiss/mapmetnet/actions/workflows/CI_test_weekly.yaml)
-[![CI_publish_docs](https://github.com/MeteoSwiss/mapmetnet/actions/workflows/CI_publish_dev_documentation.yaml)](https://github.com/MeteoSwiss/mapmetnet/actions/workflows/CI_publish_dev_docs.yaml/badge.svg)
+[![CI_publish_docs](https://github.com/MeteoSwiss/mapmetnet/actions/workflows/CI_publish_dev_docs.yaml)](https://github.com/MeteoSwiss/mapmetnet/actions/workflows/CI_publish_dev_docs.yaml/badge.svg)
 
 # Getting Started
 
