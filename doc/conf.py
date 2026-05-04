@@ -2,7 +2,8 @@ import os
 
 extensions = ["sphinx.ext.napoleon", "autoapi.extension", "sphinx.ext.viewcode",
               "sphinx.ext.todo",
-              "matplotlib.sphinxext.plot_directive"]
+              "matplotlib.sphinxext.plot_directive",
+              "sphinx.ext.inheritance_diagram"]
 
 project = "mapmetnet"
 copyright = "2026, MeteoSwiss"
@@ -50,7 +51,7 @@ html_theme_options = {
 # Disable left side navigation of specific pages, since they are empty
 # (BUG in theme: https://github.com/pydata/pydata-sphinx-theme/issues/1662)
 html_sidebars = {"usage": [], "changelog": [], "migration_guide": [], "site": [], "mean_sep": [],
-                 "network": [], "install": []}
+                 "install": [], "mapper": []}
 
 napoleon_use_param = False  # improve parameters description
 add_module_names = False  # avoid the display of redundant module names
