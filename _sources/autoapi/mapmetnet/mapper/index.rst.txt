@@ -1,0 +1,220 @@
+mapmetnet.mapper
+================
+
+.. py:module:: mapmetnet.mapper
+
+.. autoapi-nested-parse::
+
+   Copyright (c) 2026 MeteoSwiss, contributors listed in AUTHORS.
+
+   Distributed under the terms of the 3-Clause BSD License.
+
+   SPDX-License-Identifier: BSD-3-Clause
+
+   Module contains: mapper package classes
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   mapmetnet.mapper.logger
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   mapmetnet.mapper.Plotter
+   mapmetnet.mapper.Mapper
+   mapmetnet.mapper.NetworkMapper
+   mapmetnet.mapper.CountryMapper
+   mapmetnet.mapper.GBONMapper
+
+
+Module Contents
+---------------
+
+.. py:data:: logger
+
+.. py:class:: Plotter(when: str | None = None)
+
+   Great Great Great Grand Parent Mapper class, holding basic plotting utilities.
+
+
+   .. py:property:: fig
+      :type: matplotlib.figure.Figure
+
+
+      The Matplotlib figure instance holding the map.
+
+
+   .. py:property:: axs
+      :type: list
+
+
+      The list of Matplotlib axes holding the various figure elements.
+
+
+   .. py:method:: show() -> None
+      :staticmethod:
+
+
+      Wrapper around plt.show()
+
+
+
+   .. py:method:: savefig(fname: str | None, dpi: int | None = None) -> None
+      :staticmethod:
+
+
+      Wrapper around plt.savefig()
+
+
+
+.. py:class:: Mapper(lat: float, lon: float, extent: float | None)
+
+   Bases: :py:obj:`Plotter`
+
+
+   Great Grand Parent Mapper, class tuned for plotting a map with little else.
+
+
+   .. py:property:: ax_map
+      :type: cartopy.mpl.geoaxes.GeoAxes
+
+
+      The Matplotlib axis holding the map.
+
+
+   .. py:property:: ax_leg
+      :type: matplotlib.pyplot.Axes
+
+
+      The Matplotlib axis holding the legend.
+
+
+   .. py:property:: ax_clb
+      :type: matplotlib.pyplot.Axes
+
+
+      The Matplotlib axis holding the colorbar.
+
+
+   .. py:property:: true_lon_lims
+      :type: tuple
+
+
+      The longitude limits of the map.
+
+
+   .. py:property:: true_lat_lims
+      :type: tuple
+
+
+      The latitude limits of the map.
+
+
+.. py:class:: NetworkMapper(lat: float, lon: float, extent: float | None)
+
+   Bases: :py:obj:`Mapper`
+
+
+   Grand Parent Mapper class, designed to plot and characterize custom stations
+   from a given list.
+
+
+.. py:class:: CountryMapper(country_code: str, mrgid: int | None = None)
+
+   Bases: :py:obj:`NetworkMapper`
+
+
+   Parent Mapper class, tuned for focusing the plot on a specific country.
+
+
+   .. py:property:: country_code
+      :type: str
+
+
+      Country code as a 3 letter string.
+
+
+   .. py:property:: country
+
+      Return the target country Record.
+
+
+   .. py:property:: eez
+      :type: list
+
+
+      Return the list of EEZ geometries associated with the target country.
+
+
+   .. py:property:: mrgid
+      :type: int | None
+
+
+      Marine Regions Geographic IDentifier.
+
+
+   .. py:method:: get_surface_fraction(geom: shapely.geometry) -> float
+
+      Compute the target country's surface fraction of a given geometry.set
+
+      :Parameters: **geom** (*shapely geometry*) -- the geometry to assess
+
+      :returns:
+
+                the fraction of the target country's surface that is covered by the
+                    input geometry.
+      :rtype: float
+
+
+
+.. py:class:: GBONMapper(country_code: str, mrgid: int | None = None)
+
+   Bases: :py:obj:`CountryMapper`
+
+
+   Child Mapper class, tuned for automatically plotting a given country's GBON information.
+
+
+
+   .. py:method:: generate_map(figid: int = 1, pad_frac: float = 0.2, background: str | None = None, station_type: str = 'surface', var_name: str = 'temperature', interval: str = 'monthly', category: str = 'availability', date: str = '2026-01', wigos_ids: str | list | None = None, show_influence_area: bool = False, high_density: bool = False, show_country_names: bool = False, ref_radius: float | int | None = None, save_fmts: str | list | None = None, show: bool = False) -> str | None
+
+      All-in-one routine to generate a fully-fledged GBON Country map.
+
+      :Parameters: * **figid** (*int, optional*) -- the matplotlib figure ID.
+                     Will first close it if it already exists.
+                   * **pad_frac** (*float, optional*) -- padding fraction around the edges. Defaults to 0.1 (=10%).
+                   * **background** (*str, None*) -- map background. See :py:func:`Mapper._add_background` for
+                     supported options. Defaults to None.
+                   * **station_type** (*str*) -- either 'surface' or 'upper-air'.
+                   * **var_name** (*str*) -- name of variable, e.g. 'Temperature'.
+                   * **interval** (*str, optional*) -- assessment interval, i.e. one of
+                     ['monthly', 'daily', 'six_hour']. Defaults to 'monthly'.
+                   * **category** (*str, optional*) -- WDQMS category to query. Defaults to 'availability'.
+                   * **date** (*str, optional*) -- date of the availability assessment. Defaults to '2023-11'.
+                   * **wigos_ids** (*list, optional*) -- Defaults to None. If specified, will be combined with the
+                     country code using OR to select stations to be drawn.
+                   * **show_influence_area** (*bool, optional*) -- if True, will draw the baseline
+                     influence area of the network. Defaults to False.
+                   * **high_density** (*bool, optional*) -- if True, will use the GBON high-density
+                     (a.k.a "should") criteria for deriving the area of influence of stations.
+                   * **show_country_names** (*bool, optional*) -- if True, will draw the names of countries on the
+                     map. Defaults to False.
+                   * **ref_radius** (*int|float, optional*) -- if set, will draw a circle of 'ref_radius' km in
+                     radius around the capital.
+                   * **save_fmts** (*str|list, optional*) -- a str or list of str of formats to save the map to,
+                     e.g. ['pdf', 'png']. Defaults to None (= no figure saved).
+                   * **show** (*bool, optional*) -- if True, will call plt.show() at the end. Defaults to False.
+
+      :returns: the filename of the saved figure, if save_fmts was not None. Otherwise, None.
+      :rtype: str
+
+
+

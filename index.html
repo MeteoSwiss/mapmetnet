@@ -27,25 +27,25 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="_static/scripts/fontawesome.js?digest=7f76b32a3354e82990f2"></script>
+  <script defer src="_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
 
-    <script src="_static/documentation_options.js?v=bd7731dc"></script>
+    <script src="_static/documentation_options.js?v=f809a1b6"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.17.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.17.1';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = '_static/switcher_config.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
@@ -58,7 +58,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
-    <meta name="docbuild:last-update" content="2026-04-13"/>
+    <meta name="docbuild:last-update" content="2026-05-04"/>
   
     
     <script src="_static/searchtools.js"></script>
@@ -76,7 +76,9 @@
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -161,7 +163,7 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="network.html">
+  <a class="nav-link nav-internal" href="mapper.html">
     Network maps
   </a>
 </li>
@@ -310,7 +312,7 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="network.html">
+  <a class="nav-link nav-internal" href="mapper.html">
     Network maps
   </a>
 </li>
@@ -417,7 +419,7 @@
 <h1>mapmetnet<a class="headerlink" href="#mapmetnet" title="Link to this heading">#</a></h1>
 <p>Welcome to the documentation of <code class="docutils literal notranslate"><span class="pre">mapmetnet</span></code>. This Python library has 3 primary intended uses:</p>
 <ol class="arabic simple">
-<li><p>the assembly of meteorological <a class="reference internal" href="network.html"><span class="doc">network maps</span></a>,</p></li>
+<li><p>the assembly of meteorological <a class="reference internal" href="mapper.html"><span class="doc">network maps</span></a>,</p></li>
 <li><p>the computation of the <a class="reference internal" href="mean_sep.html"><span class="doc">horizontal resolution</span></a> (in the <a class="reference external" href="https://wmo.int/activities/global-basic-observing-network-gbon">GBON</a> sense) of a given network, and</p></li>
 <li><p>the generation of <a class="reference internal" href="site.html"><span class="doc">sat-view</span></a> diagrams for individual observing sites.</p></li>
 </ol>
@@ -433,7 +435,12 @@ contribute to the development of <code class="docutils literal notranslate"><spa
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="network.html">Network maps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mapper.html">Network maps</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mapper.html#gbon-network-maps">GBON network maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mapper.html#custom-network-maps">Custom network maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mapper.html#advanced-options">Advanced options</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="mean_sep.html">Horizontal resolution</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="mean_sep.html#tl-dr">tl;dr</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mean_sep.html#neighbors-where-art-thou">Neighbors, where art thou ?</a></li>
@@ -491,8 +498,8 @@ contribute to the development of <code class="docutils literal notranslate"><spa
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -500,10 +507,10 @@ contribute to the development of <code class="docutils literal notranslate"><spa
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-mapmetnet, version: dev-b0a3f67</div>
+mapmetnet, version: dev-118161e</div>
       
         <div class="footer-item"><p class="last-updated">
-  Last updated on 2026-04-13.
+  Last updated on 2026-05-04.
   <br/>
 </p></div>
       
@@ -526,7 +533,7 @@ mapmetnet, version: dev-b0a3f67</div>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.1.
 </p></div>
       
         <div class="footer-item">

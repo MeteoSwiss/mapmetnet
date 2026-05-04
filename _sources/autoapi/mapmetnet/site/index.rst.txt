@@ -39,7 +39,7 @@ Module Contents
 
 .. py:class:: Site(lat: float, lon: float, name: str | None = None)
 
-   Bases: :py:obj:`mapmetnet.core.Plotter`
+   Bases: :py:obj:`mapmetnet.mapper.Plotter`
 
 
    Parent Site class.
