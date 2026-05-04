@@ -28,11 +28,11 @@ EEZ_FN = 'eez_boundaries_v12.shp'
 
 #: dict: WDQMS color codes
 WDQMS_COLORS = {
-    'black': {'marker': 's', 'facecolor': 'k', 'edgecolor': 'w', 'hatch': 'xx',
-              'size': 30, 'label': 'No data'},
-    'red': {'marker': 'v', 'facecolor': 'firebrick', 'edgecolor': 'w', 'hatch': '//',
+    'black': {'marker': 'X', 'facecolor': 'k', 'edgecolor': 'w', 'hatch': 'xx',
+              'size': 40, 'label': 'No data'},
+    'red': {'marker': 's', 'facecolor': 'firebrick', 'edgecolor': 'w', 'hatch': '//',
             'size': 40, 'label': 'Issues (<30%)'},
-    'orange': {'marker': '^', 'facecolor': 'darkorange', 'edgecolor': 'w', 'hatch': '//',
+    'orange': {'marker': 'D', 'facecolor': 'darkorange', 'edgecolor': 'w', 'hatch': '//',
                'size': 40, 'label': 'Issues (≥30%)'},
     'green': {'marker': 'o', 'facecolor': 'limegreen', 'edgecolor': 'w', 'hatch': 'oo',
               'size': 40, 'label': 'Compliant (≥80%)'}}
