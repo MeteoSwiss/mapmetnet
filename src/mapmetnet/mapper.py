@@ -5,7 +5,7 @@ Distributed under the terms of the 3-Clause BSD License.
 
 SPDX-License-Identifier: BSD-3-Clause
 
-Module contains: core package classes
+Module contains: mapper package classes
 """
 
 # Import from Python
@@ -46,7 +46,7 @@ logger = logging.getLogger(__name__)
 
 
 class Plotter():
-    """ Great-grand Parent Plotter class, to hold basic plotting utilities. """
+    """ Great Great Great Grand Parent Mapper class, holding basic plotting utilities. """
 
     @log_func_call(logger)
     def __init__(self, when: str | None = None) -> None:
@@ -97,7 +97,7 @@ class Plotter():
 
 
 class Mapper(Plotter):
-    """ Grand-Parent Mapper class tuned for making a map with little else. """
+    """ Great Grand Parent Mapper, class tuned for plotting a map with little else. """
 
     @log_func_call(logger)
     def __init__(self, lat: float, lon: float, extent: float | None) -> None:
@@ -251,20 +251,21 @@ class Mapper(Plotter):
         """ Add a background to the map.
 
         Args:
-            which (str|None, optional): the background to add. If None (default), will use the
+            which (str | None, optional): the background to add. If None (default), will use the
                 default Natural Earth "land" feature. If 'ne', will use the Natural Earth Relief
                 tiles. If 'elevation', 'lightning', 'pop-density', 'croplands' or 'human-footprint',
                 will use the corresponding NASA GIBS layer. Defaults to None.
 
-
-        TODO: add link to docs in docstring
+        For more information on the different NASA GIBS layers, please refer to:
         https://nasa-gibs.github.io/gibs-api-docs/available-visualizations/#visualization-product-catalog
+
         """
 
         if which is None:
             # Use the Natural Earth "land" feature as default background.
             self.ax_map.add_feature(cfeature.OCEAN.with_scale('10m'))
-            self.ax_map.add_feature(cfeature.LAND.with_scale('10m'), facecolor=(0.95, 0.95, 0.95))
+            self.ax_map.add_feature(cfeature.LAND.with_scale('10m'),
+                                    facecolor=(0.95, 0.95, 0.95))
             # No colorbar required
             self.ax_clb.axis('off')
 
@@ -520,7 +521,8 @@ class Mapper(Plotter):
 
 
 class NetworkMapper(Mapper):
-    """ Child NetworkMapper class tuned to show stations from a given list. """
+    """ Grand Parent Mapper class, designed to plot and characterize custom stations
+    from a given list. """
 
     @set_mplstyle
     @log_func_call(logger)
@@ -638,7 +640,7 @@ class NetworkMapper(Mapper):
 
     @log_func_call(logger)
     def _link_neighbors(self, stations: pl.DataFrame,
-                        color: str | tuple = 'k',
+                        color: str | tuple = (0.35, 0.35, 0.35),
                         thres: float | None = None,
                         drop_not_so_bad: bool = False,
                         **kwargs: str) -> float:
@@ -693,7 +695,7 @@ class NetworkMapper(Mapper):
 
 
 class CountryMapper(NetworkMapper):
-    """ Parent Mapper class tuned for showing a given country with little else. """
+    """ Parent Mapper class, tuned for focusing the plot on a specific country. """
 
     @log_func_call(logger)
     def __init__(self, country_code: str, mrgid: int | None = None) -> None:
@@ -917,7 +919,7 @@ class CountryMapper(NetworkMapper):
 
 
 class GBONMapper(CountryMapper):
-    """ Child Station Mapper class tuned for showing a given country alongside specific GBON info.
+    """ Child Mapper class, tuned for automatically plotting a given country's GBON information.
     """
 
     @log_func_call(logger)
@@ -928,7 +930,7 @@ class GBONMapper(CountryMapper):
                    category: str = 'availability',
                    date: str = '2026-01',
                    iso_a3: str | None = None,
-                   wigos_ids: list | None = None,
+                   wigos_ids: str | list | None = None,
                    show_influence_area: bool = True,
                    high_density: bool = False) -> tuple[float, float | None]:
         """ Add all WDQMS station statistics of the target country to the map.
@@ -981,6 +983,8 @@ class GBONMapper(CountryMapper):
             iso_a3 = self.country_code
         if wigos_ids is None:
             wigos_ids = ['not-a-wigos-id']
+        elif isinstance(wigos_ids, str):
+            wigos_ids = [wigos_ids]
 
         # Filter the values as a function of country and WIGOS ids using the OR criteria
         pdf = pdf.filter((pl.col('country code') == iso_a3) |
@@ -1039,8 +1043,8 @@ class GBONMapper(CountryMapper):
                      interval: str = 'monthly',
                      category: str = 'availability',
                      date: str = '2026-01',
-                     wigos_ids: list | None = None,
-                     show_influence_area: bool = True,
+                     wigos_ids: str | list | None = None,
+                     show_influence_area: bool = False,
                      high_density: bool = False,
                      show_country_names: bool = False,
                      ref_radius: float | int | None = None,
@@ -1052,8 +1056,8 @@ class GBONMapper(CountryMapper):
             figid (int, optional): the matplotlib figure ID.
                 Will first close it if it already exists.
             pad_frac (float, optional): padding fraction around the edges. Defaults to 0.1 (=10%).
-            background (str, None): map background. Can be one of ['ne', 'pop_density'].
-                Defaults to None.
+            background (str, None): map background. See :py:func:`Mapper._add_background` for
+                supported options. Defaults to None.
             station_type (str): either 'surface' or 'upper-air'.
             var_name (str): name of variable, e.g. 'Temperature'.
             interval (str, optional): assessment interval, i.e. one of
@@ -1062,8 +1066,8 @@ class GBONMapper(CountryMapper):
             date (str, optional): date of the availability assessment. Defaults to '2023-11'.
             wigos_ids (list, optional): Defaults to None. If specified, will be combined with the
                 country code using OR to select stations to be drawn.
-            show_influence_area (bool, optional): if True (default), will draw the baseline
-                influence area of the network.
+            show_influence_area (bool, optional): if True, will draw the baseline
+                influence area of the network. Defaults to False.
             high_density (bool, optional): if True, will use the GBON high-density
                 (a.k.a "should") criteria for deriving the area of influence of stations.
             show_country_names (bool, optional): if True, will draw the names of countries on the
@@ -1104,6 +1108,8 @@ class GBONMapper(CountryMapper):
 
         if save_fmts is None:
             return None
+        elif isinstance(save_fmts, str):
+            save_fmts = [save_fmts]
 
         fn = f"GBON_map_{self.country_code}_{station_type}_{var_name.replace(' ', '-')}"
         if high_density:

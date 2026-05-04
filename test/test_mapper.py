@@ -5,14 +5,14 @@ Distributed under the terms of the 3-Clause BSD License.
 
 SPDX-License-Identifier: BSD-3-Clause
 
-Module content: tests for the core module
+Module content: tests for the mapper module
 """
 
 # Import from Python
 import pytest
 
 # Import from this package
-from mapmetnet.core import CountryMapper, GBONMapper
+from mapmetnet.mapper import CountryMapper, GBONMapper
 
 
 def test_countrymapper_init():

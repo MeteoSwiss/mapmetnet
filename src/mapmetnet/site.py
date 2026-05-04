@@ -29,7 +29,7 @@ from .errors import MapmetnetError
 from .hardcoded import WIDTH_TWOCOL
 from .copyright import build_copyright_statement
 from .utils import set_mplstyle, crosshair
-from .core import Plotter
+from .mapper import Plotter
 
 # Instantiate the module logger
 logger = logging.getLogger(__name__)

@@ -22,7 +22,7 @@ __version__ = getversion("mapmetnet")
 
 # Make sure users can do things like import mapmetnet -> mapmetnet.site.etc ...
 # Side note: this also fixes a warning with Sphinx related to duplicated loggers ...
-__all__ = ['site', 'core']
+__all__ = ['site', 'mapper']
 
 # Instantiate the module logger
 logger = logging.getLogger(__name__)
