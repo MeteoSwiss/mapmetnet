@@ -3,6 +3,7 @@ import os
 extensions = ["sphinx.ext.napoleon", "autoapi.extension", "sphinx.ext.viewcode",
               "sphinx.ext.todo",
               "matplotlib.sphinxext.plot_directive",
+              "sphinx.ext.graphviz",
               "sphinx.ext.inheritance_diagram"]
 
 project = "mapmetnet"
@@ -59,3 +60,6 @@ add_module_names = False  # avoid the display of redundant module names
 autoapi_dirs = ["../src/mapmetnet"]
 autoapi_options = ["members", "undoc-members", "show-inheritance", "show-module-summary",
                    "imported-members"]
+
+# Choose SVG for graphviz/inheritance diagram, so it auto-adjusts to the light/dark mode
+graphviz_output_format = 'svg'
