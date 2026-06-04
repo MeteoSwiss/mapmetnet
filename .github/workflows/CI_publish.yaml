@@ -35,8 +35,8 @@ jobs:
         python-version: 3.14
 
     # Graphviz is needed for the inheritance diagrams in the documentation
-    - name: Setup Graphviz
-      uses: ts-graphviz/setup-graphviz@v2
+    #- name: Setup Graphviz
+    #  uses: ts-graphviz/setup-graphviz@v2
 
     - name: Install poetry and python package
       run: |
