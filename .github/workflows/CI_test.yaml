@@ -26,11 +26,14 @@ jobs:
     - name: Checkout current repository
       uses: actions/checkout@v4
 
-
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+
+    # Graphviz is needed for the inheritance diagrams in the documentation
+    - name: Setup Graphviz
+      uses: ts-graphviz/setup-graphviz@v2
 
     - name: Install poetry
       run: |
