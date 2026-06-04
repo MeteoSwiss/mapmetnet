@@ -152,7 +152,7 @@ class Mapper(Plotter):
         return self._get_ax(2)
 
     @set_mplstyle
-    def _create_fig(self, figid: int | None = None) -> None:
+    def create_fig(self, figid: int | None = None) -> None:
         """ Creation of plotting areas.
 
         Args:
@@ -184,7 +184,7 @@ class Mapper(Plotter):
         self._axs = [ax0, axl, axc]
 
     @log_func_call(logger)
-    def _apply_extent(self) -> None:
+    def apply_extent(self) -> None:
         """ Set the map extent (symetric along N-S and E-W).
         """
 
@@ -193,12 +193,12 @@ class Mapper(Plotter):
             self.ax_map.set_extent(tuple(self._lon_lims)+tuple(self._lat_lims))
 
     @log_func_call(logger)
-    def _set_map_lims(self,
-                      lon_min: float | None = None,
-                      lon_max: float | None = None,
-                      lat_min: float | None = None,
-                      lat_max: float | None = None,
-                      squarify: bool = True) -> None:
+    def set_map_lims(self,
+                     lon_min: float | None = None,
+                     lon_max: float | None = None,
+                     lat_min: float | None = None,
+                     lat_max: float | None = None,
+                     squarify: bool = True) -> None:
         """ Adjust the map limits.
 
         Args:
@@ -230,7 +230,7 @@ class Mapper(Plotter):
         self._lat_lims = lat_lims
 
         # And apply them
-        self._apply_extent()
+        self.apply_extent()
 
     @property
     def true_lon_lims(self) -> tuple:
@@ -247,7 +247,7 @@ class Mapper(Plotter):
         return self.ax_map.get_extent(crs=ccrs.PlateCarree())[2:]
 
     @log_func_call(logger)
-    def _add_background(self, which: str | None = None) -> None:
+    def add_background(self, which: str | None = None) -> None:
         """ Add a background to the map.
 
         Args:
@@ -330,7 +330,7 @@ class Mapper(Plotter):
             raise MapmetnetError(f"Unknown background: {which}")
 
     @log_func_call(logger)
-    def _add_rivers_and_lakes(self) -> None:
+    def add_rivers_and_lakes(self) -> None:
         """ Add rivers and lakes to the map. """
 
         self.ax_map.add_feature(cfeature.RIVERS.with_scale('10m'))
@@ -338,7 +338,7 @@ class Mapper(Plotter):
         self._copyright['ne'] += ['rivers', 'lakes']
 
     @log_func_call(logger)
-    def _draw_border(self, item, is_disputed: bool = False) -> None:
+    def draw_border(self, item, is_disputed: bool = False) -> None:
         """ Draw a border on the map.
 
         Args:
@@ -394,32 +394,31 @@ class Mapper(Plotter):
                 ls=ls, lw=0.75)
 
     @log_func_call(logger)
-    def _add_borders(self) -> None:
+    def add_borders(self) -> None:
         """ Add the relevant borders on the map, including the disputed ones. """
 
         # Loop through all the boundary lines, and only deal with those that overlap with
         # the plotting area
         for item in get_ne_records(resolution='10m', category='cultural',
                                    name='admin_0_boundary_lines_land'):
-            self._draw_border(item, is_disputed=False)
+            self.draw_border(item, is_disputed=False)
 
         # Then, loop through the officially disputed area boundaries,
         # and draw these if applicable...
         for item in get_ne_records(resolution='10m', category='cultural',
                                    name='admin_0_boundary_lines_disputed_areas'):
 
-            self._draw_border(item, is_disputed=True)
+            self.draw_border(item, is_disputed=True)
 
         self._copyright['ne'] += ['borders']
 
     @log_func_call(logger)
-    def _add_coast(self) -> None:
+    def add_coast(self) -> None:
         """ Add the coastline to the map. """
         self.ax_map.add_feature(cfeature.COASTLINE.with_scale('10m'), edgecolor='k', lw=0.75)
 
     @log_func_call(logger)
-    def _highlight_country(self, iso_alpha3: str | list,
-                           show_names: bool = False) -> None:
+    def highlight_country(self, iso_alpha3: str | list, show_names: bool = False) -> None:
         """ Highlight a given set of countries on the map, by covering the other ones with
         a semi-transparent white layer.
 
@@ -472,7 +471,7 @@ class Mapper(Plotter):
                                      transform=ccrs.PlateCarree())
 
     @log_func_call(logger)
-    def _add_gridlines(self) -> None:
+    def add_gridlines(self) -> None:
         """ Add the lat/lon gridlines. """
 
         gl = self.ax_map.gridlines(draw_labels=True, ls='-', lw=0.25, color='k')
@@ -481,7 +480,7 @@ class Mapper(Plotter):
         gl.bottom_labels = False  # To make space for the copyright statement
 
     @log_func_call(logger)
-    def _add_copyright(self) -> None:
+    def add_copyright(self) -> None:
         """ Add the copyright notice, based on the content of self._copyright_statement. """
 
         self._copyright['mch'] = None
@@ -493,7 +492,7 @@ class Mapper(Plotter):
                          bbox={'boxstyle': 'Round', 'pad': 1, 'ec': 'k', 'fc': 'w'}, zorder=100)
 
     @log_func_call(logger)
-    def _add_legend(self) -> None:
+    def add_legend(self) -> None:
         """ Add the legend to to figure, based on the content of self._leg_handles. """
 
         self.ax_leg.legend(handles=[handle for (_, handle) in self._legend_handles.items()],
@@ -503,7 +502,7 @@ class Mapper(Plotter):
         self.ax_leg.axis('off')
 
     @log_func_call(logger)
-    def _add_title(self, title: str, subtitle: str | None = None) -> None:
+    def add_title(self, title: str, subtitle: str | None = None) -> None:
         """ Add a title (and posibly a subtitle) to the plot.
 
         Args:
@@ -526,13 +525,13 @@ class NetworkMapper(Mapper):
 
     @set_mplstyle
     @log_func_call(logger)
-    def _add_stations(self, stations: pl.DataFrame,
-                      influence_radius: float | int | None = None,
-                      facecolor: str | tuple = 'k',
-                      edgecolor: str | tuple = 'w',
-                      marker: str = 's', size: int = 30,
-                      label: str | None = None,
-                      ) -> shapely.geometry:
+    def add_stations(self, stations: pl.DataFrame,
+                     influence_radius: float | int | None = None,
+                     facecolor: str | tuple = 'k',
+                     edgecolor: str | tuple = 'w',
+                     marker: str = 's', size: int = 30,
+                     label: str | None = None,
+                     ) -> shapely.geometry:
         """ Add a series of stations to the map.
 
         Args:
@@ -613,7 +612,7 @@ class NetworkMapper(Mapper):
         return combined_geoms, intersect_geoms
 
     @log_func_call(logger)
-    def _add_geom_union_outline(self, geoms: list, label: str | None = None) -> None:
+    def add_geom_union_outline(self, geoms: list, label: str | None = None) -> None:
         """ Given a list of geometries, draw the outline of their union.
 
         Args:
@@ -639,11 +638,11 @@ class NetworkMapper(Mapper):
                                label=f'{label}')
 
     @log_func_call(logger)
-    def _link_neighbors(self, stations: pl.DataFrame,
-                        color: str | tuple = (0.35, 0.35, 0.35),
-                        thres: float | None = None,
-                        drop_not_so_bad: bool = False,
-                        **kwargs: str) -> float:
+    def link_neighbors(self, stations: pl.DataFrame,
+                       color: str | tuple = (0.35, 0.35, 0.35),
+                       thres: float | None = None,
+                       drop_not_so_bad: bool = False,
+                       **kwargs: str) -> float:
         """ Given a set of stations, compute the neighbors and draw the connection on the map.
 
         Args:
@@ -777,13 +776,13 @@ class CountryMapper(NetworkMapper):
         return self._mrgid
 
     @log_func_call(logger)
-    def _set_map_lims(self,
-                      lon_min: float | None = None,
-                      lon_max: float | None = None,
-                      lat_min: float | None = None,
-                      lat_max: float | None = None,
-                      squarify: bool = True,
-                      pad_frac: float = 0.1) -> None:
+    def set_map_lims(self,
+                     lon_min: float | None = None,
+                     lon_max: float | None = None,
+                     lat_min: float | None = None,
+                     lat_max: float | None = None,
+                     squarify: bool = True,
+                     pad_frac: float = 0.1) -> None:
         """ Adjust the map limits.
 
         Args:
@@ -800,12 +799,12 @@ class CountryMapper(NetworkMapper):
         self._lat_lims = utils.pad_angular_range(self._lat_lims, pad_frac)
 
         # Then use the Parent method to apply the other requests
-        super()._set_map_lims(lon_min=lon_min, lon_max=lon_max, lat_min=lat_min, lat_max=lat_max,
-                              squarify=squarify)
+        super().set_map_lims(lon_min=lon_min, lon_max=lon_max, lat_min=lat_min, lat_max=lat_max,
+                             squarify=squarify)
 
     @log_func_call(logger)
-    def _highlight_country(self, iso_alpha3: str | list | None = None,
-                           show_names: bool = False) -> None:
+    def highlight_country(self, iso_alpha3: str | list | None = None,
+                          show_names: bool = False) -> None:
         """ Highlight a given (set of) country(ies) on the map, by covering the other ones with a
         semi-transparent white layer.
 
@@ -822,10 +821,10 @@ class CountryMapper(NetworkMapper):
             iso_alpha3 = self.country_code
 
         # Call the relevant Parent method to do the actual work
-        super()._highlight_country(iso_alpha3=iso_alpha3, show_names=show_names)
+        super().highlight_country(iso_alpha3=iso_alpha3, show_names=show_names)
 
     @log_func_call(logger)
-    def _add_eez(self) -> None:
+    def add_eez(self) -> None:
         """ Add the EEZ Maritime boundaries. """
 
         if len(self.eez) == 0:
@@ -856,7 +855,7 @@ class CountryMapper(NetworkMapper):
         self._copyright['eez'] = None
 
     @log_func_call(logger)
-    def _add_capital(self, ref_radius: int | float | None = None) -> None:
+    def add_capital(self, ref_radius: int | float | None = None) -> None:
         """ Add a marker for the target country's capital city. Optionally draw a reference circle
         around it.
 
@@ -923,16 +922,16 @@ class GBONMapper(CountryMapper):
     """
 
     @log_func_call(logger)
-    def _add_wdqms(self,
-                   station_type: str = 'surface',
-                   var_name: str = 'temperature',
-                   interval: str = 'monthly',
-                   category: str = 'availability',
-                   date: str = '2026-01',
-                   iso_a3: str | None = None,
-                   wigos_ids: str | list | None = None,
-                   show_influence_area: bool = True,
-                   high_density: bool = False) -> tuple[float, float | None]:
+    def add_wdqms(self,
+                  station_type: str = 'surface',
+                  var_name: str = 'temperature',
+                  interval: str = 'monthly',
+                  category: str = 'availability',
+                  date: str = '2026-01',
+                  iso_a3: str | None = None,
+                  wigos_ids: str | list | None = None,
+                  show_influence_area: bool = True,
+                  high_density: bool = False) -> tuple[float, float | None]:
         """ Add all WDQMS station statistics of the target country to the map.
 
         Args:
@@ -1001,11 +1000,11 @@ class GBONMapper(CountryMapper):
 
             # Draw the stations
             if len(sub_pdf) > 0:
-                geom, _ = self._add_stations(sub_pdf, influence_radius=influence_radius,
-                                             facecolor=lvls[1]['facecolor'],
-                                             edgecolor=lvls[1]['edgecolor'],
-                                             marker=lvls[1]['marker'], size=lvls[1]['size'],
-                                             label=lvls[1]['label'])
+                geom, _ = self.add_stations(sub_pdf, influence_radius=influence_radius,
+                                            facecolor=lvls[1]['facecolor'],
+                                            edgecolor=lvls[1]['edgecolor'],
+                                            marker=lvls[1]['marker'], size=lvls[1]['size'],
+                                            label=lvls[1]['label'])
 
                 # Store the geomettry for later
                 combined_geoms += [geom]
@@ -1017,7 +1016,7 @@ class GBONMapper(CountryMapper):
         # Let's add the network horizontal resolution to the legend ...
         # ... after we compute it, evidently.
         # TODO: allow to differentiate between land and marine stations ...
-        mean_sep = self._link_neighbors(pdf, thres=wmoutils.gbon.get_resolution(
+        mean_sep = self.link_neighbors(pdf, thres=wmoutils.gbon.get_resolution(
             station_type, high_density=high_density))
         self._legend_handles['mean_sep'] = mlines.Line2D(
                 [], [], color='none', ls='-', label=f'Mean sep.: {mean_sep:.1f} km')
@@ -1026,7 +1025,7 @@ class GBONMapper(CountryMapper):
         # ... draw the outline ...
         # ... and add the relevant entry to the legend.
         if influence_radius is not None:
-            self._add_geom_union_outline(combined_geoms)
+            self.add_geom_union_outline(combined_geoms)
             cov_frac = self.get_surface_fraction(shapely.union_all(combined_geoms))
             self._legend_handles['coverage'] = mlines.Line2D(
                 [], [], color='none', ls='-', label=f'{iso_a3} coverage: {cov_frac:.1%}')
@@ -1067,7 +1066,7 @@ class GBONMapper(CountryMapper):
             wigos_ids (list, optional): Defaults to None. If specified, will be combined with the
                 country code using OR to select stations to be drawn.
             show_influence_area (bool, optional): if True, will draw the baseline
-                influence area of the network. Defaults to False.
+                influence area of each station. Defaults to False.
             high_density (bool, optional): if True, will use the GBON high-density
                 (a.k.a "should") criteria for deriving the area of influence of stations.
             show_country_names (bool, optional): if True, will draw the names of countries on the
@@ -1081,30 +1080,49 @@ class GBONMapper(CountryMapper):
         Returns:
             str: the filename of the saved figure, if save_fmts was not None. Otherwise, None.
 
+        Note:
+            The concept of **baseline area of influence** for a GBON station was introduced by
+            `Vogt et al., 2024`_, to which we refer the interested reader for details (see their
+            Appendix A). In short, it corresponds to the area in the immediate vicinty of a station
+            for which the GBON requirements (in terms station proximity) are met.
+
+            By setting ``show_influence_area`` to True, the map will include a visual representation
+            of the GBON baseline area of influence of every station. It will also add to the legend
+            the percentage of the country that is covered by the combined GBON baseline area of
+            influence of the total network.
+
+            While this criteria (i.e. total country coverage) is NOT a formal GBON requirement per
+            se (only the mean station separation is), we believe that it can still serve as a
+            ueful indicator of the extent to which a given country is effectively covered by the
+            GBON network, and which region, if any, may benefit most from the addition of new
+            stations.
+
+            .. _Vogt et al., 2024: https://www.un-soff.org/wp-content/uploads/2025/02/Democratic-Republic-of-Congo-GBON-National-Gap-Analysis.pdf.
+
+
         """
 
-        self._create_fig(figid=figid)
-        self._set_map_lims(pad_frac=pad_frac, squarify=True)
-        self._apply_extent()
-        self._add_background(which=background)
-        self._add_rivers_and_lakes()
-        self._add_borders()
-        self._highlight_country(show_names=show_country_names)
-        self._add_coast()
-        self._add_capital(ref_radius=ref_radius)
-        self._add_eez()
-        self._add_gridlines()
-        _ = self._add_wdqms(station_type=station_type, var_name=var_name, interval=interval,
-                            category=category,
-                            date=date, wigos_ids=wigos_ids,
-                            high_density=high_density,
-                            show_influence_area=show_influence_area)
-        self._add_copyright()
-        self._add_legend()
+        self.create_fig(figid=figid)  # ... from Mapper class
+        self.set_map_lims(pad_frac=pad_frac, squarify=True)  # ... from CountryMapper <- Mapper class
+        self.add_background(which=background)  # ... from Mapper class
+        self.add_rivers_and_lakes()  # ... from Mapper class
+        self.add_borders()  # ... from Mapper class
+        self.highlight_country(show_names=show_country_names)  # ... from CountryMapper <- Mapper class
+        self.add_coast()  # ... from Mapper class
+        self.add_capital(ref_radius=ref_radius)  # ... from CountryMapper class
+        self.add_eez()  # ... from CountryMapper class
+        self.add_gridlines()  # ... from Mapper class
+        _ = self.add_wdqms(station_type=station_type, var_name=var_name, interval=interval,
+                           category=category,
+                           date=date, wigos_ids=wigos_ids,
+                           high_density=high_density,
+                           show_influence_area=show_influence_area)  # ... from GBONMapper class
+        self.add_copyright()  # ... from Mapper class
+        self.add_legend()  # ... from Mapper class
         hd_txt = ', high-density' if high_density else ''
-        self._add_title(f'GBON compliance\n({station_type}{hd_txt})',
-                        subtitle=f'{format_var_name(var_name)}\n{interval} {category} ({date})' +
-                        '\n\nSource: https://wdqms.wmo.int/\n')
+        self.add_title(f'GBON compliance\n({station_type}{hd_txt})',
+                       subtitle=f'{format_var_name(var_name)}\n{interval} {category} ({date})' +
+                       '\n\nSource: https://wdqms.wmo.int/\n')  # ... from Mapper class
 
         if save_fmts is None:
             return None
@@ -1119,9 +1137,9 @@ class GBONMapper(CountryMapper):
         fn += f"_availability_{interval}_{date}_{background.replace('_', '-')}"
 
         for fmt in save_fmts:
-            self.savefig(fn + f'.{fmt}', dpi=300)
+            self.savefig(fn + f'.{fmt}', dpi=300)  # ... from Plotter class
 
         if show:
-            self.show()
+            self.show()  # ... from Plotter class
 
         return fn
