@@ -104,6 +104,34 @@ Module Contents
       The Matplotlib axis holding the colorbar.
 
 
+   .. py:method:: create_fig(figid: int | None = None) -> None
+
+      Creation of plotting areas.
+
+      :Parameters: **figid** (*int, optional*) -- the matplotlib figure ID.
+                   Will first close it if it already exists.
+
+
+
+   .. py:method:: apply_extent() -> None
+
+      Set the map extent (symetric along N-S and E-W).
+
+
+
+
+   .. py:method:: set_map_lims(lon_min: float | None = None, lon_max: float | None = None, lat_min: float | None = None, lat_max: float | None = None, squarify: bool = True) -> None
+
+      Adjust the map limits.
+
+      :Parameters: * **lon_min** (*foat, optional*) -- if set, will override the minimum longitude of the map.
+                   * **lon_max** (*foat, optional*) -- if set, will override the maximum longitude of the map.
+                   * **lat_min** (*foat, optional*) -- if set, will override the minimum latitude of the map.
+                   * **lat_max** (*foat, optional*) -- if set, will override the maximum latitude of the map.
+                   * **squarify** (*bool, optional*) -- if True, the map will be squarified. Defaults to True.
+
+
+
    .. py:property:: true_lon_lims
       :type: tuple
 
@@ -118,6 +146,97 @@ Module Contents
       The latitude limits of the map.
 
 
+   .. py:method:: add_background(which: str | None = None) -> None
+
+      Add a background to the map.
+
+      :Parameters: **which** (*str | None, optional*) -- the background to add. If None (default), will use the
+                   default Natural Earth "land" feature. If 'ne', will use the Natural Earth Relief
+                   tiles. If 'elevation', 'lightning', 'pop-density', 'croplands' or 'human-footprint',
+                   will use the corresponding NASA GIBS layer. Defaults to None.
+
+      For more information on the different NASA GIBS layers, please refer to:
+      https://nasa-gibs.github.io/gibs-api-docs/available-visualizations/#visualization-product-catalog
+
+
+
+
+   .. py:method:: add_rivers_and_lakes() -> None
+
+      Add rivers and lakes to the map.
+
+
+
+   .. py:method:: draw_border(item, is_disputed: bool = False) -> None
+
+      Draw a border on the map.
+
+      :Parameters: * **item** -- a Natural Earth record containing the geometry to add, and the relevant
+                     attributes to build the legend handle.
+                   * **is_disputed** (*bool, optional*) -- if True, the border will be drawn with a dotted line
+                     anbd tagged accordingly.
+
+      .. Warning::
+          This function is used both for the regular borders and the disputed area borders, and
+          it assesses the nature of the border based on both the Natural Earth attributes and
+          the ISO attributes. If any of these sources flags a border as disputed, then it will
+          be drawn as such, and a warning will be triggered to make sure the user is aware of
+          this.
+
+
+
+
+   .. py:method:: add_borders() -> None
+
+      Add the relevant borders on the map, including the disputed ones.
+
+
+
+   .. py:method:: add_coast() -> None
+
+      Add the coastline to the map.
+
+
+
+   .. py:method:: highlight_country(iso_alpha3: str | list, show_names: bool = False) -> None
+
+      Highlight a given set of countries on the map, by covering the other ones with
+      a semi-transparent white layer.
+
+      :Parameters: * **iso_alpha3** (*str | list*) -- the 3-letter ISO code of the country (or countries) to
+                     highlight.
+                   * **show_names** (*bool, optional*) -- if True, will display the names of non-highlighted
+                     countries. Defaults to False.
+
+
+
+   .. py:method:: add_gridlines() -> None
+
+      Add the lat/lon gridlines.
+
+
+
+   .. py:method:: add_copyright() -> None
+
+      Add the copyright notice, based on the content of self._copyright_statement.
+
+
+
+   .. py:method:: add_legend() -> None
+
+      Add the legend to to figure, based on the content of self._leg_handles.
+
+
+
+   .. py:method:: add_title(title: str, subtitle: str | None = None) -> None
+
+      Add a title (and posibly a subtitle) to the plot.
+
+      :Parameters: * **title** (*str*) -- the title.
+                   * **subtitle** (*str, optional*) -- the subtitle.
+
+
+
 .. py:class:: NetworkMapper(lat: float, lon: float, extent: float | None)
 
    Bases: :py:obj:`Mapper`
@@ -125,6 +244,56 @@ Module Contents
 
    Grand Parent Mapper class, designed to plot and characterize custom stations
    from a given list.
+
+
+   .. py:method:: add_stations(stations: polars.DataFrame, influence_radius: float | int | None = None, facecolor: str | tuple = 'k', edgecolor: str | tuple = 'w', marker: str = 's', size: int = 30, label: str | None = None) -> shapely.geometry
+
+      Add a series of stations to the map.
+
+      :Parameters: * **stations** (*polars.DataFrame*) -- DataFrame of stations to plot. Must contain the columns
+                     'longitude' and 'latitude' at the very least.
+                   * **influence_radius** (*int|float, optional*) -- influence radius of each station, in km.
+                     Defaults to None, in which case no radius will be drawn.
+                   * **facecolor** (*str|tuple, optional*) -- marker facecolor.
+                   * **edgecolor** (*str|tuple, optional*) -- marker edgecolor.
+                   * **marker** (*str, optional*) -- marker shape, fed to scatter(). If None, then no points are
+                     drawn.
+                   * **size** (*int, optional*) -- marker size, in pts, fed to scatter().
+                   * **label** (*str|tuple, optional*) -- station label. Defaults to None (= no legend).
+                   * **legend** (*str, optional*) -- if 'generic', the country overlap values will not be shown.
+                     Useful for regional maps. Defaults to 'specific'.
+
+      Returns: (shapely.geometry, area) - a tuple of the combined gemoetry of all the station
+          areas of influence, and country fractional area covered by the stations.
+
+
+
+
+   .. py:method:: add_geom_union_outline(geoms: list, label: str | None = None) -> None
+
+      Given a list of geometries, draw the outline of their union.
+
+      :Parameters: * **geoms** (*list*) -- list of shapely geometries to merge before drawing their outline.
+                   * **label** (*str, optional*) -- label of the union. Defaults to None (= no legend).
+
+
+
+   .. py:method:: link_neighbors(stations: polars.DataFrame, color: str | tuple = (0.35, 0.35, 0.35), thres: float | None = None, drop_not_so_bad: bool = False, **kwargs: str) -> float
+
+      Given a set of stations, compute the neighbors and draw the connection on the map.
+
+      :Parameters: * **stations** (*polars.DataFrame*) -- DataFrame of stations to plot. Must contain the columns
+                     'longitude' and 'latitude' at the very least.
+                   * **color** (*str|tuple, optional*) -- line color. Defaults to 'k'.
+                   * **thres** (*float, optional*) -- if set, vertices longer than this value (in km) will be drawned
+                     with dashes instead.
+                   * **drop_not_so_bad** (*bool, optional*) -- if True, the not_so_bad vertices will be ignored.
+                     Defaults to False.
+                   * **\*\*kwargs** (*optional*) -- all other arguments will be fed to the plot() function.
+
+      :returns: the mean separation between stations.
+      :rtype: float
+
 
 
 .. py:class:: CountryMapper(country_code: str, mrgid: int | None = None)
@@ -161,6 +330,47 @@ Module Contents
       Marine Regions Geographic IDentifier.
 
 
+   .. py:method:: set_map_lims(lon_min: float | None = None, lon_max: float | None = None, lat_min: float | None = None, lat_max: float | None = None, squarify: bool = True, pad_frac: float = 0.1) -> None
+
+      Adjust the map limits.
+
+      :Parameters: * **pad_frac** (*float, optional*) -- padding fraction around the edges. Defaults to 0.1 (=10%).
+                   * **lon_min** (*foat, optional*) -- if set, will override the minimum longitude of the map.
+                   * **lon_max** (*foat, optional*) -- if set, will override the maximum longitude of the map.
+                   * **lat_min** (*foat, optional*) -- if set, will override the minimum latitude of the map.
+                   * **lat_max** (*foat, optional*) -- if set, will override the maximum latitude of the map.
+                   * **squarify** (*bool, optional*) -- if True, the map will be squarified. Defaults to True.
+
+
+
+   .. py:method:: highlight_country(iso_alpha3: str | list | None = None, show_names: bool = False) -> None
+
+      Highlight a given (set of) country(ies) on the map, by covering the other ones with a
+      semi-transparent white layer.
+
+      :Parameters: * **iso_alpha3** (*str | list | None, optional*) -- the 3-letter ISO code of the country
+                     (or countries) to highlight. If None (default), will use self.country_code.
+                   * **show_names** (*bool, optional*) -- if True, will display the names of neighboring countries.
+                     Defaults to False.
+
+
+
+   .. py:method:: add_eez() -> None
+
+      Add the EEZ Maritime boundaries.
+
+
+
+   .. py:method:: add_capital(ref_radius: int | float | None = None) -> None
+
+      Add a marker for the target country's capital city. Optionally draw a reference circle
+      around it.
+
+      :Parameters: **ref_radius** (*int|float, optional*) -- if set, will draw a circle of 'ref_radius' km in
+                   radius around the capital. Defaults to None.
+
+
+
    .. py:method:: get_surface_fraction(geom: shapely.geometry) -> float
 
       Compute the target country's surface fraction of a given geometry.set
@@ -184,6 +394,36 @@ Module Contents
 
 
 
+   .. py:method:: add_wdqms(station_type: str = 'surface', var_name: str = 'temperature', interval: str = 'monthly', category: str = 'availability', date: str = '2026-01', iso_a3: str | None = None, wigos_ids: str | list | None = None, show_influence_area: bool = True, high_density: bool = False) -> tuple[float, float | None]
+
+      Add all WDQMS station statistics of the target country to the map.
+
+      :Parameters: * **station_type** (*str, optional*) -- either 'surface' (default) or 'upper-air'.
+                   * **var_name** (*str, optional*) -- name of variable to plot. Defaults to 'temperature'.
+                   * **interval** (*str, optional*) -- assessment interval, i.e. one of
+                     ['monthly', 'daily', 'six_hour']. Defaults to 'monthly'.
+                   * **category** (*str, optional*) -- assessment category. Defaults to 'availability'.
+                   * **date** (*str, optional*) -- date of the availability assessment. Defaults to '2023-11'.
+                   * **iso_a3** (*str, optional*) -- station country code as ISO alpha 3.
+                     Defaults to None = target country.
+                   * **wigos_ids** (*list, optional*) -- Defaults to None. If specified, will be combined with the
+                     country code using OR to select stations to be drawn.
+                   * **show_influence_area** (*bool, optional*) -- if True (default), will draw the baseline
+                     influence area of the network.
+                   * **high_density** (*bool, optional*) -- if True, will use the GBON high-density
+                     (a.k.a "should") criteria for deriving the area of influence of stations.
+
+      :returns: the network horizontal resolution and country coverage fraction
+      :rtype: float, float
+
+      .. todo::
+
+         - allow users to select the high-density/sea parameters for the influence area.
+         - allow users to feed parameters to _link_neighbors().
+         - clarify var_name for upper-stations (should be None).
+
+
+
    .. py:method:: generate_map(figid: int = 1, pad_frac: float = 0.2, background: str | None = None, station_type: str = 'surface', var_name: str = 'temperature', interval: str = 'monthly', category: str = 'availability', date: str = '2026-01', wigos_ids: str | list | None = None, show_influence_area: bool = False, high_density: bool = False, show_country_names: bool = False, ref_radius: float | int | None = None, save_fmts: str | list | None = None, show: bool = False) -> str | None
 
       All-in-one routine to generate a fully-fledged GBON Country map.
@@ -202,7 +442,7 @@ Module Contents
                    * **wigos_ids** (*list, optional*) -- Defaults to None. If specified, will be combined with the
                      country code using OR to select stations to be drawn.
                    * **show_influence_area** (*bool, optional*) -- if True, will draw the baseline
-                     influence area of the network. Defaults to False.
+                     influence area of each station. Defaults to False.
                    * **high_density** (*bool, optional*) -- if True, will use the GBON high-density
                      (a.k.a "should") criteria for deriving the area of influence of stations.
                    * **show_country_names** (*bool, optional*) -- if True, will draw the names of countries on the
@@ -215,6 +455,26 @@ Module Contents
 
       :returns: the filename of the saved figure, if save_fmts was not None. Otherwise, None.
       :rtype: str
+
+      .. note::
+
+         The concept of **baseline area of influence** for a GBON station was introduced by
+         `Vogt et al., 2024`_, to which we refer the interested reader for details (see their
+         Appendix A). In short, it corresponds to the area in the immediate vicinty of a station
+         for which the GBON requirements (in terms station proximity) are met.
+         
+         By setting ``show_influence_area`` to True, the map will include a visual representation
+         of the GBON baseline area of influence of every station. It will also add to the legend
+         the percentage of the country that is covered by the combined GBON baseline area of
+         influence of the total network.
+         
+         While this criteria (i.e. total country coverage) is NOT a formal GBON requirement per
+         se (only the mean station separation is), we believe that it can still serve as a
+         ueful indicator of the extent to which a given country is effectively covered by the
+         GBON network, and which region, if any, may benefit most from the addition of new
+         stations.
+         
+         .. _Vogt et al., 2024: https://www.un-soff.org/wp-content/uploads/2025/02/Democratic-Republic-of-Congo-GBON-National-Gap-Analysis.pdf.
 
 
 

@@ -9,4 +9,5 @@ che_map.generate_map(figid=1,
                      category='availability',
                      date='2026-04-13',
                      high_density=True,
+                     show_influence_area=False,
                      show=True)

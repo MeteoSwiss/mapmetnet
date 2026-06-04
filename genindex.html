@@ -26,25 +26,25 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
 
-    <script src="_static/documentation_options.js?v=e9a3d2cf"></script>
+    <script src="_static/documentation_options.js?v=902ab7fc"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'genindex';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.17.1';
+        DOCUMENTATION_OPTIONS.theme_version = '0.18.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = '_static/switcher_config.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
@@ -56,7 +56,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
-    <meta name="docbuild:last-update" content="2026-05-05"/>
+    <meta name="docbuild:last-update" content="2026-06-04"/>
   
     
     <script src="_static/searchtools.js"></script>
@@ -225,11 +225,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
         <div class="navbar-item">
 <div class="version-switcher__container dropdown pst-js-only">
@@ -355,11 +362,18 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
           <div class="navbar-item">
 <div class="version-switcher__container dropdown pst-js-only">
@@ -420,9 +434,11 @@
  <a href="#A"><strong>A</strong></a>
  | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
@@ -437,12 +453,40 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.Mapper.add_background">add_background() (Mapper method)</a>
+</li>
+      <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.Mapper.add_borders">add_borders() (Mapper method)</a>
+</li>
+      <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.CountryMapper.add_capital">add_capital() (CountryMapper method)</a>
+</li>
+      <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.Mapper.add_coast">add_coast() (Mapper method)</a>
+</li>
+      <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.Mapper.add_copyright">add_copyright() (Mapper method)</a>
+</li>
+      <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.CountryMapper.add_eez">add_eez() (CountryMapper method)</a>
+</li>
+      <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.NetworkMapper.add_geom_union_outline">add_geom_union_outline() (NetworkMapper method)</a>
+</li>
+      <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.Mapper.add_gridlines">add_gridlines() (Mapper method)</a>
+</li>
+      <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.Mapper.add_legend">add_legend() (Mapper method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.Mapper.add_rivers_and_lakes">add_rivers_and_lakes() (Mapper method)</a>
+</li>
+      <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.NetworkMapper.add_stations">add_stations() (NetworkMapper method)</a>
+</li>
+      <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.Mapper.add_title">add_title() (Mapper method)</a>
+</li>
+      <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.GBONMapper.add_wdqms">add_wdqms() (GBONMapper method)</a>
+</li>
+      <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.Mapper.apply_extent">apply_extent() (Mapper method)</a>
+</li>
       <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.Mapper.ax_clb">ax_clb (Mapper property)</a>
 </li>
       <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.Mapper.ax_leg">ax_leg (Mapper property)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.Mapper.ax_map">ax_map (Mapper property)</a>
 </li>
       <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.Plotter.axs">axs (Plotter property)</a>
@@ -465,13 +509,23 @@
 </li>
       <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.CountryMapper.country">country (CountryMapper property)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.CountryMapper.country_code">country_code (CountryMapper property)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.CountryMapper">CountryMapper (class in mapmetnet.mapper)</a>
 </li>
+      <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.Mapper.create_fig">create_fig() (Mapper method)</a>
+</li>
       <li><a href="autoapi/mapmetnet/utils/index.html#mapmetnet.utils.crosshair">crosshair() (in module mapmetnet.utils)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.Mapper.draw_border">draw_border() (Mapper method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -548,6 +602,18 @@
   </ul></td>
 </tr></table>
 
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.CountryMapper.highlight_country">highlight_country() (CountryMapper method)</a>
+
+      <ul>
+        <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.Mapper.highlight_country">(Mapper method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -559,6 +625,8 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.NetworkMapper.link_neighbors">link_neighbors() (NetworkMapper method)</a>
+</li>
       <li><a href="autoapi/mapmetnet/logger/index.html#mapmetnet.logger.log_func_call">log_func_call() (in module mapmetnet.logger)</a>
 </li>
       <li><a href="autoapi/mapmetnet/copyright/index.html#mapmetnet.copyright.logger">logger (in module mapmetnet.copyright)</a>
@@ -736,12 +804,18 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.Plotter.savefig">savefig() (Plotter static method)</a>
 </li>
-      <li><a href="autoapi/mapmetnet/utils/index.html#mapmetnet.utils.set_mplstyle">set_mplstyle() (in module mapmetnet.utils)</a>
+      <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.CountryMapper.set_map_lims">set_map_lims() (CountryMapper method)</a>
+
+      <ul>
+        <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.Mapper.set_map_lims">(Mapper method)</a>
 </li>
-      <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.Plotter.show">show() (Plotter static method)</a>
+      </ul></li>
+      <li><a href="autoapi/mapmetnet/utils/index.html#mapmetnet.utils.set_mplstyle">set_mplstyle() (in module mapmetnet.utils)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.Plotter.show">show() (Plotter static method)</a>
+</li>
       <li><a href="autoapi/mapmetnet/site/index.html#mapmetnet.site.Site">Site (class in mapmetnet.site)</a>
 </li>
       <li><a href="autoapi/mapmetnet/site/index.html#mapmetnet.site.Site.site_view">site_view() (Site method)</a>
@@ -816,8 +890,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -825,10 +899,10 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-mapmetnet, version: dev-8fba869</div>
+mapmetnet, version: dev-b126caf</div>
       
         <div class="footer-item"><p class="last-updated">
-  Last updated on 2026-05-05.
+  Last updated on 2026-06-04.
   <br/>
 </p></div>
       
@@ -851,7 +925,7 @@ mapmetnet, version: dev-8fba869</div>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.18.0.
 </p></div>
       
         <div class="footer-item">
