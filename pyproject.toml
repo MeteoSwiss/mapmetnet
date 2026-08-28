@@ -56,6 +56,9 @@ Repository = "https://github.com/MeteoSwiss/mapmetnet/"
 Issues = "https://github.com/MeteoSwiss/mapmetnet/issues"
 Changelog = "https://github.com/MeteoSwiss/mapmetnet/blob/main/CHANGELOG.rst"
 
+[project.scripts]
+mapmetnet = "mapmetnet.hlep:info"
+
 [dependency-groups]
 dev = [
     "mypy (>=1.18.1)",
@@ -72,6 +75,7 @@ dev = [
 include = [
     {path = 'src/mapmetnet/data/mpl_styles'},
     {path = 'src/mapmetnet/data/eez/README.md'},
+    {path = 'src/mapmetnet/data/backgrounds/README.md'},
 ]
 
 [tool.yapf]
