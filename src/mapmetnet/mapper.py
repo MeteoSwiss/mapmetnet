@@ -530,6 +530,7 @@ class NetworkMapper(Mapper):
                      facecolor: str | tuple = 'k',
                      edgecolor: str | tuple = 'w',
                      marker: str = 's', size: int = 30,
+                     linewidth: float = 0.5,
                      label: str | None = None,
                      ) -> shapely.geometry:
         """ Add a series of stations to the map.
@@ -544,6 +545,7 @@ class NetworkMapper(Mapper):
             marker (str, optional): marker shape, fed to scatter(). If None, then no points are
                 drawn.
             size (int, optional): marker size, in pts, fed to scatter().
+            linewidth (float, optional): marker edge linewidth, fed to scatter().
             label (str|tuple, optional): station label. Defaults to None (= no legend).
             legend (str, optional): if 'generic', the country overlap values will not be shown.
                 Useful for regional maps. Defaults to 'specific'.
@@ -559,7 +561,7 @@ class NetworkMapper(Mapper):
                                 stations.get_column('latitude').to_numpy(),
                                 marker=marker, facecolor=facecolor, s=size,
                                 edgecolor=edgecolor, transform=ccrs.PlateCarree(),
-                                linewidth=0.5,
+                                linewidth=linewidth,
                                 zorder=101)
 
             # Deal with the legend if warranted
@@ -1102,16 +1104,16 @@ class GBONMapper(CountryMapper):
 
         """
 
-        self.create_fig(figid=figid)  # ... from Mapper class
-        self.set_map_lims(pad_frac=pad_frac, squarify=True)  # ... from CountryMapper <- Mapper class
-        self.add_background(which=background)  # ... from Mapper class
-        self.add_rivers_and_lakes()  # ... from Mapper class
-        self.add_borders()  # ... from Mapper class
-        self.highlight_country(show_names=show_country_names)  # ... from CountryMapper <- Mapper class
-        self.add_coast()  # ... from Mapper class
-        self.add_capital(ref_radius=ref_radius)  # ... from CountryMapper class
-        self.add_eez()  # ... from CountryMapper class
-        self.add_gridlines()  # ... from Mapper class
+        self.create_fig(figid=figid)  # from Mapper class
+        self.set_map_lims(pad_frac=pad_frac, squarify=True)  # from CountryMapper <- Mapper class
+        self.add_background(which=background)  # from Mapper class
+        self.add_rivers_and_lakes()  # from Mapper class
+        self.add_borders()  # from Mapper class
+        self.highlight_country(show_names=show_country_names)  # from CountryMapper <- Mapper class
+        self.add_coast()  # from Mapper class
+        self.add_capital(ref_radius=ref_radius)  # from CountryMapper class
+        self.add_eez()  # from CountryMapper class
+        self.add_gridlines()  # from Mapper class
         _ = self.add_wdqms(station_type=station_type, var_name=var_name, interval=interval,
                            category=category,
                            date=date, wigos_ids=wigos_ids,
