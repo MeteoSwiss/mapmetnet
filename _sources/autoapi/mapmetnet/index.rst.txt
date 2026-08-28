@@ -26,11 +26,13 @@ Submodules
    /autoapi/mapmetnet/errors/index
    /autoapi/mapmetnet/gibs/index
    /autoapi/mapmetnet/hardcoded/index
+   /autoapi/mapmetnet/hlep/index
    /autoapi/mapmetnet/logger/index
    /autoapi/mapmetnet/mapper/index
    /autoapi/mapmetnet/ne/index
    /autoapi/mapmetnet/network/index
    /autoapi/mapmetnet/site/index
    /autoapi/mapmetnet/utils/index
+   /autoapi/mapmetnet/version/index
 
 

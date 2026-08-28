@@ -158,6 +158,9 @@ Module Contents
       For more information on the different NASA GIBS layers, please refer to:
       https://nasa-gibs.github.io/gibs-api-docs/available-visualizations/#visualization-product-catalog
 
+      The 'ne' option requires a local (manual) install of relevant Natural Earth data. For
+      details, please refer to: https://meteoswiss.github.io/mapmetnet/mapper.html#natural-earth-background
+
 
 
 
@@ -246,7 +249,7 @@ Module Contents
    from a given list.
 
 
-   .. py:method:: add_stations(stations: polars.DataFrame, influence_radius: float | int | None = None, facecolor: str | tuple = 'k', edgecolor: str | tuple = 'w', marker: str = 's', size: int = 30, label: str | None = None) -> shapely.geometry
+   .. py:method:: add_stations(stations: polars.DataFrame, influence_radius: float | int | None = None, facecolor: str | tuple = 'k', edgecolor: str | tuple = 'w', marker: str = 's', size: int = 30, linewidth: float = 0.5, label: str | None = None) -> shapely.geometry
 
       Add a series of stations to the map.
 
@@ -259,6 +262,7 @@ Module Contents
                    * **marker** (*str, optional*) -- marker shape, fed to scatter(). If None, then no points are
                      drawn.
                    * **size** (*int, optional*) -- marker size, in pts, fed to scatter().
+                   * **linewidth** (*float, optional*) -- marker edge linewidth, fed to scatter().
                    * **label** (*str|tuple, optional*) -- station label. Defaults to None (= no legend).
                    * **legend** (*str, optional*) -- if 'generic', the country overlap values will not be shown.
                      Useful for regional maps. Defaults to 'specific'.
@@ -431,8 +435,9 @@ Module Contents
       :Parameters: * **figid** (*int, optional*) -- the matplotlib figure ID.
                      Will first close it if it already exists.
                    * **pad_frac** (*float, optional*) -- padding fraction around the edges. Defaults to 0.1 (=10%).
-                   * **background** (*str, None*) -- map background. See :py:func:`Mapper._add_background` for
-                     supported options. Defaults to None.
+                   * **background** (*str, None*) -- map background.
+                     See :py:func:`mapmetnet.mapper.Mapper.add_background` for supported options.
+                     Defaults to None.
                    * **station_type** (*str*) -- either 'surface' or 'upper-air'.
                    * **var_name** (*str*) -- name of variable, e.g. 'Temperature'.
                    * **interval** (*str, optional*) -- assessment interval, i.e. one of

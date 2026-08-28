@@ -37,7 +37,7 @@ Module Contents
 
 .. py:data:: logger
 
-.. py:class:: Site(lat: float, lon: float, name: str | None = None)
+.. py:class:: Site(lat: float, lon: float, name: str | None = None, comment: str | None = None)
 
    Bases: :py:obj:`mapmetnet.mapper.Plotter`
 
@@ -45,7 +45,7 @@ Module Contents
    Parent Site class.
 
 
-   .. py:method:: site_view(figid: int | None = None, show_ref_circles: bool = True, save_fn: str | None = None, show: bool = False) -> None
+   .. py:method:: site_view(figid: int | None = None, show_ref_circles: bool = True, save_fn: str | None = None, show: bool = False, close_fig: bool = True) -> None
 
       Create the default mapmetnet site view.
 
@@ -56,6 +56,8 @@ Module Contents
                    * **save_fn** (*str, optional*) -- the filename to save the figure as.
                      If None, the figure will not be saved. Defaults to None.
                    * **show** (*bool, optional*) -- whether to show the figure. Defaults to False.
+                   * **close_fig** (*bool, optional*) -- whether to close the figure or not. Set to False
+                     if you want to keep the figure open for further modifications. Defaults to True.
 
 
 

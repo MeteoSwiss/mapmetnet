@@ -1,0 +1,33 @@
+mapmetnet.hlep
+==============
+
+.. py:module:: mapmetnet.hlep
+
+.. autoapi-nested-parse::
+
+   Copyright (c) 2026 MeteoSwiss, contributors listed in AUTHORS.
+
+   Distributed under the terms of the 3-Clause BSD License.
+
+   SPDX-License-Identifier: BSD-3-Clause
+
+   Module contains: high-level entry points
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   mapmetnet.hlep.info
+
+
+Module Contents
+---------------
+
+.. py:function:: info()
+
+   High-level utility function to inform users on where to place supplementary material.
+
+

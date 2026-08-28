@@ -26,25 +26,25 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../_static/documentation_options.js?v=fb0b7a2e"></script>
+    <script src="../../_static/documentation_options.js?v=f5a4b954"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/mapmetnet/copyright';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.18.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.21.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = '_static/switcher_config.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
@@ -56,7 +56,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
-    <meta name="docbuild:last-update" content="2026-06-04"/>
+    <meta name="docbuild:last-update" content="2026-08-28"/>
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -455,7 +455,7 @@
                 <article class="bd-article">
                   
   <h1>Source code for mapmetnet.copyright</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Copyright (c) 2026 MeteoSwiss, contributors listed in AUTHORS.</span>
 
 <span class="sd">Distributed under the terms of the 3-Clause BSD License.</span>
@@ -463,7 +463,7 @@
 <span class="sd">SPDX-License-Identifier: BSD-3-Clause</span>
 
 <span class="sd">Module contains: relevant copyright notices</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="c1"># Import from Python</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
@@ -482,19 +482,19 @@
 <a class="viewcode-back" href="../../autoapi/mapmetnet/copyright/index.html#mapmetnet.copyright.get_mmn_msg">[docs]</a>
 <span class="nd">@log_func_call</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_mmn_msg</span><span class="p">(</span><span class="n">when</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Get the copyright statement for mapmetnet.</span>
+<span class="w">    </span><span class="sd">""" Get the copyright statement for mapmetnet.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        when: The date when the map was created, in a human-readable format. Optional.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">if</span> <span class="n">when</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39; on </span><span class="si">{</span><span class="n">when</span><span class="si">}</span><span class="s1">.&#39;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">' on </span><span class="si">{</span><span class="n">when</span><span class="si">}</span><span class="s1">.'</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">'.'</span>
 
-    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Created with mapmetnet v</span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">msg</span></div>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">'Created with mapmetnet v</span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s1">'</span> <span class="o">+</span> <span class="n">msg</span></div>
 
 
 
@@ -502,19 +502,19 @@
 <a class="viewcode-back" href="../../autoapi/mapmetnet/copyright/index.html#mapmetnet.copyright.get_cartopy_msg">[docs]</a>
 <span class="nd">@log_func_call</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_cartopy_msg</span><span class="p">(</span><span class="n">projection</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Get the copyright statement for cartopy.</span>
+<span class="w">    </span><span class="sd">""" Get the copyright statement for cartopy.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        projection: The name of the cartopy projection used to generate the map.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">if</span> <span class="n">projection</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">start</span> <span class="o">=</span> <span class="s1">&#39;P&#39;</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="s1">'P'</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">start</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">projection</span><span class="si">}</span><span class="s1"> p&#39;</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">projection</span><span class="si">}</span><span class="s1"> p'</span>
 
-    <span class="k">return</span> <span class="n">start</span> <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39;rojection via cartopy v</span><span class="si">{</span><span class="n">cartopy_version</span><span class="si">}</span><span class="s1">, Met Office.&#39;</span></div>
+    <span class="k">return</span> <span class="n">start</span> <span class="o">+</span> <span class="sa">f</span><span class="s1">'rojection via cartopy v</span><span class="si">{</span><span class="n">cartopy_version</span><span class="si">}</span><span class="s1">, Met Office.'</span></div>
 
 
 
@@ -522,17 +522,17 @@
 <a class="viewcode-back" href="../../autoapi/mapmetnet/copyright/index.html#mapmetnet.copyright.get_ne_msg">[docs]</a>
 <span class="nd">@log_func_call</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_ne_msg</span><span class="p">(</span><span class="n">features</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Get the copyright statement for Natural Earth. &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">""" Get the copyright statement for Natural Earth. """</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">''</span>
 
     <span class="c1"># Join the list of strings into a single one, separated by comma</span>
-    <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
 
     <span class="c1"># Capitalize the first letter of the message</span>
     <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="n">msg</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s1"> from Natural Earth.&#39;</span></div>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s1"> from Natural Earth.'</span></div>
 
 
 
@@ -540,10 +540,10 @@
 <a class="viewcode-back" href="../../autoapi/mapmetnet/copyright/index.html#mapmetnet.copyright.get_gibs_msg">[docs]</a>
 <span class="nd">@log_func_call</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_gibs_msg</span><span class="p">(</span><span class="n">feature</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Get the copyright statement for NASA GIBS. &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">""" Get the copyright statement for NASA GIBS. """</span>
 
-    <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">feature</span><span class="si">}</span><span class="s2">, from NASA&#39;s Global Imagery Browse Services (GIBS), &quot;</span> <span class="o">+</span> \
-        <span class="s2">&quot;part of NASA&#39;s Earth Observing System Data and Information System (EOSDIS).&quot;</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">feature</span><span class="si">}</span><span class="s2">, from NASA's Global Imagery Browse Services (GIBS), "</span> <span class="o">+</span> \
+        <span class="s2">"part of NASA's Earth Observing System Data and Information System (EOSDIS)."</span>
     <span class="k">return</span> <span class="n">msg</span></div>
 
 
@@ -552,12 +552,12 @@
 <a class="viewcode-back" href="../../autoapi/mapmetnet/copyright/index.html#mapmetnet.copyright.get_eez_msg">[docs]</a>
 <span class="nd">@log_func_call</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_eez_msg</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Get the copyright statement for EEZ. &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">""" Get the copyright statement for EEZ. """</span>
 
-    <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;EEZ maritime boundaries from Flanders Marine Institute (2023), &quot;</span> <span class="o">+</span> \
-        <span class="s2">&quot;Maritime Boundaries Geodatabase: &quot;</span> <span class="o">+</span> \
-        <span class="s2">&quot;Maritime Boundaries and Exclusive Economic Zones (200NM), version 12.&quot;</span>  <span class="c1"># + \</span>
-    <span class="c1"># &quot;available online at https://www.marineregions.org/ (https://doi.org/10.14284/632).&quot;</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="s2">"EEZ maritime boundaries from Flanders Marine Institute (2023), "</span> <span class="o">+</span> \
+        <span class="s2">"Maritime Boundaries Geodatabase: "</span> <span class="o">+</span> \
+        <span class="s2">"Maritime Boundaries and Exclusive Economic Zones (200NM), version 12."</span>  <span class="c1"># + \</span>
+    <span class="c1"># "available online at https://www.marineregions.org/ (https://doi.org/10.14284/632)."</span>
     <span class="k">return</span> <span class="n">msg</span></div>
 
 
@@ -566,14 +566,14 @@
 <a class="viewcode-back" href="../../autoapi/mapmetnet/copyright/index.html#mapmetnet.copyright.get_mch_msg">[docs]</a>
 <span class="nd">@log_func_call</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_mch_msg</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Get the disclaimer statement for MeteoSwiss. &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">""" Get the disclaimer statement for MeteoSwiss. """</span>
 
-    <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Disclaimer: the designations employed in this map do not imply the expression of &quot;</span> <span class="o">+</span> \
-        <span class="s2">&quot;any opinion whatsoever on the part of MeteoSwiss concerning the legal status of any &quot;</span> <span class="o">+</span> \
-        <span class="s2">&quot;country, area, or territory or of its authorities, or concerning the delimitation of &quot;</span> <span class="o">+</span> \
-        <span class="s2">&quot;its borders. The depiction and use of boundaries, geographic names and related data &quot;</span> <span class="o">+</span> \
-        <span class="s2">&quot;are not warranted to be error free nor do they necessarily imply official endorsement &quot;</span> <span class="o">+</span> \
-        <span class="s2">&quot;by MeteoSwiss.&quot;</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="s2">"Disclaimer: the designations employed in this map do not imply the expression of "</span> <span class="o">+</span> \
+        <span class="s2">"any opinion whatsoever on the part of MeteoSwiss concerning the legal status of any "</span> <span class="o">+</span> \
+        <span class="s2">"country, area, or territory or of its authorities, or concerning the delimitation of "</span> <span class="o">+</span> \
+        <span class="s2">"its borders. The depiction and use of boundaries, geographic names and related data "</span> <span class="o">+</span> \
+        <span class="s2">"are not warranted to be error free nor do they necessarily imply official endorsement "</span> <span class="o">+</span> \
+        <span class="s2">"by MeteoSwiss."</span>
     <span class="k">return</span> <span class="n">msg</span></div>
 
 
@@ -582,7 +582,7 @@
 <a class="viewcode-back" href="../../autoapi/mapmetnet/copyright/index.html#mapmetnet.copyright.build_copyright_statement">[docs]</a>
 <span class="nd">@log_func_call</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">build_copyright_statement</span><span class="p">(</span><span class="n">which</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">160</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Build a copyright statement for the map, based on the different elements that are</span>
+<span class="w">    </span><span class="sd">""" Build a copyright statement for the map, based on the different elements that are</span>
 <span class="sd">    included in it.</span>
 
 <span class="sd">    Args:</span>
@@ -592,7 +592,7 @@
 <span class="sd">        width (int, optional): the width to use for wrapping the text. Defaults to 160. If None,</span>
 <span class="sd">            no wrapping will be applied.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># Initialize an empty list to store the different parts of the copyright statement</span>
     <span class="n">parts</span> <span class="o">=</span> <span class="p">[]</span>
@@ -600,9 +600,9 @@
     <span class="c1"># Iterate over the possible dictionnary keys, and generate the relevant copyright if warranted.</span>
     <span class="c1"># Doing so allows to maintain a set order of sentences.</span>
 
-    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;mmn&#39;</span><span class="p">,</span> <span class="s1">&#39;cartopy&#39;</span><span class="p">,</span> <span class="s1">&#39;ne&#39;</span><span class="p">,</span> <span class="s1">&#39;gibs&#39;</span><span class="p">,</span> <span class="s1">&#39;eez&#39;</span><span class="p">,</span> <span class="s1">&#39;mch&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'mmn'</span><span class="p">,</span> <span class="s1">'cartopy'</span><span class="p">,</span> <span class="s1">'ne'</span><span class="p">,</span> <span class="s1">'gibs'</span><span class="p">,</span> <span class="s1">'eez'</span><span class="p">,</span> <span class="s1">'mch'</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">which</span><span class="p">:</span>
-            <span class="n">func</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;get_</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">_msg&#39;</span><span class="p">)</span>
+            <span class="n">func</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="sa">f</span><span class="s1">'get_</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">_msg'</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">which</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">part</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">which</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
@@ -610,10 +610,10 @@
             <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">part</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">width</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">' '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
 
     <span class="c1"># Join the parts and wrap them into a paragraph suitable for plotting</span>
-    <span class="k">return</span> <span class="n">fill</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">fill</span><span class="p">(</span><span class="s1">' '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span></div>
 
 </pre></div>
 
@@ -644,8 +644,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -653,10 +653,10 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-mapmetnet, version: dev-abb59f0</div>
+mapmetnet, version: dev-dd7778d</div>
       
         <div class="footer-item"><p class="last-updated">
-  Last updated on 2026-06-04.
+  Last updated on 2026-08-28.
   <br/>
 </p></div>
       
@@ -679,7 +679,7 @@ mapmetnet, version: dev-abb59f0</div>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.18.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
         <div class="footer-item">

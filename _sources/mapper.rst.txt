@@ -144,11 +144,63 @@ Custom example 2: non-GBON stations
     mymap.show()
 
 
-Advanced options
-----------------
+Advanced options (for adventurous users)
+----------------------------------------
+
+Exclusive Economic Zones (EEZ)
+..............................
+
+It is possible to draw the Exclusive Economic Zones (EEZ) of target countries on the map, by
+specifying the relevant Marine Regions Geographic IDengifier (MRGID) number when instantianting
+either the :py:class:`mapmetnet.mapper.GBONMapper` or :py:class:`mapmetnet.mapper.CountryMapper`
+classes:
+
+.. code-block:: python
+
+    from mapmetnet.mapper import GBONMapper
+
+    alb_map = GBONMapper('ALB', mrgid=2153)
+    alb_map.generate_map(...)
+
+The MRGID number for a given country can be found on the `Marine Regions website`_. For exemple,
+Albania has the MRGID number `2153`_.
+
+Doing so requires, in turn, to install the relevant EEZ shapefiles locally, which cannot be shipped
+with the code for `legal reasons`_. To identify the correct install location, use the ``mapmetnet``
+entry point from a terminal:
+
+.. code-block:: bash
+
+    $ mapmetnet
+
+    mapmetnet X.Y
+
+    Reference locations for supplementary material:
+
+    * Natural Earth: /Some/where/locally/src/mapmetnet/data/backgrounds
+
+    * EEZ shapefile: /Some/where/locally/src/mapmetnet/data/eez
+
+    For more info: https://MeteoSwiss.github.io/mapmetnet
+
+
+Detailed install instructions can then be found under the ``README.md`` file located at the
+designated EEZ location.
+
+.. _Marine Regions website: https://www.marineregions.org/mrgid.php
+.. _2153: http://marineregions.org/mrgid/2153
+.. _legal reasons: https://marineregions.org/disclaimer.php
 
 Natural Earth background
 ........................
 
-Exclusive Economic Zones (EEZ)
-..............................
+``mapmetnet`` can use the `Natural Earth`_ I with Shaded Relief, Water, and Drainages
+high-resolution map as background via the ``background='ne'`` parameter in the
+:py:class:`mapmetnet.mapper.GBONMapper.generate_map` call. Doing so requires, in turn,
+to place the relevant Natural Earth data locally (its large size prevents us from shipping it
+with the code).
+
+Here as well, use the ``mapmetnet`` high-level entry point to identify the correct install location and associated
+``README.md``.
+
+.. _Natural Earth: https://www.naturalearthdata.com/downloads/10m-natural-earth-1/10m-natural-earth-1-with-shaded-relief-water-and-drainages/
