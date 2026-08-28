@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../../_static/documentation_options.js?v=f5a4b954"></script>
+    <script src="../../../_static/documentation_options.js?v=1470ec87"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/mapmetnet/mapper/index';</script>
@@ -1027,9 +1027,10 @@ e.g. [‘pdf’, ‘png’]. Defaults to None (= no figure saved).</p></li>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The concept of <strong>baseline area of influence</strong> for a GBON station was introduced by
-<a class="reference external" href="https://www.un-soff.org/wp-content/uploads/2025/02/Democratic-Republic-of-Congo-GBON-National-Gap-Analysis.pdf.">Vogt et al., 2024</a>, to which we refer the interested reader for details (see their
-Appendix A). In short, it corresponds to the area in the immediate vicinty of a station
-for which the GBON requirements (in terms station proximity) are met.</p>
+<a class="reference external" href="https://www.un-soff.org/wp-content/uploads/2025/02/Democratic-Republic-of-Congo-GBON-National-Gap-Analysis.pdf.">Vogt et al., 2024</a>, to which we refer the interested reader for details: see their
+Appendix A, and also the documentation of the associated <a class="reference external" href="https://meteoswiss.github.io/wmoutils/gbon.html#gbon-radius-of-influence">Python implementation</a>.
+In short, it corresponds to the area in the immediate vicinty of a station for which
+the GBON requirements (in terms station proximity) are met.</p>
 <p>By setting <code class="docutils literal notranslate"><span class="pre">show_influence_area</span></code> to True, the map will include a visual representation
 of the GBON baseline area of influence of every station. It will also add to the legend
 the percentage of the country that is covered by the combined GBON baseline area of
@@ -1176,7 +1177,7 @@ stations.</p>
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-mapmetnet, version: dev-dd7778d</div>
+mapmetnet, version: dev-afd68b2</div>
       
         <div class="footer-item"><p class="last-updated">
   Last updated on 2026-08-28.

@@ -464,9 +464,10 @@ Module Contents
       .. note::
 
          The concept of **baseline area of influence** for a GBON station was introduced by
-         `Vogt et al., 2024`_, to which we refer the interested reader for details (see their
-         Appendix A). In short, it corresponds to the area in the immediate vicinty of a station
-         for which the GBON requirements (in terms station proximity) are met.
+         `Vogt et al., 2024`_, to which we refer the interested reader for details: see their
+         Appendix A, and also the documentation of the associated `Python implementation`_.
+         In short, it corresponds to the area in the immediate vicinty of a station for which
+         the GBON requirements (in terms station proximity) are met.
          
          By setting ``show_influence_area`` to True, the map will include a visual representation
          of the GBON baseline area of influence of every station. It will also add to the legend
@@ -480,6 +481,7 @@ Module Contents
          stations.
          
          .. _Vogt et al., 2024: https://www.un-soff.org/wp-content/uploads/2025/02/Democratic-Republic-of-Congo-GBON-National-Gap-Analysis.pdf.
+         .. _Python implementation: https://meteoswiss.github.io/wmoutils/gbon.html#gbon-radius-of-influence
 
 
 
