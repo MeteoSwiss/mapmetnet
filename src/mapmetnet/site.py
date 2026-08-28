@@ -39,13 +39,15 @@ class Site(Plotter):
     """ Parent Site class. """
 
     @log_func_call(logger)
-    def __init__(self, lat: float, lon: float, name: str | None = None) -> None:
+    def __init__(self, lat: float, lon: float, name: str | None = None,
+                 comment: str | None = None) -> None:
         """ Basic init routine.
 
             Args:
                 lat (float): The latitude of the map center.
                 lon (float): The longitude of the map center.
                 name (str, optional): The name of the site. Defaults to None.
+                comment (str, optional): A comment about the site. Defaults to None.
 
         """
 
@@ -67,6 +69,7 @@ class Site(Plotter):
         self._panel_extents: list = [None] * 4
         self._copyright['cartopy'] = None
         self._name = name
+        self._comment = comment
 
     def _panel_type_to_img(self, panel_type: str) -> list:
         """ Convert a panel type to a cartopy image.
@@ -226,6 +229,19 @@ class Site(Plotter):
         self.fig.text(0.03, 0.99, f'{title}',
                       fontsize=20, fontweight='bold', va='top', ha='left')
 
+    def _add_subtitle(self, subtitle: str | None = None) -> None:
+        """ Add a subtitle to the figure.
+
+        Args:
+            subtitle (str, optional): The subtitle to add. Defaults to None = self._comment.
+        """
+
+        if subtitle is None:
+            subtitle = self._comment if self._comment is not None else ''
+
+        self.fig.text(0.03, 0.965, f'{subtitle}',
+                      fontsize=15, fontweight='normal', va='top', ha='left')
+
     def _add_coords(self) -> None:
         """ Add the coordinates of the site to the figure. """
 
@@ -242,7 +258,7 @@ class Site(Plotter):
         self.fig.text(0.97, 0.965,
                       rf'{self._lat:+.6f} N | {self._lon:+.6f} E',
                       # | {alt:+.1f} m',
-                      fontsize=11, fontweight='normal', va='top', ha='right')
+                      fontsize=15, fontweight='normal', va='top', ha='right')
 
     def _add_copyright(self) -> None:
         """ Add the necessary copyright statement. """
@@ -254,7 +270,8 @@ class Site(Plotter):
     def site_view(self, figid: int | None = None,
                   show_ref_circles: bool = True,
                   save_fn: str | None = None,
-                  show: bool = False) -> None:
+                  show: bool = False,
+                  close_fig: bool = True) -> None:
         """ Create the default mapmetnet site view.
 
         Args:
@@ -265,6 +282,8 @@ class Site(Plotter):
             save_fn (str, optional): the filename to save the figure as.
                 If None, the figure will not be saved. Defaults to None.
             show (bool, optional): whether to show the figure. Defaults to False.
+            close_fig (bool, optional): whether to close the figure or not. Set to False
+                if you want to keep the figure open for further modifications. Defaults to True.
         """
 
         self._create_fig(figid=figid)
@@ -275,11 +294,14 @@ class Site(Plotter):
                 for r in [100, 30, 10]:
                     self._draw_circle(r, ax)
         self._add_title()
+        self._add_subtitle()
         self._add_coords()
         self._add_copyright()
         self.savefig(save_fn)
         if show:
             self.show()
+        if close_fig:
+            plt.close(self.fig)
 
 
 class WigosSite(Site):
