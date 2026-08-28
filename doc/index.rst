@@ -14,10 +14,14 @@ Please refer to the relevant sections of the documentation below to learn more.
    using ``mapmetnet``, please report the issue on the `GitHub repository`_. If you wish to
    contribute to the development of ``mapmetnet``, please refer to the `contributing guidelines`_.
 
+.. note::
+   ``mapmetnet`` relies on a number of packages, including `wmoutils`_ which is also being developed
+   at MeteoSwiss.
+
 .. _GBON: https://wmo.int/activities/global-basic-observing-network-gbon
 .. _GitHub repository: https://github.com/MeteoSwiss/mapmetnet/issues
 .. _contributing guidelines: https://github.com/MeteoSwiss/mapmetnet/blob/main/CONTRIBUTING.md
-
+.. _wmoutils: https://meteoswiss.github.io/wmoutils/
 
 .. toctree::
    :maxdepth: 2
