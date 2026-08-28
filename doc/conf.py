@@ -3,6 +3,8 @@ import os
 extensions = ["sphinx.ext.napoleon", "autoapi.extension", "sphinx.ext.viewcode",
               "sphinx.ext.todo",
               "matplotlib.sphinxext.plot_directive",
+              # For the following to work, one also needs to install graphviz in the relevant
+              # Github action.
               "sphinx.ext.graphviz",
               "sphinx.ext.inheritance_diagram"]
 

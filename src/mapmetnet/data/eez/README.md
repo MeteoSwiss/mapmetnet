@@ -14,4 +14,4 @@ Exclusive Economic Zones (200NM), version 12. Available online at
 <https://www.marineregions.org/>. <https://doi.org/10.14284/632>
 
 They cannot be shipped together with the mapmetnet code for legal reasons. Users interested must
-therefore download them directly from the source above, and strore them in this folder.
+therefore download them directly from the source above, and store them in this folder.
