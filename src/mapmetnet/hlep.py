@@ -8,7 +8,7 @@ SPDX-License-Identifier: BSD-3-Clause
 Module contains: high-level entry points
 """
 
-from .__init__ import __version__ as VERSION
+from .version import VERSION
 from .hardcoded import USR_BKG_PATH, EEZ_PATH
 
 

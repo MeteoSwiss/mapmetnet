@@ -11,14 +11,13 @@ Module contains: highest-level init magic
 # Import from Python
 import os
 import logging
-from importlib.metadata import version as getversion
 
 # Import from this module
 from .hardcoded import USR_BKG_PATH
+from .version import VERSION
 
-# Extract the version from the system, because it is set (upon release) by the CI/CD pipeline
-# via the pyproject.toml file (using poetry).
-__version__ = getversion("mapmetnet")
+# Set the module version for users to access.
+__version__ = VERSION
 
 # Make sure users can do things like import mapmetnet -> mapmetnet.site.etc ...
 # Side note: this also fixes a warning with Sphinx related to duplicated loggers ...
