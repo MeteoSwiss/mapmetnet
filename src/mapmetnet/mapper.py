@@ -259,6 +259,9 @@ class Mapper(Plotter):
         For more information on the different NASA GIBS layers, please refer to:
         https://nasa-gibs.github.io/gibs-api-docs/available-visualizations/#visualization-product-catalog
 
+        The 'ne' option requires a local (manual) install of relevant Natural Earth data. For
+        details, please refer to: https://meteoswiss.github.io/mapmetnet/mapper.html#natural-earth-background
+
         """
 
         if which is None:
@@ -1057,8 +1060,9 @@ class GBONMapper(CountryMapper):
             figid (int, optional): the matplotlib figure ID.
                 Will first close it if it already exists.
             pad_frac (float, optional): padding fraction around the edges. Defaults to 0.1 (=10%).
-            background (str, None): map background. See :py:func:`Mapper._add_background` for
-                supported options. Defaults to None.
+            background (str, None): map background.
+                See :py:func:`mapmetnet.mapper.Mapper.add_background` for supported options.
+                Defaults to None.
             station_type (str): either 'surface' or 'upper-air'.
             var_name (str): name of variable, e.g. 'Temperature'.
             interval (str, optional): assessment interval, i.e. one of
