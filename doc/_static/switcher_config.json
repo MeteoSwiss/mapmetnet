@@ -3,5 +3,10 @@
     "name": "dev (unstable)",
     "version": "dev",
     "url": "/mapmetnet/"
+  },
+  {
+    "name": "v0.1.0",
+    "version": "v0.1.0",
+    "url": "/mapmetnet/v0.1.0/"
   }
 ]
