@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../_static/documentation_options.js?v=4550cd48"></script>
+    <script src="../../_static/documentation_options.js?v=c523c8d9"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/mapmetnet/logger';</script>
@@ -495,7 +495,7 @@
 <span class="w">        </span><span class="sd">""" This is the actual function decorator. """</span>
 
         <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>  <span class="c1"># This black magic is required for Sphinx to still pickup the func docstrings.</span>
-        <span class="k">def</span><span class="w"> </span><span class="nf">inner_deco</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">inner_deco</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
 <span class="w">            </span><span class="sd">""" The core function, where the magic happens. """</span>
 
             <span class="c1"># Extract all the arguments and named-arguments fed to the function.</span>
@@ -556,7 +556,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-mapmetnet, version: dev-741e6e7</div>
+mapmetnet, version: dev-9965ad9</div>
       
         <div class="footer-item"><p class="last-updated">
   Last updated on 2026-09-18.

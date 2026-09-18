@@ -26,7 +26,7 @@ Functions
 Module Contents
 ---------------
 
-.. py:function:: info()
+.. py:function:: info() -> None
 
    High-level utility function to inform users on where to place supplementary material.
 
