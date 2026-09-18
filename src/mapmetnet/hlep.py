@@ -12,7 +12,7 @@ from .version import VERSION
 from .hardcoded import USR_BKG_PATH, EEZ_PATH
 
 
-def info():
+def info() -> None:
     """
     High-level utility function to inform users on where to place supplementary material.
     """

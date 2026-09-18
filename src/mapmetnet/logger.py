@@ -36,7 +36,7 @@ def log_func_call(logger: Logger) -> Callable:
         """ This is the actual function decorator. """
 
         @wraps(func)  # This black magic is required for Sphinx to still pickup the func docstrings.
-        def inner_deco(*args, **kwargs) -> Callable:
+        def inner_deco(*args: tuple, **kwargs: dict) -> Callable:
             """ The core function, where the magic happens. """
 
             # Extract all the arguments and named-arguments fed to the function.
