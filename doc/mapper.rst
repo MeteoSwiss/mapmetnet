@@ -46,12 +46,18 @@ and :ref:`exemple2`.
 
 We shall not describe here the different steps/options in details, but instead refer interested
 users to the relevant function docstrings instead. We shall merely note that these different steps
-are located in distinct hierarchical classes, as illustrated below.
+are located in distinct hierarchical classes::
 
-.. inheritance-diagram:: mapmetnet.mapper.GBONMapper
-    :caption: Fig. 1: Inheritance diagram for the GBONMapper class
-    :top-classes: mapmetnet.mapper.NetworkMapper
+    mapmetnet.mapper.NetworkMapper
+    └── mapmetnet.mapper.CountryMapper
+        └── mapmetnet.mapper.GBONMapper
 
+
+.. The code below would be a nice way to draw the diagram automatically
+  # What follows reqwuires to allow the Graphviz actions on GitHub (not yet the case)
+  .. inheritance-diagram:: mapmetnet.mapper.GBONMapper
+     :caption: Fig. 1: Inheritance diagram for the GBONMapper class
+     :top-classes: mapmetnet.mapper.NetworkMapper
 
 .. _exemple1:
 

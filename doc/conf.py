@@ -5,8 +5,9 @@ extensions = ["sphinx.ext.napoleon", "autoapi.extension", "sphinx.ext.viewcode",
               "matplotlib.sphinxext.plot_directive",
               # For the following to work, one also needs to install graphviz in the relevant
               # Github action.
-              "sphinx.ext.graphviz",
-              "sphinx.ext.inheritance_diagram"]
+              # "sphinx.ext.graphviz",
+              # "sphinx.ext.inheritance_diagram"
+              ]
 
 project = "mapmetnet"
 copyright = "2026, MeteoSwiss"

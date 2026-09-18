@@ -28,8 +28,8 @@ Removed
 Security
 --------
 
-v0.1.0
-======
+0.1.0
+=====
 Added
 -----
 - [fpavogt] First release.

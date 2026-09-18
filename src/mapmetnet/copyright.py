@@ -35,7 +35,7 @@ def get_mmn_msg(when: str | None = None) -> str:
     else:
         msg = '.'
 
-    return f'Created with mapmetnet v{__version__}' + msg
+    return f'Created with mapmetnet {__version__}' + msg
 
 
 @log_func_call(logger)
