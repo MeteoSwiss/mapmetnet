@@ -1,0 +1,90 @@
+mapmetnet.copyright
+===================
+
+.. py:module:: mapmetnet.copyright
+
+.. autoapi-nested-parse::
+
+   Copyright (c) 2026 MeteoSwiss, contributors listed in AUTHORS.
+
+   Distributed under the terms of the 3-Clause BSD License.
+
+   SPDX-License-Identifier: BSD-3-Clause
+
+   Module contains: relevant copyright notices
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   mapmetnet.copyright.logger
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   mapmetnet.copyright.get_mmn_msg
+   mapmetnet.copyright.get_cartopy_msg
+   mapmetnet.copyright.get_ne_msg
+   mapmetnet.copyright.get_gibs_msg
+   mapmetnet.copyright.get_eez_msg
+   mapmetnet.copyright.get_mch_msg
+   mapmetnet.copyright.build_copyright_statement
+
+
+Module Contents
+---------------
+
+.. py:data:: logger
+
+.. py:function:: get_mmn_msg(when: str | None = None) -> str
+
+   Get the copyright statement for mapmetnet.
+
+   :Parameters: **when** -- The date when the map was created, in a human-readable format. Optional.
+
+
+.. py:function:: get_cartopy_msg(projection: str | None = None) -> str
+
+   Get the copyright statement for cartopy.
+
+   :Parameters: **projection** -- The name of the cartopy projection used to generate the map.
+
+
+.. py:function:: get_ne_msg(features: list) -> str
+
+   Get the copyright statement for Natural Earth.
+
+
+.. py:function:: get_gibs_msg(feature: str) -> str
+
+   Get the copyright statement for NASA GIBS.
+
+
+.. py:function:: get_eez_msg() -> str
+
+   Get the copyright statement for EEZ.
+
+
+.. py:function:: get_mch_msg() -> str
+
+   Get the disclaimer statement for MeteoSwiss.
+
+
+.. py:function:: build_copyright_statement(which: dict, width: int | None = 160) -> str
+
+   Build a copyright statement for the map, based on the different elements that are
+   included in it.
+
+   :Parameters: * **which** (*dict*) -- a dictionary with the different elements to include in the copyright
+                  statement. The keys of the dict should be the same as the names of the functions
+                  defined above, and the values should be the arguments to feed to those functions.
+                * **width** (*int, optional*) -- the width to use for wrapping the text. Defaults to 160. If None,
+                  no wrapping will be applied.
+
+

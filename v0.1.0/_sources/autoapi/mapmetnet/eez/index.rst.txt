@@ -1,0 +1,61 @@
+mapmetnet.eez
+=============
+
+.. py:module:: mapmetnet.eez
+
+.. autoapi-nested-parse::
+
+   Copyright (c) 2026 MeteoSwiss, contributors listed in AUTHORS.
+
+   Distributed under the terms of the 3-Clause BSD License.
+
+   SPDX-License-Identifier: BSD-3-Clause
+
+   Module contains: utility functions related to EEZ maritime boundaries
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   mapmetnet.eez.logger
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   mapmetnet.eez.get_eez_records
+   mapmetnet.eez.get_eez
+
+
+Module Contents
+---------------
+
+.. py:data:: logger
+
+.. py:function:: get_eez_records()
+
+   Wrapper routine to extract EEZ records.
+
+   Return: iterator of Record, extracted from as shapefile.
+
+   .. todo::
+
+      It is not allowed to share the EEZ file together with the code. A mechanism is required
+      to allow user to set this up correctly.
+
+
+.. py:function:: get_eez(mrgid: int) -> list
+
+   Small utility function to extract a target EEZ geometries.
+
+   :Parameters: **mrgid** (*int*) -- Marine Regions Geographic IDentifier of the target.
+
+   Returns: list of eez records.
+
+
+

@@ -1,0 +1,54 @@
+mapmetnet.gibs
+==============
+
+.. py:module:: mapmetnet.gibs
+
+.. autoapi-nested-parse::
+
+   Copyright (c) 2026 MeteoSwiss, contributors listed in AUTHORS.
+
+   Distributed under the terms of the 3-Clause BSD License.
+
+   SPDX-License-Identifier: BSD-3-Clause
+
+   Module contains: NASA GIBS tools
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   mapmetnet.gibs.logger
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   mapmetnet.gibs.get_cb_img
+
+
+Module Contents
+---------------
+
+.. py:data:: logger
+
+.. py:function:: get_cb_img(cb_name: str, write_loc: pathlib.Path = Path('.')) -> numpy.ndarray
+
+   Basic utility routine to fetch a colorbar from NASA GIBS in SVG format, convert it to
+   png, and return it as a numpy array.
+
+   :Parameters: * **cb_name** (*str*) -- the name of the colorbar file. Should match a file in
+                  https://gitc.earthdata.nasa.gov/legends
+                * **write_loc** (*pathlib.Path, optional*) -- location where the NASA GIBS image will be stored
+                  temporarily. Defaults to Path('.').
+
+   :returns: the colorbar image as numpy array, suitable for imshow plotting.
+   :rtype: np.ndarray
+
+   .. note:: The colorbar will be save to disc temporarily.
+
+

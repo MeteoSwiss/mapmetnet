@@ -1,0 +1,65 @@
+mapmetnet.ne
+============
+
+.. py:module:: mapmetnet.ne
+
+.. autoapi-nested-parse::
+
+   Copyright (c) 2026 MeteoSwiss, contributors listed in AUTHORS.
+
+   Distributed under the terms of the 3-Clause BSD License.
+
+   SPDX-License-Identifier: BSD-3-Clause
+
+   Module contains: utility functions related to Natural Earth material
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   mapmetnet.ne.logger
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   mapmetnet.ne.get_ne_records
+   mapmetnet.ne.get_ne_country
+
+
+Module Contents
+---------------
+
+.. py:data:: logger
+
+.. py:function:: get_ne_records(resolution: str = '10m', category: str = 'cultural', name: str = 'admin_0_map_units', fmt: str = 'iterator')
+
+   Wrapper routine to extract Natural Earth shapefile Records.
+
+   For a list of available options, see: https://www.naturalearthdata.com/features/
+
+   :Parameters: * **resolution** (*str*) -- defaults to '10m'.
+                * **category** (*str*) -- either 'cultural' or 'physical'
+                * **name** (*str*) -- the dataset name. Defaults to 'admin_0_map_units'
+                * **fmt** (*str*) -- output format, either 'iterator' (by default) or 'list'.
+
+
+.. py:function:: get_ne_country(country_code: str, resolution: str = '10m', is_map_unit: bool = True)
+
+   Small utility function to extract a target country record from Natural Earth.
+
+   :Parameters: * **country_code** (*str*) -- ISO 3166-1 alpha-3 country code.
+                  https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
+                * **resolution** (*str, optional*) -- the resolution of the data. Defaults to '10m'.
+                * **is_map_unit** (*bool, optional*) -- if True, will search the map_unit dataset. Else the country
+                  dataset. Defaults to True.
+
+   Returns: country record
+
+
+

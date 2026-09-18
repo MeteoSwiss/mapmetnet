@@ -1,0 +1,38 @@
+mapmetnet
+=========
+
+.. py:module:: mapmetnet
+
+.. autoapi-nested-parse::
+
+   Copyright (c) 2026 MeteoSwiss, contributors listed in AUTHORS
+
+   Distributed under the terms of the BSD 3-Clause License.
+
+   SPDX-License-Identifier: BSD-3-Clause
+
+   Module contains: highest-level init magic
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/mapmetnet/copyright/index
+   /autoapi/mapmetnet/eez/index
+   /autoapi/mapmetnet/errors/index
+   /autoapi/mapmetnet/gibs/index
+   /autoapi/mapmetnet/hardcoded/index
+   /autoapi/mapmetnet/hlep/index
+   /autoapi/mapmetnet/logger/index
+   /autoapi/mapmetnet/mapper/index
+   /autoapi/mapmetnet/ne/index
+   /autoapi/mapmetnet/network/index
+   /autoapi/mapmetnet/site/index
+   /autoapi/mapmetnet/utils/index
+   /autoapi/mapmetnet/version/index
+
+
