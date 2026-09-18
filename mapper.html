@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="_static/documentation_options.js?v=1470ec87"></script>
+    <script src="_static/documentation_options.js?v=70063177"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'mapper';</script>
@@ -59,7 +59,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
-    <meta name="docbuild:last-update" content="2026-08-28"/>
+    <meta name="docbuild:last-update" content="2026-09-18"/>
   
     
     <script src="_static/searchtools.js"></script>
@@ -555,22 +555,12 @@ map by replicating, adjusting and expanding the different steps implemented in
 and <a class="reference internal" href="#exemple2"><span class="std std-ref">Custom example 2: non-GBON stations</span></a>.</p>
 <p>We shall not describe here the different steps/options in details, but instead refer interested
 users to the relevant function docstrings instead. We shall merely note that these different steps
-are located in distinct hierarchical classes, as illustrated below.</p>
-<figure class="align-default" id="id2">
-digraph inheritanceeb21cbec8f {
-bgcolor=transparent;
-rankdir=LR;
-size=&quot;8.0, 12.0&quot;;
-  &quot;mapmetnet.mapper.CountryMapper&quot; [URL=&quot;autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.CountryMapper&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Parent Mapper class, tuned for focusing the plot on a specific country.&quot;];
-  &quot;mapmetnet.mapper.NetworkMapper&quot; -&gt; &quot;mapmetnet.mapper.CountryMapper&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;mapmetnet.mapper.GBONMapper&quot; [URL=&quot;autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.GBONMapper&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Child Mapper class, tuned for automatically plotting a given country's GBON information.&quot;];
-  &quot;mapmetnet.mapper.CountryMapper&quot; -&gt; &quot;mapmetnet.mapper.GBONMapper&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;mapmetnet.mapper.NetworkMapper&quot; [URL=&quot;autoapi/mapmetnet/mapper/index.html#mapmetnet.mapper.NetworkMapper&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Grand Parent Mapper class, designed to plot and characterize custom stations&quot;];
-}
-<figcaption>
-<p><span class="caption-text">Fig. 1: Inheritance diagram for the GBONMapper class</span><a class="headerlink" href="#id2" title="Link to this image">#</a></p>
-</figcaption>
-</figure>
+are located in distinct hierarchical classes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mapmetnet.mapper.NetworkMapper
+└── mapmetnet.mapper.CountryMapper
+    └── mapmetnet.mapper.GBONMapper
+</pre></div>
+</div>
 <section id="custom-example-1-international-network">
 <span id="exemple1"></span><h3>Custom example 1: international network<a class="headerlink" href="#custom-example-1-international-network" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
@@ -792,10 +782,10 @@ with the code).</p>
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-mapmetnet, version: dev-afd68b2</div>
+mapmetnet, version: dev-e504aba</div>
       
         <div class="footer-item"><p class="last-updated">
-  Last updated on 2026-08-28.
+  Last updated on 2026-09-18.
   <br/>
 </p></div>
       
