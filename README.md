@@ -10,8 +10,7 @@
 
 > [!WARNING]
 > The `mapmetnet` package is under active development. You can expect regular breaking changes, poor
-> documentation, and rapidly evolving APIs. If you want to use the package, please reach out to the
-> developers and we will be happy to help you get started.
+> documentation, and rapidly evolving APIs.
 
 The `mapmetnet` package has 3 primary intended uses:
 

@@ -1,7 +1,7 @@
 Installation
 ============
 
-``mapmetnet`` is **not yet** available on `PyPI`_, and can **not** be installed using ``pip``:
+``mapmetnet`` is available on `PyPI`_, and can be installed using ``pip``:
 
 .. code-block:: bash
 
